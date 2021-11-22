@@ -1,0 +1,521 @@
+---
+title: "Screen Quality Control (Human)"
+author: "Jan Sauer"
+# date: "10.11.2018"
+output: 
+   BiocStyle::html_document:
+    code_folding: hide
+    df_print: paged
+    toc_depth: 4
+    toc_float: true
+    fig_height: 6
+    fig_width: 9.5
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, message=FALSE}
+library(rhdf5)
+library(ggplot2)
+source("../r_functions/PublicationTheme_ggplot.R")
+source("../r_functions/Color_Palette.R")
+source("../r_functions/Replicates.R")
+
+species = "human"
+feature_type = "organoids"
+feature_dir = "/local-collab-ag-fischer/PROMISE/data-10x-4t-c-16z/features"
+
+lines = get_lines(species = species)
+colorScale = setNames(
+  object = get_color_palette(species = species, length = length(lines)), 
+  nm = sort(lines))
+
+key_features = c('x.0.s.area', 'x.a.b.q05', 'x.b.b.q05', 'x.c.b.q05')
+```
+
+# Feature Preprocessing and Batch Effect Removal
+Features were preprocessed with the see python package. The effect of this normalization is shown here. I look at four key features, the area and the mean intensities in each channel, to illustrate how the preprocessing stabilizes plates and replicates. Shown are the negative controls, which are expected to be identical on each plate.
+
+## Before preprocessing
+```{r}
+raw_fn = "KeyFeatures_raw.rds"
+if(!file.exists(raw_fn)) {
+  ggplot_df = list()
+  for(line in lines) {
+    cat(line, "\n")
+    plates = get_plates(species)[substr(get_plates(species), 1, 7) == line]
+    line_features = list()
+    for(plate in plates) {
+      fn = file.path(feature_dir, plate, sprintf("%s_features.h5", plate))
+      feature_names = h5read(fn, sprintf("feature_names_%s", feature_type))
+      # Keep only key features
+      plate_features = data.frame(h5read(
+        fn, sprintf("features_%s", feature_type), 
+        list(NULL, match(key_features, feature_names))))
+      colnames(plate_features) = key_features
+      
+      plate_metadata = data.frame(
+        t(h5read(fn, sprintf("metadata_%s", feature_type))), 
+        stringsAsFactors = FALSE)
+      colnames(plate_metadata) = h5read(fn, sprintf("metadata_names_%s", feature_type))
+      plate_metadata$Replicate = as.numeric(plate_metadata$Replicate)
+      plate_metadata$Field = as.numeric(plate_metadata$Field)
+      plate_metadata$ObjectID = as.numeric(plate_metadata$ObjectID)
+      plate_metadata$OriginalX = as.numeric(plate_metadata$OriginalX)
+      plate_metadata$OriginalY = as.numeric(plate_metadata$OriginalY)
+      plate_metadata$Size = as.numeric(plate_metadata$Size)
+      
+      # Keep only DMSO controls
+      plate_features = plate_features[plate_metadata$Drug == "DMSO", ]
+      plate_metadata = plate_metadata[plate_metadata$Drug == "DMSO", ]
+      
+      line_features[[plate]] = cbind(plate_features, plate_metadata[, 
+        c("Line", "Plate", "Well", "Replicate", "Field")])
+      
+      H5close()
+    }
+    line_features = do.call(rbind, line_features)
+    ggplot_df[[line]] = line_features
+  }
+  ggplot_df = do.call(rbind, ggplot_df)
+  
+  # The area scales quadratically, so I want to transform it accordingly for better visualization
+  ggplot_df$x.0.s.area = sqrt(ggplot_df$x.0.s.area)
+  ggplot_df$Rep.ID = paste0("R", ggplot_df$Replicate, " / ", substr(ggplot_df$Plate, 12, 14))
+  ggplot_df = ggplot_df[order(ggplot_df$Line, ggplot_df$Rep.ID),]
+  saveRDS(ggplot_df, raw_fn)
+}
+ggplot_df = readRDS(raw_fn)
+```
+
+```{r, warning=FALSE}
+outdir = sprintf("%s/raw", species)
+if(!dir.exists(outdir)) dir.create(outdir)
+plots = list()
+legend = NULL
+feat_dict = c(
+  "x.0.s.area" = "Square Root of Area", "x.a.b.q05" = "Actin Median Intensity", 
+  "x.b.b.q05" = "FITC Median Intensity", "x.c.b.q05" = "DAPI Median Intensity")
+for(feat in names(feat_dict)) {
+  # This bit only determines the axes limits for pretty visualization
+  max_y = max(aggregate(ggplot_df[, feat], list(ggplot_df$Plate), function(x) {
+    IQR(x)*1.5 + quantile(x, 0.75)})$x) + 0.05
+  min_y = max(0, min(aggregate(ggplot_df[, feat], list(ggplot_df$Plate), function(x) {
+    quantile(x, 0.25) - IQR(x)*1.5})$x) - 0.05)
+  if(feat %in% c("x.a.b.q05", "x.b.b.q05", "x.c.b.q05")) {
+    max_y = min(1, max_y)}
+  
+  # Generate the plot
+  gp = ggplot(data = ggplot_df) + 
+    geom_boxplot(aes_string(x = "Line", y = feat, fill = "Rep.ID"), outlier.shape = NA) + 
+    theme_Publication() + scale_fill_Publication() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+          legend.title = element_blank(), legend.position = "right", 
+          legend.direction = "vertical", legend.key.size = unit(0.5, "cm")) + 
+    xlab("") + ylab("") + ggtitle(feat_dict[feat]) + ylim(c(min_y, max_y))
+  
+  # Get legend
+  tmp <- ggplot_gtable(ggplot_build(gp)) 
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+  legend <- tmp$grobs[[leg]]
+  pdf(file.path(outdir, "legend.pdf"))
+  grid.draw(legend)
+  dev.off()
+  
+  # Save plot
+  gp = gp + theme(legend.position = "none")
+  ggsave(
+    filename = file.path(outdir, sprintf("ggplot_%s.pdf", feat_dict[feat])), plot = gp, 
+    width = 10, height = 5)
+  plots[[feat]] = gp
+}
+
+for(feat in names(feat_dict)) plot(plots[[feat]])
+```
+
+## After Preprocessing
+
+```{r, warning=FALSE}
+processed_fn = "KeyFeatures_processed.rds"
+if(!file.exists(processed_fn)) {
+  ggplot_df = list()
+  for(line in lines) {
+    plates = get_plates(species)[substr(get_plates(species), 1, 7) == line]
+    line_features = list()
+    for(plate in plates) {
+      fn = file.path(feature_dir, plate, sprintf("%s_processedFeatures.h5", plate))
+      feature_names = h5read(fn, sprintf("feature_names_%s", feature_type))
+      # Keep only key features
+      plate_features = data.frame(h5read(
+        fn, sprintf("features_%s", feature_type), 
+        list(NULL, match(key_features, feature_names))))
+      colnames(plate_features) = key_features
+      
+      plate_metadata = data.frame(
+        t(h5read(fn, sprintf("metadata_%s", feature_type))), 
+        stringsAsFactors = FALSE)
+      colnames(plate_metadata) = h5read(fn, sprintf("metadata_names_%s", feature_type))
+      plate_metadata$Replicate = as.numeric(plate_metadata$Replicate)
+      plate_metadata$Field = as.numeric(plate_metadata$Field)
+      plate_metadata$ObjectID = as.numeric(plate_metadata$ObjectID)
+      plate_metadata$OriginalX = as.numeric(plate_metadata$OriginalX)
+      plate_metadata$OriginalY = as.numeric(plate_metadata$OriginalY)
+      plate_metadata$Size = as.numeric(plate_metadata$Size)
+      
+      # Keep only DMSO controls
+      plate_features = plate_features[plate_metadata$Drug == "DMSO", ]
+      plate_metadata = plate_metadata[plate_metadata$Drug == "DMSO", ]
+      
+      line_features[[plate]] = cbind(plate_features, plate_metadata[, 
+        c("Line", "Plate", "Well", "Replicate", "Field")])
+      
+      H5close()
+    }
+    line_features = do.call(rbind, line_features)
+    ggplot_df[[line]] = line_features
+  }
+  ggplot_df = do.call(rbind, ggplot_df)
+  
+  # The area scales quadratically, so I want to reduce it
+  ggplot_df$x.0.s.area = sqrt(ggplot_df$x.0.s.area)
+  ggplot_df$Rep.ID = paste0("R", ggplot_df$Replicate, " / ", substr(ggplot_df$Plate, 12, 14))
+  ggplot_df = ggplot_df[order(ggplot_df$Line, ggplot_df$Rep.ID),]
+  ggplot_df = ggplot_df[rowSums(is.na(ggplot_df)) == 0, ]
+  
+  saveRDS(ggplot_df, processed_fn)
+}
+ggplot_df = readRDS(processed_fn)
+```
+
+```{r, warning=FALSE}
+outdir = sprintf("%s/normalized", species)
+if(!dir.exists(outdir)) dir.create(outdir)
+plots = list()
+legend = NULL
+feat_dict = c(
+  "x.0.s.area" = "Square Root of Area", "x.a.b.q05" = "Actin Median Intensity", 
+  "x.b.b.q05" = "FITC Median Intensity", "x.c.b.q05" = "DAPI Median Intensity")
+for(feat in names(feat_dict)) {
+  # This bit only determines the axes limits for pretty visualization
+  max_y = max(aggregate(ggplot_df[, feat], list(ggplot_df$Plate), function(x) {
+    IQR(x)*1.5 + quantile(x, 0.75)})$x) + 0.05
+  min_y = max(0, min(aggregate(ggplot_df[, feat], list(ggplot_df$Plate), function(x) {
+    quantile(x, 0.25) - IQR(x)*1.5})$x) - 0.05)
+  if(feat %in% c("x.0.m.eccentricity", "x.a.b.mean", "x.b.b.mean", "x.c.b.mean")) {
+    max_y = min(1, max_y)}
+  
+  # Generate the plot
+  gp = ggplot(data = ggplot_df) + 
+    geom_boxplot(aes_string(x = "Line", y = feat, fill = "Rep.ID"), outlier.shape = NA) + 
+    theme_Publication() + scale_fill_Publication() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+          legend.title = element_blank(), legend.position = "right", 
+          legend.direction = "vertical") + 
+    xlab("") + ylab("") + ggtitle(feat_dict[feat]) + ylim(c(min_y, max_y))
+  
+  # Get legend
+  tmp <- ggplot_gtable(ggplot_build(gp)) 
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+  legend <- tmp$grobs[[leg]]
+  pdf(file.path(outdir, "legend.pdf"))
+  grid.draw(legend)
+  dev.off()
+  
+  # Save plot
+  gp = gp + theme(legend.position = "none")
+  ggsave(
+    filename = file.path(outdir, sprintf("ggplot_%s.pdf", feat_dict[feat])), plot = gp, 
+    width = 10, height = 5)
+  plots[[feat]] = gp
+}
+
+for(feat in names(feat_dict)) plot(plots[[feat]])
+```
+
+# Quality Control of Screen
+I use well-averaged features for the quality control of the screen.
+
+```{r load_well_data}
+features = setNames(
+  object = vector(mode="list", length=length(lines)), 
+  nm = lines)
+features_metadata = setNames(
+  object = vector(mode="list", length=length(lines)), 
+  nm = lines)
+for(line in lines) {
+  cl_plates = get_plates(species)[substr(get_plates(species), 1, 7) == line]
+  cl_plates = cl_plates[order(substr(cl_plates, 10, 14))]
+  cl_features = list()
+  cl_metadata = list()
+  for(cl_plate in cl_plates) {
+    feature_fn = file.path(
+      feature_dir, cl_plate, 
+      sprintf("%s_averaged_features_%s.h5", cl_plate, feature_type))
+    well_names = h5read(feature_fn, paste0("well_names_", feature_type))
+    pl_features = data.frame(
+      h5read(feature_fn, paste0("features_", feature_type)))
+    colnames(pl_features) = h5read(feature_fn, paste0("feature_names_", feature_type))
+    rownames(pl_features) = well_names
+    pl_metadata = data.frame(
+      h5read(feature_fn, paste0("metadata_", feature_type)))
+    colnames(pl_metadata) = h5read(feature_fn, paste0("metadata_names_", feature_type))
+    rownames(pl_metadata) = well_names
+    cl_features[[cl_plate]] = pl_features
+    cl_metadata[[cl_plate]] = pl_metadata
+  }
+  cl_features = do.call(rbind, cl_features)
+  cl_metadata = do.call(rbind, cl_metadata)
+  rownames(cl_features) = sapply(strsplit(rownames(cl_features), ".", fixed = TRUE), "[[", 2)
+  rownames(cl_metadata) = sapply(strsplit(rownames(cl_metadata), ".", fixed = TRUE), "[[", 2)
+  features[[line]] = cl_features
+  features_metadata[[line]] = cl_metadata
+}
+
+features = do.call(rbind, features)
+rownames(features) = sapply(strsplit(rownames(features), ".", fixed = TRUE), "[[", 2)
+features_metadata = do.call(rbind, features_metadata)
+rownames(features_metadata) = sapply(strsplit(rownames(features_metadata), ".", fixed = TRUE), "[[", 2)
+
+# Ensure that only wells with replicates are kept
+rows_repid = paste0(substr(rownames(features), 1, 7), "_", substr(rownames(features), 12, 19))
+valid_row_ids = names(which(table(rows_repid) == 2))
+features = features[rows_repid %in% valid_row_ids, ]
+features_metadata = features_metadata[rows_repid %in% valid_row_ids, ]
+```
+
+## Correlation between replicates
+
+### Correlation within cell lines
+```{r, warning=FALSE}
+cl_correlations = setNames(
+  object = vector(mode = "list", length = length(lines)),
+  nm = lines)
+for(line in lines) {
+  cl_features = features[substr(rownames(features), 1, 7) == line, ]
+  cl_features_metadata = features_metadata[substr(rownames(features_metadata), 1, 7) == line, ]
+  rep1 = cl_features[cl_features_metadata$Replicate == 1, ]
+  rep2 = cl_features[cl_features_metadata$Replicate == 2, ]
+  if(!identical(paste0(substr(rownames(rep1), 1, 7), "_", substr(rownames(rep1), 12, 19)),
+                paste0(substr(rownames(rep2), 1, 7), "_", substr(rownames(rep2), 12, 19)))) {
+    warning(sprintf("Replicates for '%s' are not in the same order!", line))
+  }
+  rep_correlations = setNames(
+    object = vector(mode = "numeric", length = ncol(cl_features)),
+    nm = colnames(cl_features))
+  for(feature in colnames(cl_features)) {
+    rep_correlations[[feature]] = cor(
+      rep1[[feature]], rep2[[feature]],
+      use = "pairwise.complete.obs")
+  }
+  rep_correlations = sort(rep_correlations, decreasing = TRUE)
+  cl_correlations[[line]] = data.frame(
+    "Features" = seq_along(rep_correlations),
+    "Feature.Name" = names(rep_correlations),
+    "Correlations" = rep_correlations,
+    "Cell.Line" = line)
+}
+
+cl_correlations = do.call(rbind, cl_correlations)
+ggplot(data = cl_correlations) + geom_line(aes(x = Features, y = Correlations, color = Cell.Line)) +
+  ggtitle("Correlations between Replicates") + theme_Publication() + scale_color_manual(values = colorScale) + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+```
+
+### Correlation Across Entire Screen
+
+```{r, warning=FALSE}
+rep1 = features[features_metadata$Replicate == 1, ]
+rep2 = features[features_metadata$Replicate == 2, ]
+if(!identical(paste0(substr(rownames(rep1), 1, 7), "_", substr(rownames(rep1), 12, 19)),
+              paste0(substr(rownames(rep2), 1, 7), "_", substr(rownames(rep2), 12, 19)))) {
+  warning("Replicates are not in the same order!")
+}
+
+screen_correlations = setNames(
+  object = vector(mode = "numeric", length = ncol(features)),
+  nm = colnames(features))
+for(feature in colnames(features)) {
+  screen_correlations[[feature]] = cor(
+    rep1[[feature]], rep2[[feature]],
+    use = "pairwise.complete.obs")
+}
+
+ggplotdf = data.frame(
+  "Features" = seq_along(sort(screen_correlations)),
+  "Correlation" = sort(screen_correlations, decreasing = TRUE))
+ggplot(data = ggplotdf) + geom_line(aes(x = Features, y = Correlation)) +
+  ggtitle("Correlations between Replicates across all Cell Lines")
+```
+
+# Intensity Distributions
+
+## Before Normalization
+I look at the raw intensity distributions of the images for each plate to determine imaging consistency
+```{r}
+all_intensities = list()
+for(line in lines) {
+  plates = get_plates(species = species)
+  plates = plates[substr(plates, 1, 7) == line]
+  for(plate in plates) {
+    fn = file.path(
+      "intensity_distribution", 
+      sprintf("IntensityDistribution_Summaries_%s.csv", plate))
+    intensities = read.csv(fn, row.names = 1)
+    colnames(intensities) = c(
+      "Min", "q1", "q5", "q10", "q25", "q75", 
+      "q90", "q95", "q99", "Max", "Median", "Mean")
+    metadata = strsplit(rownames(intensities), "_")
+    intensities$Plate = sapply(metadata, "[[", 1)
+    intensities$Well = sapply(metadata, function(x) paste0(x[2], x[3]))
+    intensities$Channel = sapply(metadata, "[[", 4)
+    intensities$Line = substr(intensities$Plate, 1, 7)
+    intensities$Row = substr(intensities$Well, 1, 1)
+    intensities$Col = substr(intensities$Well, 2, 3)
+    intensities$RowX = match(intensities$Row, LETTERS)
+    intensities$ColX = as.numeric(intensities$Col)
+    intensities$X = (intensities$RowX - 1) * max(intensities$ColX) + intensities$ColX
+    all_intensities[[length(all_intensities) + 1]] = intensities
+  }
+}
+all_intensities = do.call(rbind, all_intensities)
+```
+
+Due to a mistake, some of the images of D013T01P001L02 were not projected and the data lost. These are flagged and removed.
+```{r}
+missing_wells = c(
+  "D013T01P001L02_A_01", "D013T01P001L02_A_02", "D013T01P001L02_A_03", 
+  "D013T01P001L02_A_06", "D013T01P001L02_A_07", "D013T01P001L02_A_10", 
+  "D013T01P001L02_A_12", "D013T01P001L02_A_15", "D013T01P001L02_A_18", 
+  "D013T01P001L02_A_21", "D013T01P001L02_A_22", "D013T01P001L02_A_23", 
+  "D013T01P001L02_A_24", "D013T01P001L02_B_04", "D013T01P001L02_B_05", 
+  "D013T01P001L02_B_07", "D013T01P001L02_B_14", "D013T01P001L02_I_11", 
+  "D013T01P001L02_J_01", "D013T01P001L02_K_09", "D013T01P001L02_M_10", 
+  "D013T01P001L02_M_17", "D013T01P001L02_N_05")
+
+all_intensities = all_intensities[!substr(rownames(all_intensities), 1, 19) %in% missing_wells, ]
+```
+
+
+```{r, fig.width=10, fig.height=15}
+ggplot(
+    data = all_intensities, 
+    mapping = aes(x = Well, y = q99, color = Channel)) + 
+  geom_point(size = 0.5) + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  scale_color_manual(labels = c("Actin", "DAPI", "FITC"), 
+                     values = c("#ef3b2c", "#386cb0", "#7fc97f")) +
+  theme_Publication() + theme(
+    axis.text.x = element_blank(), legend.title = element_blank(), 
+    axis.ticks.x = element_blank()) + labs(x = "Wells", y = "") + 
+  ggtitle("Raw Channel Intensities per Plate") + 
+  guides(color = guide_legend(override.aes = list(size = 5)))
+```
+
+```{r, fig.width = 15, fig.height=15}
+actin_intensities = all_intensities[all_intensities$Channel == "Actin", ]
+ggplot(data = actin_intensities, 
+       mapping = aes(x = Col, y = Row, fill = Median)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Raw Median Actin Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```
+
+```{r, fig.width=15, fig.height=15}
+DAPI_intensities = all_intensities[all_intensities$Channel == "DAPI", ]
+ggplot(data = DAPI_intensities, 
+       mapping = aes(x = Col, y = Row, fill = Median)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Raw Median DAPI Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```
+
+```{r, fig.width=15, fig.height=15}
+FITC_intensities = all_intensities[all_intensities$Channel == "FITC", ]
+ggplot(data = FITC_intensities, 
+       mapping = aes(x = Col, y = Row, fill = Median)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Raw Median FITC Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```
+
+## After normalization
+```{r}
+norm_intensities = list()
+for(line in lines) {
+  plates = get_plates(species = species)
+  plates = plates[substr(plates, 1, 7) == line]
+  for(plate in plates) {
+    fn = file.path(
+      feature_dir, plate, 
+      sprintf("%s_averaged_features_%s.h5", plate, feature_type))
+    intensities = as.data.frame(h5read(
+      file = fn, name = sprintf("features_%s", feature_type)))
+    colnames(intensities) = h5read(
+      file = fn, name = sprintf("feature_names_%s", feature_type))
+    rownames(intensities) = h5read(
+      file = fn, name = sprintf("well_names_%s", feature_type))
+    H5close()
+    
+    # Keep only some features for each well
+    intensities = intensities[, c(
+      "x.a.b.mean_expected", "x.b.b.mean_expected", "x.c.b.mean_expected", 
+      "x.a.b.q05_expected", "x.b.b.q05_expected", "x.c.b.q05_expected", 
+      "x.a.b.q005_expected", "x.b.b.q005_expected", "x.c.b.q005_expected", 
+      "x.a.b.q095_expected", "x.b.b.q095_expected", "x.c.b.q095_expected")]
+    
+    metadata = strsplit(rownames(intensities), "_")
+    intensities$Plate = sapply(metadata, "[[", 1)
+    intensities$Well = sapply(metadata, function(x) paste0(x[2], x[3]))
+    intensities$Line = substr(intensities$Plate, 1, 7)
+    intensities$Row = substr(intensities$Well, 1, 1)
+    intensities$Col = substr(intensities$Well, 2, 3)
+    intensities$RowX = match(intensities$Row, LETTERS)
+    intensities$ColX = as.numeric(intensities$Col)
+    intensities$X = (intensities$RowX - 1) * max(intensities$ColX) + intensities$ColX
+    norm_intensities[[length(norm_intensities) + 1]] = intensities
+  }
+}
+norm_intensities = do.call(rbind, norm_intensities)
+```
+
+```{r, fig.width=15, fig.height=15}
+ggplot(data = norm_intensities, 
+       mapping = aes(x = Col, y = Row, fill = x.a.b.q05_expected)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Normalized Median Actin Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```
+
+```{r, fig.width=10, fig.height=15}
+ggplot(data = norm_intensities, 
+       mapping = aes(x = Col, y = Row, fill = x.c.b.q05_expected)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Normalized Median DAPI Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```
+
+```{r, fig.width=10, fig.height=15}
+ggplot(data = norm_intensities, 
+       mapping = aes(x = Col, y = Row, fill = x.b.b.q05_expected)) + 
+  geom_raster() + facet_wrap(facets = ~Plate, nrow = length(lines)) + 
+  coord_equal() + scale_fill_gradient(low = "lightblue", high = "darkblue") + 
+  ggtitle("Normalized Median FITC Intensities per Plate") + theme_Publication() + 
+  theme(axis.text = element_blank(), legend.title = element_blank(), 
+        axis.ticks = element_blank(), axis.line = element_blank()) + 
+  labs(x = "", y = "")
+```

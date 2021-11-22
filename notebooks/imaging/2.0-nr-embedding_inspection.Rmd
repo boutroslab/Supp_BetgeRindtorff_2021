@@ -1,0 +1,679 @@
+---
+title: "UMAP EDA"
+author: Niklas Rindtorff
+output:
+  #pdf_document: default
+  html_document:
+    keep_md: true
+params:
+  data: "data/processed/morphology/umap_absolute_all_drugs_sampled.Rds"
+  data_harmony: "data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds"
+  remote: FALSE
+  cache: FALSE
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = params$cache,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(purrr)
+library(readr)
+library(here)
+library(tibble)
+library(ggrastr)
+library(cowplot)
+library(princurve)
+library(scico)
+library(ggridges)
+library(cowplot)
+library(tibble)
+library(grDevices)
+library(stats)
+
+# parameter
+print("parameter input:")
+print(params$data)
+print(params$data_harmony)
+```
+
+
+# Introduction
+
+After extracting features from segmented organoids, we are interested in a set of questions regarding (I) morphological differences between organoid lines, (II) robust morphological states across organoid lines and (III) how such states correlate to biological organoid state by means of gene expression, drug perturbation etc. 
+
+The current preprocessing of our data includes: 
+* filtering of objects below 300 pixels
+* removing objects touching the original image boundary
+* initial filtering of blurry organoids using a supervised random-forest classifier
+* normalization of organoid features to each plate's distribution
+
+Further, we added the following steps:
+* we remove noisy features and reduce data dimensionality using PCA, we keep 25 components (arbitrary cutoff)
+* ( we experiment with *Harmony*, a method to remove batch effects in high dimensional data, such as single-cell RNA-Seq data)
+* we perform a UMAP projection of the complete data
+
+In this vignette we are interested in the overall structure of the embedding and the effect of *Harmony*. We compare pre-processed data run through *Harmony* with data that was directly projected using UMAP.
+
+```{r, message = FALSE}
+
+
+organoid_morphology <- read_delim(here::here("references/imaging/visual_classification_organoids.csv"), ";", escape_double = FALSE, trim_ws = TRUE) %>% 
+  dplyr::select(line = organoid, morphology = visual_inspection_v2) %>% 
+  expand_grid(., version = c("01", "02")) %>%
+  mutate(line = paste0(line, version)) %>% 
+  dplyr::select(-version)
+
+umap_sampled <- read_rds(here::here(params$data)) %>% left_join(organoid_morphology)
+umap_sampled_h <- read_rds(here::here(params$data_harmony)) %>% left_join(organoid_morphology)
+
+# umap_df <- rbind(pca_df_raw %>% mutate(status = "raw"),
+#                 pca_df_harmony %>% mutate(status = "harmony"))
+
+```
+
+
+# Organoid Size
+
+The central cluster contains mostly large organoids, while two seperate clusters contain smaller objects.
+
+```{r}
+umap_size <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = size_log)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_viridis_c() +
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main,
+       color = "ln(size)") + 
+  theme(legend.position = "bottom")
+}
+
+p1 <- umap_size(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_size(umap_sampled, "Raw Data, All data")
+# p3 <- umap_size(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_size(umap_sampled_dmso, "Raw Data, DMSO")
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("reports/figures/imaging/gg_size_panel.pdf"), 
+            width = 8,
+            height = 4)
+```
+
+
+# Organoid Viability
+
+```{r}
+umap_ldc <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = prob_dead)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_scico(palette = 'lajolla') + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main,
+       color = "p(dead)") + 
+  theme(legend.position = "bottom") + 
+  guides(fill = guide_colourbar(barwidth = 0.5, barheight = 10))
+}
+
+p1 <- umap_ldc(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_ldc(umap_sampled, "Raw Data, All data")
+# p3 <- umap_ldc(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_ldc(umap_sampled_dmso, "Raw Data, DMSO")
+
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("reports/figures/imaging/gg_ldc_panel.pdf"),
+            width = 8,
+            height = 4)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_ldc.pdf"), width = 4, height = 4)
+```
+
+```{r}
+umap_morph <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = morphology)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_brewer(type = "qual") + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main) + 
+  theme(legend.position = "bottom")
+}
+
+p1 <- umap_morph(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_morph(umap_sampled, "Raw Data, All data")
+# p3 <- umap_morph(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_morph(umap_sampled_dmso, "Raw Data, DMSO")
+
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("gg_morph_panel.pdf"),
+            width = 8,
+            height = 4)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_morph.pdf"))
+```
+
+
+```{r, eval = FALSE}
+umap_line <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = line)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_brewer(type = "qual") + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main) + 
+  theme(legend.position = "bottom")
+}
+
+p1 <- umap_line(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_line(umap_sampled, "Raw Data, All data")
+# p3 <- umap_line(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_line(umap_sampled_dmso, "Raw Data, DMSO")
+
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("gg_line_panel.pdf"),
+            width = 8,
+            height = 4)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_line.pdf"))
+```
+
+
+```{r}
+umap_replicate <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = replicate)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_brewer(type = "qual") + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main,
+       color = "Screen ID") + 
+  theme(legend.position = "bottom")
+}
+
+p1 <- umap_replicate(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_replicate(umap_sampled, "Raw Data, All data")
+# p3 <- umap_screen(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_screen(umap_sampled_dmso, "Raw Data, DMSO")
+
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("reports/figures/imaging/gg_replicate_panel.pdf"),
+            width = 8,
+            height = 4)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_screen.pdf"), width = 4, height = 4)
+```
+
+
+```{r}
+umap_screen <- function(umap, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = screen_id)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_brewer(type = "qual") + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main,
+       color = "Screen ID") + 
+  theme(legend.position = "bottom")
+}
+
+p1 <- umap_screen(umap_sampled_h, "Harmony normalised, All data")
+p2 <- umap_screen(umap_sampled, "Raw Data, All data")
+# p3 <- umap_screen(umap_sampled_dmso_h, "Harmony normalised, DMSO")
+# p4 <- umap_screen(umap_sampled_dmso, "Raw Data, DMSO")
+
+
+plot_grid(
+  p1, p2,
+#  p3, p4,
+  labels = "AUTO", ncol = 2
+) +  ggsave(here::here("reports/figures/imaging/gg_screen_panel.pdf"),
+            width = 8,
+            height = 4)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_screen.pdf"), width = 4, height = 4)
+```
+
+# Dye Intensity
+
+```{r}
+umap_sampled %>%
+  ggplot(aes(actin, fill = screen_id)) +
+  geom_density(alpha = 0.5) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r}
+umap_sampled %>%
+  ggplot(aes(permeability, fill = screen_id)) +
+  geom_density(alpha = 0.5) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r}
+umap_sampled %>%
+  ggplot(aes(dapi, fill = screen_id)) +
+  geom_density(alpha = 0.5) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r}
+set.seed(123)
+
+umap_sampled %>%
+  filter(drug == "DMSO") %>%
+  #sample_n(10000) %>%
+  ggplot(aes(v1, v2, color = actin)) + 
+  geom_point_rast(alpha = 0.75, size = 0.35) +
+   scale_colour_gradient(low = "white", high = "red") + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = "Actin staining intensity") + 
+  theme(legend.position = "bottom") + 
+  ggsave(here::here("reports/figures/imaging/gg_actin.pdf"), width = 4, height = 4)
+
+umap_sampled %>%
+  filter(drug == "DMSO") %>%
+  #sample_n(10000) %>%
+  ggplot(aes(v1, v2, color = dapi)) + 
+  geom_point_rast(alpha = 0.75, size = 0.35) +
+   scale_colour_gradient(low = "white", high = "blue") + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = "Nuclear staining intensity") + 
+  theme(legend.position = "bottom") + 
+  ggsave(here::here("reports/figures/imaging/gg_dapi.pdf"), width = 4, height = 4)
+
+```
+
+# Supplements
+Here I collect pieces of code that did not make it into the final analysis but can be run in theory. In order to access these peaces of code, you have to open the *.RMD* file. 
+
+```{r}
+knitr::knit_exit()
+```
+
+# Lines of interest
+
+
+```{r, eval = FALSE}
+umap_morph_filter <- function(umap, line_vis, main){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = morphology)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35, color = "grey") +
+  geom_point_rast(data = umap %>% filter(line == line_vis), alpha = 0.5, size = 0.35) +
+  scale_color_brewer(type = "qual") + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = main) + 
+  theme(legend.position = "bottom")
+}
+
+loi_morph <- function(loi){
+p1 <- umap_morph_filter(umap_sampled_h, loi, paste0("Harmony, All data, ", loi))
+p2 <- umap_morph_filter(umap_sampled, loi, "Raw Data, All data")
+# p3 <- umap_morph_filter(umap_sampled_dmso_h, loi, paste0("Harmony, DMSO, ", loi))
+# p4 <- umap_morph_filter(umap_sampled_dmso, loi, paste0("Raw Data, DMSO, ", loi))
+
+plot_grid(
+  p1, p2,
+ # p3, p4,
+  labels = "AUTO", ncol = 2) +  ggsave(here::here(paste0("reports/figures/imaging/gg_morph_panel", loi, ".pdf")), 
+            width = 8,
+            height = 8)
+
+#p2 +  ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_morph.pdf"))
+
+}
+
+loi_morph("D013T01")
+
+lapply(umap_sampled_h$line %>% unique(), loi_morph)
+```
+
+# Characterizing organoid regions
+
+```{r, eval = FALSE}
+cutout_df <- tibble(path = list.files(paste0(PATH, "data/processed/FeatureAnalysis/"), recursive = TRUE, pattern = ".tif")) %>%
+  separate(path, c("line", "drug", "uuid"), sep = "/", remove = FALSE) %>% 
+  separate(uuid, c("uuid", "ext"), sep = ".t") %>% 
+  dplyr::select(-ext)
+
+umap_cut <- umap_tidy %>% semi_join(cutout_df %>% dplyr::select(uuid))
+  
+umap_sampled %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = size_log)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35, color = "grey") + 
+  #scale_color_viridis_c() +
+  geom_point_rast(data = umap_cut,
+                  alpha = 0.5, 
+                  aes(color = line),
+                  #color = "red",
+                  size = 0.35) + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "ln(size)") + 
+  theme(legend.position = "bottom")
+
+```
+
+```{r, eval = FALSE}
+set.seed(23452)
+
+cut_example <- umap_cut %>%
+  mutate(v1 = round(v1)) %>%
+  mutate(v2 = round(v2)) %>%
+  group_by(line, v1, v2) %>% sample_n(1) %>%
+  dplyr::select(v1, v2, line, uuid) %>% 
+  arrange(v1, v2)
+
+```
+
+```{r, eval = FALSE}
+theme_black = function(base_size = 12, base_family = "") {
+ 
+  theme_grey(base_size = base_size, base_family = base_family) %+replace%
+ 
+    theme(
+      # Specify axis options
+      axis.line = element_blank(),  
+      axis.text.x = element_text(size = base_size*0.8, color = "white", lineheight = 0.9),  
+      axis.text.y = element_text(size = base_size*0.8, color = "white", lineheight = 0.9),  
+      axis.ticks = element_line(color = "white", size  =  0.2),  
+      axis.title.x = element_text(size = base_size, color = "white", margin = margin(0, 10, 0, 0)),  
+      axis.title.y = element_text(size = base_size, color = "white", angle = 90, margin = margin(0, 10, 0, 0)),  
+      axis.ticks.length = unit(0.3, "lines"),   
+      # Specify legend options
+      legend.background = element_rect(color = NA, fill = "black"),  
+      legend.key = element_rect(color = "white",  fill = "black"),  
+      legend.key.size = unit(1.2, "lines"),  
+      legend.key.height = NULL,  
+      legend.key.width = NULL,      
+      legend.text = element_text(size = base_size*0.8, color = "white"),  
+      legend.title = element_text(size = base_size*0.8, face = "bold", hjust = 0, color = "white"),  
+      legend.position = "right",  
+      legend.text.align = NULL,  
+      legend.title.align = NULL,  
+      legend.direction = "vertical",  
+      legend.box = NULL, 
+      # Specify panel options
+      panel.background = element_rect(fill = "black", color  =  NA),  
+      panel.border = element_rect(fill = NA, color = "white"),  
+      panel.grid.major = element_line(color = "grey35"),  
+      panel.grid.minor = element_line(color = "grey20"),  
+      panel.margin = unit(0.5, "lines"),   
+      # Specify facetting options
+      strip.background = element_rect(fill = "grey30", color = "grey10"),  
+      strip.text.x = element_text(size = base_size*0.8, color = "white"),  
+      strip.text.y = element_text(size = base_size*0.8, color = "white",angle = -90),  
+      # Specify plot options
+      plot.background = element_rect(color = "black", fill = "black"),  
+      plot.title = element_text(size = base_size*1.2, color = "white"),  
+      plot.margin = unit(rep(1, 4), "lines")
+ 
+    )
+ 
+}
+```
+
+
+```{r, eval = FALSE}
+set.seed(234)
+
+cut_sample <- cut_example %>% ungroup() %>% group_by(v1, v2) %>% sample_n(1)
+
+gg_example <- umap_sampled %>%
+  #filter(Size < 1000) %>%
+  ggplot(data = ., aes(v1, v2, color = size_log)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_viridis_c() +
+  geom_point(data = cut_sample,
+                  #alpha = 0.5, 
+                  #aes(color = line),
+                  color = "white",
+                  size = 0.35) + 
+  ggrepel::geom_text_repel(data = ,
+                           aes(label = uuid),
+                           color = "white",
+                           size = 2) +
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "ln(size)") + 
+  theme_black() +
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+        ) 
+
+gg_example + ggsave(paste0(PATH, "notebooks/PhenotypeSpectrum/gg_example.pdf"), width = 6, height = 6)
+```
+
+```{r, eval = FALSE}
+lapply(paste0("rsync ", PATH , "data/processed/FeatureAnalysis/", cut_sample$line, "/DMSO/", cut_sample$uuid, ".tif ", PATH, "data/processed/FeatureAnalysis/" , "cut_sample/DMSO/"), system)
+```
+
+
+```{r, eval = FALSE}
+my_plot <- 
+  ggplot(data    = iris, 
+         mapping = aes(x    = Sepal.Length, 
+                       fill = Species)) + 
+  geom_density(alpha = 0.7)
+
+
+logo_file <- paste0(PATH, "data/processed/FeatureAnalysis/D046T01/DMSO/" , cut_example[1,4], ".tif")
+my_plot_2 <- ggdraw() +
+  draw_image(logo_file,  x = 5, y = 0.4, scale = 2) 
+my_plot_2 + ggsave(paste0(PATH, "/tmp.pdf"))
+```
+
+
+
+
+```{r,  eval = FALSE}
+metadata = read_excel(here::here("data/metadata/Screenings_Imaging_Manuscript.xlsx"))
+
+pca_metadata <- metadata %>% 
+  mutate(Line = paste0(donor, tumor)) %>% 
+  filter(image_CTG == "Imaging") %>%
+  dplyr::select(Line, Plate = barcode, screen_ID) %>% 
+  #cleaning data to harmonize different naming schemes
+  mutate(Plate = if_else(Line == "D020T01" & screen_ID %in% c("HC1092-9", "HC1092-10"), str_replace(Plate, "D020T01", "D020T02"), Plate)) %>%
+  mutate(Line = if_else(Line == "D020T01" & screen_ID %in% c("HC1092-9", "HC1092-10"), "D020T02", Line)) %>%
+  #accounting for re-imaging of plates
+  separate(Plate, c("start", "end"), sep = 8, remove = FALSE) %>% 
+  mutate(end = str_sub(end, 2,-1L)) %>% 
+  dplyr::select(-Plate) %>%
+  dplyr::rename(line = Line) %>%
+  left_join(pca_dmso_subset %>% 
+              separate(plate, c("start", "end"), sep = 8, remove = FALSE) %>% 
+              mutate(end = str_sub(end, 2,-1L)) , .) %>% 
+  dplyr::select(-start, -end) %>% 
+  dplyr::rename(screen_id = screen_ID)
+
+stopifnot(pca_metadata %>% dplyr::count(screen_id, line, plate) %>% naniar::miss_summary() %>% .$miss_df_prop == 0)
+```
+
+```{r, eval = FALSE}
+set.seed(123)
+
+pca_metadata_frac <- pca_metadata #%>% sample_frac(0.001)
+
+pca_harmony <- pca_metadata_frac %>% dplyr::select(contains("PC"))
+metadata_harmony <- pca_metadata_frac %>% dplyr::select(screen_id, line)
+
+my_harmony_embeddings <- HarmonyMatrix(
+  pca_harmony, metadata_harmony, c("screen_id"),
+  do_pca = FALSE,
+  verbose = TRUE, 
+  return_object = TRUE
+)
+
+umap_pre <- uwot::umap(my_harmony_embeddings$Z_orig %>% t() %>% as_tibble(), verbose = TRUE)
+umap_post <- uwot::umap(my_harmony_embeddings$Z_corr %>% t() %>% as_tibble(), verbose = TRUE)
+
+harmony_effect <- umap_pre %>% as_tibble() %>% mutate(status = "pre") %>% cbind(id = 1:nrow(.)) %>% cbind(metadata_harmony)%>%
+  rbind(.,umap_post %>% as_tibble() %>% mutate(status = "post")%>% cbind(id = 1:nrow(.)) %>% cbind(metadata_harmony)) 
+
+harmony_effect %>% saveRDS(here::here("vignettes/harmony_effect_absolute.Rds"))
+```
+
+Here we can see the effect of Harmony on batch discordances.
+
+```{r, eval = FALSE}
+harmony_effect <- readRDS(here::here("vignettes/harmony_effect_absolute.Rds"))
+
+gg_harmony_effect <- harmony_effect %>% 
+  sample_frac(0.01) %>%
+  mutate(status = factor(status, levels = c("pre", "post"))) %>%
+  ggplot(aes(V1, V2, color = screen_id)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  theme_cowplot() + 
+  scale_color_brewer(type = "qual", palette = 2) +
+  facet_wrap( ~ status) + 
+  #ggsave(here::here("vignettes/07_organoid_unsupervised_exploration/pre_post_harmony.png")) + 
+  NULL
+```
+
+Still, line-specific differences are conserved in this method.
+
+```{r, eval = FALSE}
+harmony_effect %>% 
+ filter(status == "post") %>%
+  sample_frac(0.01) %>%
+  ggplot(aes(V1, V2, color = line)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  theme_cowplot() + 
+  #scale_color_brewer(type = "qual") +
+  #ggsave(here::here("vignettes/07_organoid_unsupervised_exploration/post_harmony_line.png")) + 
+  NULL
+```
+
+```{r, eval = FALSE}
+harmony_effect %>% 
+ filter(status == "post") %>%
+  sample_frac(0.1) %>%
+  left_join(umap_sampled %>% 
+  distinct(line, morphological_class)) %>%
+  filter(morphological_class != "other") %>%
+  ggplot(aes(V1, V2, color = morphological_class)) + 
+  #scale_color_brewer(type = "qual", palette = 2) +
+  geom_point_rast(alpha = 0.5, size = 0.7) + 
+  scale_color_viridis_d() +
+  theme_cowplot()
+
+
+```
+
+```{r, eval = FALSE}
+df <- harmony_effect %>% 
+ filter(status == "post") %>% 
+  dplyr::select(-id) %>%
+  cbind(umap_tidy %>% dplyr::select(-v1, -v2, -line)) %>%
+  mutate(cystic = if_else(line == "D013T01" &  well == "D24" & plate == "D013T01P001L02", TRUE, FALSE)) %>%
+  mutate(compact = if_else(line == "D055T01" &  well == "D24" & plate == "D055T01P007L02", TRUE, FALSE))
+
+df %>% 
+  sample_frac(0.01) %>%
+  ggplot(aes(V1, V2, color = size_log)) + 
+  #scale_color_brewer(type = "qual", palette = 2) +
+  geom_point_rast(alpha = 0.1, size = 0.35) + 
+  geom_point_rast(color = "red", alpha = 1, size = 0.5, data = df %>% filter(cystic == TRUE)) +
+  geom_point_rast(color = "blue", alpha = 1, size = 0.5, data = df %>% filter(compact == TRUE)) + 
+  scale_color_viridis_c() +
+  theme_cowplot() + 
+  coord_fixed()
+```
+
+```{r, eval = FALSE}
+harmony_effect %>% 
+ filter(status == "post") %>% 
+  dplyr::select(-id) %>%
+  cbind(umap_tidy %>% dplyr::select(-v1, -v2, -line)) %>%
+  dplyr::filter(line == "D013T01" &  well == "D24" & plate == "D013T01P001L02") %>% 
+  mutate(original_x = as.numeric(original_x),
+         original_y = as.numeric(original_y)) %>%
+  mutate(field = factor(field, levels = c(1, 2, 4, 3))) %>%
+  ggplot(aes(original_x, -original_y, size = size_log, color = V1)) + 
+  geom_point() + 
+  facet_wrap(~field, ncol = 2) + 
+  coord_fixed() +
+  scale_color_viridis() +
+  theme_cowplot()
+```
+
+```{r, eval = FALSE}
+set.seed(123)
+
+pca_harmony <- pca_metadata %>% dplyr::select(contains("V"))
+metadata_harmony <- pca_metadata %>% dplyr::select(screen_ID, Line)
+
+harmony_id <- HarmonyMatrix(
+  pca_harmony, metadata_harmony, c("screen_ID"),
+  do_pca = FALSE,
+  verbose = TRUE, 
+  return_object = TRUE
+)
+
+harmony_id$Z_corr %>% saveRDS(here::here("vignettes/07_organoid_unsupervised_exploration/harmony/harmony_pca_id.Rds"))
+```
+

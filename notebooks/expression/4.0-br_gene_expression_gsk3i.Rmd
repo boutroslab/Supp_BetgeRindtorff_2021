@@ -1,0 +1,301 @@
+---
+title: "Differential gene expression upon GSK3 inhibitor treatment"
+author: "Benedikt Rauscher"
+date: "11/24/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F, warning = F, results = 'hide')
+```
+
+# Dependencies
+
+```{r}
+library(affy)
+library(limma)
+library(clusterProfiler)
+library(ReactomePA)
+library(enrichplot)
+library(org.Hs.eg.db)
+library(pheatmap)
+library(reshape2)
+library(tidyverse)
+library(cowplot)
+library(here)
+```
+
+Define function namespace.
+
+```{r}
+filter <- dplyr::filter
+select <- dplyr::select
+rename <- dplyr::rename
+slice <- dplyr::slice
+```
+
+Set parameters for plotting.
+
+```{r}
+theme_set(theme_cowplot())
+```
+
+# Data loading and normalization
+
+We load the gene expression data from the raw Affymetrix CEL files and normalize the data using RMA.
+
+```{r}
+expr_mat <- read_rds(here::here("data/processed/expression/gsk_expr.rds"))
+
+## sample info
+sample_info <- tibble(names = colnames(expr_mat)) %>%
+  extract(names, c('line', 'treatment', 'rep'),
+          regex = '^(D.+?)-(.+?)-([1,2])_.+?', remove = F)
+
+## create an annotation for the probe IDs
+promise_expr_filtered_tidy <- readRDS(here::here("data/processed/expression/promise_expr_filtered_tidy.rds"))
+probe_anno <- promise_expr_filtered_tidy %>% distinct(probe, symbol, entrez)
+
+## confirm that chip model was the same
+table(probe_anno$probe %in% rownames(expr_mat))
+```
+
+# Quality control
+
+We perform a clustering to check if the samples are grouped correctly.
+
+```{r}
+## generate heatmap annotation
+hm_anno <- sample_info %>% 
+  mutate_all(as.factor) %>%
+  as.data.frame() %>% column_to_rownames('names')
+
+## visualize distance matrix
+pheatmap(as.matrix(dist(t(expr_mat))),
+         annotation_row = hm_anno)
+
+## visualize most variable probes
+pheatmap(expr_mat[order(apply(expr_mat, 1, sd), decreasing = T)[1:500],], 
+         annotation_col = hm_anno)
+```
+
+The samples cluster by line which is expected. For both lines we see a clustering by treatment which is also what we expect.
+
+# Differential gene expression
+
+We use 'limma' to perform differential gene expression analysis between cystic and solid organoid lines. Because of the fact that the lines are quite different in their expression I also fit line-specific contrasts.
+
+```{r}
+## model matrices
+identical(colnames(expr_mat), sample_info$names)
+mm <- model.matrix(~line + treatment, data = sample_info)
+mm2 <- model.matrix(~0 + group, # no intercept
+                    data = mutate(sample_info, group = paste(line, treatment, sep='_')))
+
+## fit models and compute model coefficients
+fit <- eBayes(lmFit(expr_mat, mm))
+fit2 <- lmFit(expr_mat, mm2)
+contr <- makeContrasts(groupD007T_GSK3I-groupD007T_DMSO,
+                       groupD019T_GSK3I-groupD019T_DMSO,
+                       levels = mm2)
+fit2_contr <- contrasts.fit(fit2, contr)
+fit2_contr <- eBayes(fit2_contr)
+
+## extract results and annotate gene symbols
+limma_results <- function(obj, coef){
+  topTable(obj, coef = coef, n = Inf) %>% 
+  as_tibble(rownames = 'probe') %>%
+  left_join(probe_anno)
+}
+
+## consistent dyregulation across both lines
+res_gsk <- limma_results(fit, coef = 'treatmentGSK3I')
+
+## line-specific effects
+res_gsk7 <- limma_results(fit2_contr, coef = colnames(coef(fit2_contr))[1])
+res_gsk19 <- limma_results(fit2_contr, coef = colnames(coef(fit2_contr))[2])
+```
+
+We generate an expression tibble for easy plotting.
+
+```{r}
+expr_long <- expr_mat %>% as_tibble(rownames = 'probe') %>%
+  gather(names, expr, -probe) %>% 
+  left_join(sample_info) %>%
+  left_join(probe_anno)
+```
+
+We plot a number of hits to validate the DGE testing.
+
+```{r}
+## best consistent hit in both lines
+expr_long %>% filter(probe == res_gsk$probe[1]) %>%
+  ggplot(aes(treatment, expr)) + 
+  stat_summary(geom = 'bar', fun = 'mean') +
+  geom_point() +  
+  facet_wrap(~line + symbol + probe)
+
+## best hits in 7 and 19 respectively
+expr_long %>% filter(probe %in% c(res_gsk7$probe[1], res_gsk19$probe[1])) %>%
+  ggplot(aes(treatment, expr)) + 
+  stat_summary(geom = 'bar', fun = 'mean') +
+  geom_point() +  
+  facet_wrap(~line + symbol + probe, scales =)
+
+## what about axin2?
+expr_long %>% filter(symbol %in% c('AXIN2')) %>%
+  ggplot(aes(treatment, expr)) + 
+  stat_summary(geom = 'bar', fun = 'mean') +
+  geom_point() +  
+  facet_wrap(~line + symbol + probe, scales =)
+
+## various stemness markers
+expr_long %>% filter(symbol %in% c('CD44', 'LGR5', 'ASCL2', 'EPHB2')) %>%
+  ggplot(aes(treatment, expr)) + 
+  stat_summary(geom = 'bar', fun = 'mean') +
+  geom_point(aes(color = line)) +  
+  facet_wrap(~ symbol + probe, scales = 'free_y')
+```
+
+This looks good. There is no difference between AXIN2 levels indicating that the GSK3 inhibition does not affect Wnt signaling in these lines. This is likely due to APC mutations. How many DGE do we get for each comparison?
+
+```{r}
+print(paste('Both lines:', nrow(res_gsk %>% filter(adj.P.Val < 0.05))))
+print(paste('D007T:', nrow(res_gsk7 %>% filter(adj.P.Val < 0.05))))
+print(paste('D019T:', nrow(res_gsk7 %>% filter(adj.P.Val < 0.05))))
+```
+
+# Gene set enrichment
+
+Since there was decent signal in the combined DGE test and the GSK3 inhibitor phenotype is visible in both lines we focus on the results that are consistent in both lines for gene set enrichment analyses.
+
+## Gene Ontology
+
+We use the clusterProfiler + fgsea packages to perform a ranked gene set enrichment analysis in order to identify differentially expressed pathways.
+
+```{r}
+## select strongest probe for each entrez id
+res_filtered <- res_gsk %>% inner_join(probe_anno) %>% 
+  group_by(entrez) %>% top_n(1, -P.Value) %>% ungroup()
+
+## create ranked list for enrichment
+ranks <- setNames(res_filtered$t, as.character(res_filtered$entrez))
+ranks <- sort(ranks, decreasing = T)
+
+
+```
+
+We can generate a network plot using clusterProfiler in order to get an overview of the results.
+
+```{r, eval = FALSE}
+## GO term enrichment (biological process)
+gse_go <- gseGO(
+  geneList = ranks,
+  OrgDb = org.Hs.eg.db,
+  ont = 'BP'#,
+  # nPerm = 1e5,
+  # minGSSize = 100,
+  # maxGSSize = 500
+)
+
+emapplot(gse_go)
+```
+
+An upregulation of ribosome biogenesis might indicate a mode of action via mTOR. The link between GSK3 and TSC is known and both a highly correlated in the DepMap CRISPR data.
+
+## Reactome
+
+We do the same for Reactome instead of GO terms. A convenience function for enrichment against Reactome is implemented in the 'ReactomePA' package. Conceptually this function works the same way as the clusterProfiler functions.
+
+```{r}
+## Reactome enrichment analysis
+gse_reactome <- gsePathway(
+  geneList = ranks,
+  organism = 'human'#,
+  # nPerm = 1e5,
+  # minGSSize = 100,
+  # maxGSSize = 500
+)
+```
+
+Again we plot an enrichment map to visualize the results.
+
+```{r}
+emapplot(pairwise_termsim(gse_reactome))
+```
+
+## Intestinal crypt signatures
+
+We perform GSEA for the humanized intestinal crypt signatures published in Merloz-Suarez et al (Cell Stem Cell, 2011).
+
+```{r}
+## parse signatures and make list
+intestinal_sig <- readxl::read_excel(here('data/external/expression/merloz-suarez_sigantures.xls'), 
+                                     sheet = 1, skip = 4) %>% .[,1:4] %>%
+  gather(signature, symbol) %>% drop_na() %>% 
+  mutate(symbol = gsub('\\*', '', symbol))
+
+## run gsea with clusterprofiler
+res_symbol <- res_gsk %>% 
+  group_by(symbol) %>% arrange(P.Value) %>% slice(1) %>% ungroup()
+ranks_symbol <- sort(setNames(res_symbol$t, res_symbol$symbol), decreasing = T)
+
+gse_sig <- GSEA(
+  geneList = ranks_symbol,
+  TERM2GENE = intestinal_sig,
+  # nPerm = 1e5,
+  # minGSSize = 1,
+  # maxGSSize = 1000,
+  pvalueCutoff = 1
+)
+
+## output as tibble
+gse_sig_tbl <- as_tibble(gse_sig)
+```
+
+We see a significant upregulation of the proliferation signature and a downregulation of the Lgr5 ISC signature in solid compared to cystic organoids. We generate barcode plots to visualize these enrichments.
+
+```{r}
+## lgr5 signature
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[4], 
+  title = paste0(gse_sig$ID[4], 
+                ' (p = ', round(gse_sig_tbl$pvalue[4], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[4], 2), ')')
+) 
+
+## proliferation
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[1],
+  title = paste0(gse_sig$ID[1], 
+                ' (p = ', round(gse_sig_tbl$pvalue[1], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[1], 2), ')')
+)
+
+## late ta
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[2],
+  title = paste0(gse_sig$ID[2], 
+                ' (p = ', round(gse_sig_tbl$pvalue[2], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[2], 2), ')')
+)
+
+## ephb2-isc
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[3],
+  title = paste0(gse_sig$ID[3], 
+                ' (p = ', round(gse_sig_tbl$pvalue[3], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[3], 2), ')')
+)
+```
+
+There is a strong upregulation of the proliferation signature, but both stemness signatures remain unchanged.
+
+# Session info
+
+```{r, results='show'}
+sessionInfo()
+```
+

@@ -1,0 +1,80 @@
+---
+title: "Amplicon plots"
+author: "Erica Valentini"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  rmd: "make_amplicon_plots_snakemake.Rmd"
+output:
+  html_document:
+  highlight: tango
+  number_sections: no
+  theme: default
+  toc: yes
+  toc_depth: 3
+  toc_float:
+    collapsed: no
+    smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document.
+
+Files include from snakemake: `r snakemake@input`.
+
+## Source
+<a download="make_amplicon_plots_snakemake.Rmd" href="`r base64enc::dataURI(file = params$rmd, mime = 'text/rmd', encoding = 'base64')`">R Markdown source file (to produce this document)</a>
+
+## Create matrix
+
+```{r matrix}
+library(readr)
+library(dplyr)
+library(plyr)
+
+counter_list <- list()
+temp <- list.files(path = snakemake@input[[1]], pattern = "*.counter.txt", full.names = T)
+for (i in 1:length(temp)) counter_list[[i]] <- read.csv(temp[i], sep="\t", col.names = c("chr", "start", "end", strsplit(basename(temp[i]), split="_")[[1]][1]))
+bedtools_amplicon_counter.matrix <- counter_list[[1]][!duplicated(counter_list[[1]]),]
+for (i in 2:length(counter_list)) bedtools_amplicon_counter.matrix <- inner_join(bedtools_amplicon_counter.matrix, counter_list[[i]][!duplicated(counter_list[[i]]),], by=c("chr", "start", "end"))
+```
+
+
+## Load file
+
+```{r load}
+library(ggplot2)
+library(colorRamps)
+library(RColorBrewer)
+library(tidyr)
+
+bedtools_amplicon_counter.matrix$amplicon <- paste(bedtools_amplicon_counter.matrix$chr, paste(bedtools_amplicon_counter.matrix$start, bedtools_amplicon_counter.matrix$end, sep='-'), sep=':')
+manifest_hg38_interval_names <- read_delim(snakemake@input[[2]], "\t", escape_double = FALSE, col_names = c("amplicon_name", "amplicon"), trim_ws = TRUE)
+manifest_hg38_interval_names <- manifest_hg38_interval_names[!duplicated(manifest_hg38_interval_names),]
+manifest_hg38_interval_names <- separate(manifest_hg38_interval_names, amplicon_name, into= "amplicon_gene", sep=" ", remove=FALSE)
+manifest_hg38_interval_names$amplicon_gene <- paste(manifest_hg38_interval_names$amplicon_gene, rownames(manifest_hg38_interval_names), sep="_")
+amplicon_all <- merge(manifest_hg38_interval_names, bedtools_amplicon_counter.matrix)
+amplicon_all <- cbind(amplicon_all[,1:6], amplicon_all[,grepl("^D", colnames(amplicon_all))])
+amplicon_all$avg <- rowMeans(amplicon_all[,7:ncol(amplicon_all)])
+amplicon_all <- amplicon_all[order(amplicon_all$avg),]
+amplicon_all$amplicon_gene <-factor(amplicon_all$amplicon_gene, levels= amplicon_all$amplicon_gene[order(amplicon_all$avg)])
+amplicon_all.expected <- (ncol(amplicon_all)-7) * 10
+```
+
+## Reshape data
+
+```{r reshape}
+library(reshape2)
+amplicons.melted <- melt(amplicon_all[,c(3,7:(ncol(amplicon_all)-1))], id = "amplicon_gene", value.name = "reads", variable.name = "sample")
+```
+
+## Plots
+
+```{r plot, fig.height=18, fig.width=10}
+ggplot(data = amplicons.melted ,aes(x=amplicon_gene, y=reads, color=sample)) + geom_point() + geom_boxplot(alpha=0.3, color="grey") + scale_color_brewer(palette = "Set3") + coord_flip() + theme(legend.justification = c(1,0), legend.position = c(1,0), text=element_text(size=8)) + geom_hline(yintercept=amplicon_all.expected) + stat_summary(fun.y=mean, colour="black", geom="point", shape=18, size=1)
+```
+

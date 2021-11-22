@@ -1,0 +1,319 @@
+#created by Erica Valentini on the 8th of March 2018
+import os
+import csv
+from collections import namedtuple, defaultdict
+
+#Programs needed are listed here with path (please update the path according to your own machine):
+FASTQC = '/Applications/FastQC.app/Contents/MacOS/fastqc'
+TRIM = '/Users/valentini/Programs/TrimGalore-0.4.3/trim_galore'
+BWA = '/Users/valentini/Programs/bwa/bwa'
+SAMTOOLS = '/Users/valentini/Programs/samtools-1.3.1/samtools'
+PICARD = 'java -Xmx5G -jar /Users/valentini/Documents/dropseq/Drop-seq_tools-1.12/3rdParty/picard/picard.jar'
+GATK = 'java -jar /Users/valentini/Programs/GenomeAnalysisTK.jar'
+BEDTOOLS = '/usr/local/bin/bedtools'
+VEP = '/Users/valentini/Programs/ensembl-vep/vep'
+
+#Files needed are listed here with path in the B110-Isilon3 machine (please update the path according to your own mount of the server):
+REF_GENOME = "/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/hg38_gatk/resources%2Fbroad%2Fhg38%2Fv0%2FHomo_sapiens_assembly38.fasta"
+DBSNP = '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/verily_h38/Homo_sapiens_assembly38.dbsnp138.vcf'
+MILLS = '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/verily_h38/Mills_and_1000G_gold_standard.indels.hg38.vcf'
+COSMIC = '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/CosmicCodingMuts.with_chrMT.vcf'
+MANIFEST = "/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/TruSeq CAT Manifest TC0117123-CAT.txt"
+PON = '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/MuTect2_PON.vcf'
+CHAIN = '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/hg19ToHg38.over.chain.gz'
+
+READS = ['R1', 'R2']
+SAMPLES = glob_wildcards("{S}.fastq.gz").S
+
+IL = namedtuple("IdLane", "sample_id s")
+FULLNAME = defaultdict(list)
+
+for sample in SAMPLES:
+    sample_id, s, number = sample.rsplit("_", maxsplit=2)
+    FULLNAME[IL(sample_id, s)].append(sample)
+
+print(FULLNAME)
+
+rule all:
+    input:
+        expand(["fastqc/{X.sample_id}_{X.s}_{read}_fastqc.html"], X=FULLNAME.keys(), read=READS),
+        expand(["trimmed/{X.sample_id}_{X.s}_{read}.fastq.gz_trimming_report.txt"], X=FULLNAME.keys(), read=READS),
+        expand(["trimmed/fastqc/{X.sample_id}_{X.s}_{number}_fastqc.html"], X=FULLNAME.keys(), number=["R1_val_1","R2_val_2"]),
+        expand(["aligned/{X.sample_id}_{X.s}_aligned_reads_sorted.bai"], X=FULLNAME.keys()),
+        expand(["calibration/{X.sample_id}_{X.s}.recalibration_plots.pdf"], X=FULLNAME.keys()),
+        "multiqc_report.html",
+        expand(["aligned/{X.sample_id}_{X.s}_aligned_reads_sorted_recalibrated.bam"], X=FULLNAME.keys()),
+        "manifest_hg38_interval.bed",
+        expand(["bed_files/{X.sample_id}_{X.s}_aligned_reads_sorted_recalibrated.bam.counter.txt"], X=FULLNAME.keys()),
+        "make_amplicon_plots_snakemake.html",
+        expand(["vcf/{X.sample_id}_{X.s}_mutect2_pon_qc_output.vcf"], X=FULLNAME.keys()),
+        expand(["vcf/{X.sample_id}_{X.s}_mutect2_pon_qc_VEP.vcf"], X=FULLNAME.keys()),
+        "GATK_VEP_combined_table_PON_QC_sm.txt",
+        "oncoprint_snakemake.html",
+        expand(["vcf/{X.sample_id}_{X.s}_mutect2_no_manifest_output.vcf"], X=FULLNAME.keys()),
+        expand(["vcf/{X.sample_id}_{X.s}_mutect2_no_manifest_output_VEP.vcf"], X=FULLNAME.keys()),
+        "GATK_VEP_combined_table_PON_QC_no_manifest.txt",
+
+
+rule fastqc:
+    input:
+        '{id}.fastq.gz'
+    output:
+        html = 'fastqc/{id}_fastqc.html'
+    params:
+        dir = 'fastqc/'
+    shell:
+        '{FASTQC} -o {params.dir} -f fastq {input}'
+
+
+rule trimming:
+    input:
+        r1 = lambda wc: FULLNAME[IL(wc.I, wc.S)][0]+".fastq.gz",
+        r2 = lambda wc: FULLNAME[IL(wc.I, wc.S)][1]+".fastq.gz",
+    output:
+        o = "trimmed/{I}_{S}_{r}.fastq.gz_trimming_report.txt"
+    params:
+        dir = 'trimmed/'
+    shell:
+        '{TRIM} -q 20 --paired --stringency 5 -o {params.dir} {input.r1} {input.r2}'
+
+
+rule fastqc_trimmed:
+        input:
+            'trimmed/{id}_val_{read}.fq.gz'
+        output:
+            html = 'trimmed/fastqc/{id}_val_{read}_fastqc.html'
+        params:
+            dir = 'trimmed/fastqc/'
+        shell:
+            '{FASTQC} -o {params.dir} -f fastq {input}'
+
+
+rule run_bwa:
+    input:
+        r1 = lambda wc: 'trimmed/'+FULLNAME[IL(wc.I, wc.S)][0]+"_val_1.fq.gz",
+        r2 = lambda wc: 'trimmed/'+FULLNAME[IL(wc.I, wc.S)][1]+"_val_2.fq.gz",
+    output:
+        temp("aligned/{I}_{S}_aligned_reads.sam")
+    params:
+        identifier = "\"@RG\\tID:{S}\\tSM:{I}\\tPL:illumina\\tLB:LL01\""
+    threads:
+        4
+    shell:
+        '{BWA} mem -M -R {params.identifier} -t {threads} -o {output} {REF_GENOME}\
+ {input.r1} {input.r2}'
+
+
+rule samtobam:
+    input:
+        "aligned/{i}_aligned_reads.sam"
+    output:
+        temp("aligned/{i}_aligned_reads.bam")
+    shell:
+        '{SAMTOOLS} view -bS {input} > {output}'
+
+
+rule sortbam:
+    input:
+        "aligned/{i}_aligned_reads.bam"
+    output:
+        "aligned/{i}_aligned_reads_sorted.bam"
+    shell:
+        '{PICARD} SortSam I={input} O={output} SORT_ORDER=coordinate'
+
+
+rule indexbam:
+    input:
+        "aligned/{i}_aligned_reads_sorted.bam"
+    output:
+        "aligned/{i}_aligned_reads_sorted.bai"
+    shell:
+        "{PICARD} BuildBamIndex I={input}"
+
+
+rule recalibration_1:
+    input:
+        "aligned/{i}_aligned_reads_sorted.bam"
+    output:
+        "calibration/{i}.recal_data.table"
+    shell:
+        '{GATK} -T BaseRecalibrator -R {REF_GENOME} -I {input} -knownSites {DBSNP}\
+ -knownSites {MILLS} -o {output}'
+
+
+rule recalibration_2:
+    input:
+        bam = "aligned/{i}_aligned_reads_sorted.bam",
+        table = "calibration/{i}.recal_data.table"
+    output:
+        "calibration/{i}.post_recal_data.table"
+    shell:
+        '{GATK} -T BaseRecalibrator -R {REF_GENOME} -I {input.bam} -knownSites {DBSNP}\
+ -knownSites {MILLS} -BQSR {input.table} -o {output}'
+
+
+rule analyze:
+    input:
+        pre = "calibration/{i}.recal_data.table",
+        post = "calibration/{i}.post_recal_data.table",
+    output:
+        "calibration/{i}.recalibration_plots.pdf"
+    shell:
+        '{GATK} -T AnalyzeCovariates -R {REF_GENOME} -before {input.pre} -after \
+{input.post} -plots {output}'
+
+
+rule multiqc:
+    input:
+        'calibration/'
+    output:
+        'multiqc_report.html'
+    params:
+        dir = '.'
+    shell:
+        'multiqc {params.dir}'
+
+
+rule print_reads:
+    input:
+        bam = "aligned/{i}_aligned_reads_sorted.bam",
+        table = "calibration/{i}.recal_data.table",
+    output:
+        "aligned/{i}_aligned_reads_sorted_recalibrated.bam"
+    shell:
+        '{GATK} -T PrintReads -R {REF_GENOME} -I {input.bam} -BQSR {input.table}\
+ -o {output}'
+
+
+rule manifest_to_interval:
+    input:
+        {MANIFEST}
+    output:
+        names = "manifest_hg38_interval_names.list",
+        intervals = "manifest_hg38_interval_unique.list",
+    script:
+        '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/Snakemake/convert_genome_coordinate_manifest_snakemake.py'
+
+
+rule manifest_to_bed:
+    input:
+        "manifest_hg38_interval_unique.list"
+    output:
+        "manifest_hg38_interval.bed"
+    run:
+        op = open(output[0], 'w')
+        with open(input[0]) as f:
+            for line in f:
+                info = line.split('\t')[1]
+                CHR = info.split(':')[0]
+                START = info.split(':')[1].split('-')[0]
+                END = info.split(':')[1].split('-')[1]
+                op.write(CHR+'\t'+START+'\t'+END+'\n')
+        op.close()
+
+
+rule bam2bed:
+    input:
+        "aligned/{i}_aligned_reads_sorted_recalibrated.bam"
+    output:
+        "bed_files/{i}_aligned_reads_sorted_recalibrated.bam.bed"
+    shell:
+        '{BEDTOOLS} bamtobed -i {input} > {output}'
+
+
+rule find_intersection:
+    input:
+        sequence = "bed_files/{i}_aligned_reads_sorted_recalibrated.bam.bed",
+        manifest = "manifest_hg38_interval.bed"
+    output:
+        "bed_files/{i}_aligned_reads_sorted_recalibrated.bam.counter.txt"
+    shell:
+        '{BEDTOOLS} intersect -a {input.manifest} -b {input.sequence} -c > {output}'
+
+
+rule amplicon_plots:
+    input:
+        matrix = "bed_files/",
+        amplicons = "manifest_hg38_interval_unique.list"
+    output:
+        "make_amplicon_plots_snakemake.html"
+    script:
+        '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/data_03_2018/snakemake/make_amplicon_plots_snakemake.Rmd'
+
+
+rule mutect2_with_PoN_QC:
+    input:
+        bam = "aligned/{i}_aligned_reads_sorted_recalibrated.bam",
+        manifest = "manifest_hg38_interval_names.list"
+    output:
+        "vcf/{i}_mutect2_pon_qc_output.vcf"
+    shell:
+        '{GATK} -T MuTect2 -R {REF_GENOME} -I:tumor {input.bam} --dbsnp {DBSNP}\
+        --cosmic {COSMIC} -PON {PON} -L {input.manifest} -A BaseQualityRankSumTest\
+        -A FisherStrand -o {output}'
+
+
+rule run_vep:
+    input:
+        "vcf/{i}_mutect2_pon_qc_output.vcf"
+    output:
+        "vcf/{i}_mutect2_pon_qc_VEP.vcf"
+    params:
+        "Feature,Feature_type,Consequence,Protein_position,Amino_acids,Codons,\
+Existing_variation,IMPACT,SYMBOL,CANONICAL,BIOTYPE,SIFT,PolyPhen,EXON,gnomAD_AF,CLIN_SIG,PUBMED"
+    shell:
+        '{VEP} -i {input} -o {output} --offline --force_overwrite --symbol \
+--sift b --poly b --pubmed --numbers --check_existing --af_gnomad --biotype \
+--no_intergenic --vcf --fields {params} --canonical --gencode_basic --fork 4'
+
+
+rule mutect2_without_manifest:
+    input:
+        "aligned/{i}_aligned_reads_sorted_recalibrated.bam"
+    output:
+        "vcf/{i}_mutect2_no_manifest_output.vcf"
+    shell:
+        '{GATK} -T MuTect2 -R {REF_GENOME} -I:tumor {input} --dbsnp {DBSNP}\
+        --cosmic {COSMIC} -PON {PON} -A BaseQualityRankSumTest\
+        -A FisherStrand -o {output}'
+
+
+rule run_vep_without_manifest:
+    input:
+        "vcf/{i}_mutect2_no_manifest_output.vcf"
+    output:
+        "vcf/{i}_mutect2_no_manifest_output_VEP.vcf"
+    params:
+        "Feature,Feature_type,Consequence,Protein_position,Amino_acids,Codons,\
+Existing_variation,IMPACT,SYMBOL,CANONICAL,BIOTYPE,SIFT,PolyPhen,EXON,gnomAD_AF,CLIN_SIG,PUBMED"
+    shell:
+        '{VEP} -i {input} -o {output} --offline --force_overwrite --symbol \
+--sift b --poly b --pubmed --numbers --check_existing --af_gnomad --biotype \
+--no_intergenic --vcf --fields {params} --canonical --gencode_basic --fork 4'
+
+
+rule combine_all_vcf_no_manifest:
+    input:
+        "vcf/"
+    output:
+        "GATK_VEP_combined_table_PON_QC_no_manifest.txt"
+    script:
+        '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/Snakemake/GATK_VEP_parser_no_manifest_snakemake.py'
+
+
+rule combine_all_vcf:
+    input:
+        "vcf/"
+    output:
+        "GATK_VEP_combined_table_PON_QC_sm.txt"
+    script:
+        '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/Snakemake/GATK_VEP_parser_snakemake.py'
+
+
+rule oncoplot:
+    input:
+        "GATK_VEP_combined_table_PON_QC_sm.txt"
+    output:
+        "oncoprint_snakemake.html"
+    script:
+        '/shares/b110_data/B110-Isilon3/valentini/amplicon_analysis/data_03_2018/snakemake/oncoprint_snakemake.Rmd'

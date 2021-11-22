@@ -1,0 +1,534 @@
+---
+title: "Gene Expression Morphology"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE)
+
+```
+
+
+```{r}
+library(SummarizedExperiment)
+library(limma)
+library(glmnet)
+library(pheatmap)
+library(reshape2)
+library(tidyverse)
+library(cowplot)
+library(here)
+library(DESeq2)
+
+
+library(clusterProfiler)
+library(ReactomePA)
+library(enrichplot)
+library(org.Hs.eg.db)
+```
+
+Define function namespace.
+
+```{r}
+filter <- dplyr::filter
+select <- dplyr::select
+rename <- dplyr::rename
+slice <- dplyr::slice
+count <- dplyr::count
+```
+
+Set parameters for plotting.
+
+```{r}
+theme_set(theme_cowplot())
+```
+
+# Data loading
+
+We load the gene expression data from an Rdata object from file.
+
+```{r, eval = TRUE}
+load(here('data/processed/expression/promise_expr.rda'))
+promise_expr_filtered <- readRDS(here::here('data/processed/expression/promise_expr_filtered.rds'))
+promise_expr_filtered_top <- readRDS(here::here('data/processed/expression/promise_expr_filtered_top.rds'))
+
+promise_long <- readRDS(here::here('data/processed/expression/promise_expr_tidy.rds'))
+promise_long_filtered <- readRDS(here::here('data/processed/expression/promise_expr_filtered_tidy.rds'))
+promise_long_filtered_top <- readRDS(here::here('data/processed/expression/promise_expr_filtered_tidy_top.rds'))
+
+# others
+organoid_morphology <- read_delim(here::here("references/imaging/visual_classification_organoids.csv"), ";", escape_double = FALSE, trim_ws = TRUE) %>% 
+  dplyr::select(line = organoid, morphology = visual_inspection_v2) %>%
+  mutate(line = substr(line, 1, 4)) %>% 
+  mutate(morphology = if_else(is.na(morphology), "other", morphology))
+
+organoid_size_fit <- readRDS(here::here("data/processed/morphology/organoid_size_fit.Rds")) %>% 
+  filter(!line %in% c('D055T01', 'D020T02', 'D021T01')) %>% 
+  #filter(!line %in% c('D055T01','D020T02')) %>% 
+  mutate(line = as.character(line)) %>% 
+  dplyr::select(line, size = x, rep = replicate) %>% 
+  distinct() %>% arrange(line) %>%
+  mutate(line = substr(line, 1, 4)) %>% 
+  mutate(rep = paste0("r", rep))
+```
+
+# Quality control
+
+We perform a clustering to check if the samples are grouped by line of origin.
+
+```{r, eval = FALSE}
+## make expr matrix
+expr_mat <- assays(promise_expr_filtered)$expr
+
+## generate heatmap annotation
+anno <- promise_long_filtered %>% 
+  distinct(line, rep, phenotype) %>% 
+  unite(id, line, rep) %>% 
+  mutate_all(as.factor) %>%
+  as.data.frame() %>% column_to_rownames('id')
+
+## visualize distance matrix
+pheatmap(as.matrix(dist(t(expr_mat))),
+         annotation_row = anno)
+
+## visualize most variable probes
+pheatmap(expr_mat[order(apply(expr_mat, 1, sd), decreasing = T)[1:100],], 
+         annotation_col = anno)
+```
+
+## Feature Selection
+
+```{r}
+means <- rowMeans(assays(promise_expr_filtered)$expr)
+sd <- apply(assays(promise_expr_filtered)$expr,1,sd)
+cv <- sd/means
+#par(mar=c(3.5,3.5,1,1),mgp=c(2,0.65,0),cex=0.9)
+smoothScatter(log(means),log(cv))
+```
+
+```{r}
+hist_res <- hist(cv, 100, col="#e7efd8", 
+                 freq = FALSE, 
+                 main = "Histogram of coefficients of variance", 
+                 xlab = "CV")
+
+top_n = cv %>% length()
+top_n = top_n * 0.10
+
+keep_probes = cv %>% sort(decreasing = TRUE) %>% .[1:top_n] 
+
+
+thresh_n = min(keep_probes)
+
+abline(v = thresh_n)
+```
+
+
+```{r}
+pca_hco <- assays(promise_expr_filtered_top)$expr %>% t() %>% prcomp(., scale = TRUE)
+summary(pca_hco)
+
+#Build colnames 
+pca_percent <- paste(colnames(pca_hco$x), " ", "(", 
+                     as.character(round(pca_hco$sdev^2 / sum(pca_hco$sdev^2) * 100, 1)),
+                     "%", ")", sep="")
+
+#Format PCA
+pca_hco$x_anno <- pca_hco$x %>%
+  as.data.frame() %>%
+  rownames_to_column("id") %>% 
+  separate(id, c("organoid", "line", "date", "array1", "array2"), sep="_") %>%
+  unite(type, c("array1", "array2")) %>% mutate(type = substr(type, 1, nchar(type)-4))
+```
+
+```{r}
+summary(pca_hco)$importance %>% as.data.frame() %>% 
+  rownames_to_column("metric") %>% gather(PC, value, -metric) %>% 
+  filter(metric == "Proportion of Variance") %>% 
+  mutate(PC = factor(PC, levels = .$PC)) %>% 
+  head(-1) %>% 
+  ggplot(aes(PC, value)) + 
+  geom_point() + 
+  labs(y = "Variance explained")
+```
+
+```{r, eval = FALSE}
+df = promise_long %>% 
+  group_by(probe, line, symbol, phenotype) %>% summarise(expr = mean(expr))
+
+plot_df = pca_hco$rotation %>% as.data.frame() %>% rownames_to_column("id") %>% 
+  gather(PC, value, -id) %>% 
+  nest(-PC) %>%
+  mutate(head = purrr::map(data, ~ head(.x, 10)),
+         tail = purrr::map(data, ~ tail(.x, 10)),
+         headtail = purrr::map2(head, tail, ~ rbind(.x, .y))) %>% 
+  dplyr::select(PC, headtail) %>% 
+  unnest() %>% 
+  arrange(PC, value) %>% 
+  filter(PC %in% c("PC1", "PC2", "PC3")) %>% 
+  dplyr::select(-value, probe = id) %>%
+  left_join(df)
+
+plot_df %>% 
+  ggplot(aes(line, probe, fill = expr)) + 
+  geom_tile() + 
+  facet_wrap(~ PC)
+```
+
+
+```{r}
+pca_morph <- pca_hco$x_anno %>%
+  left_join(organoid_morphology %>% rename(organoid = line)) %>%
+  ggplot(aes(PC1, PC2, color = morphology, label = organoid)) + 
+  geom_point(size = 3) + 
+  theme_classic() + 
+  xlab(pca_percent[1]) + 
+  ylab(pca_percent[2]) +
+  scale_color_manual(values = c("grey", "black")) +
+  theme(legend.position = "bottom") + 
+  ggrepel::geom_text_repel() +
+  ggtitle("PCA on probe level - organoid morphology")
+
+pca_morph + 
+  ggsave(here::here("reports/figures/expression/pca_organoid_morphology.pdf"), height = 4, width = 4)
+```
+
+```{r}
+
+
+pca_size <- pca_hco$x_anno %>%
+  left_join(organoid_size_fit %>% rename(organoid = line, line = rep)) %>%
+  ggplot(aes(PC1, PC2, color = size, label = organoid)) + 
+  geom_point(size = 3) + 
+  theme_classic() + 
+  xlab(pca_percent[1]) + 
+  ylab(pca_percent[2]) +
+  theme(legend.position = "bottom") + 
+  #scale_color_viridis_c() +
+  scale_color_gradient(low="blue", high="red") +
+  #scale_colour_gradient2() +
+  ggrepel::geom_text_repel() +
+  ggtitle("PCA on probe level - organoid size")
+
+pca_size + 
+  ggsave(here::here("reports/figures/expression/pca_organoid_size.pdf"), height = 4, width = 4)
+```
+
+```{r}
+df = promise_long %>% 
+  filter(symbol %in% c("IGF2")) %>% 
+  dplyr::select(organoid =line, expr, line = rep)
+
+pca_igf <- pca_hco$x_anno %>%
+  left_join(df) %>%
+  distinct() %>%
+  ggplot(aes(PC1, PC2, color = expr, label = organoid)) + 
+  geom_point(size = 3) + 
+  theme_classic() + 
+  xlab(pca_percent[1]) + 
+  ylab(pca_percent[2]) +
+  theme(legend.position = "bottom") + 
+  scale_color_viridis_c() +
+  ggrepel::geom_text_repel() +
+  #scale_color_gradient(low="blue", high="red") +
+  #scale_colour_gradient2() +
+  ggtitle("PCA on probe level - IGF2 expression")
+
+pca_igf
+```
+
+
+
+```{r}
+size_mat <- model.matrix(~size, colData(promise_expr_filtered_top))
+
+size_fit <- limma::lmFit(assays(promise_expr_filtered_top)$expr, design = size_mat)
+size_fit_bayes <- limma::eBayes(size_fit)
+
+toptable_size = topTable(size_fit_bayes, number = Inf, coef = "size") %>% rownames_to_column("id") %>% 
+  left_join(rowData(promise_expr_filtered_top) %>% as.data.frame() %>% rownames_to_column("id"))
+
+toptable_size %>% ggplot(aes(P.Value)) + 
+  geom_histogram(bins = 100) + 
+  theme_classic() + 
+  geom_vline(xintercept = 0.05) + 
+  xlab("p-value")  +
+  ggtitle("p-value distriutions") 
+  #scale_y_log10()
+```
+
+```{r}
+toptable_size %>% 
+  filter(adj.P.Val <= 0.05) %>%
+  arrange(desc(t))
+```
+
+
+```{r}
+promise_long %>% 
+  filter(symbol %in% c("H19", "IRS1", "IGF2", "SGPP2")) %>% arrange(expr) %>% arrange(line) %>% 
+  group_by(line, rep, symbol) %>% 
+  summarise(expr = mean(expr)) %>% 
+  left_join(organoid_size_fit) %>% 
+  arrange(symbol) %>%
+  ggplot(aes(expr, size)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  facet_wrap(~ symbol, ncol =2)
+```
+
+
+```{r, eval = FALSE}
+## gene ranks for enrichment, best T-value for each gene
+ranks <- top3_res %>%
+  filter(!tp53, !sex) %>%
+  arrange(desc(abs(t)))
+ranks <- setNames(ranks$t, ranks$entrez)
+
+## get pathway annotation
+pathways <- fgsea::reactomePathways(names(ranks))
+
+## perform GSEA
+enr <- fgsea::fgsea(pathways, ranks, nperm = 1e5, maxSize=500)
+enr <- as_tibble(enr) %>% arrange(pval)
+
+## genes for interesting terms
+eg <- enr %>% filter(pathway == 'IGF1R signaling cascade') %>% pull(leadingEdge) %>% unlist()
+
+
+## a function to draw barcode plots
+custom_barcode_plot <- function(stat_vector, sig_genes, term){
+  ## generate barcode plot
+  bc_plot <- plotEnrichment(sig_genes, stat_vector)
+  
+  ## remove unwanted layers
+  bc_plot$layers <- list()
+  
+  ## add barcode at the bottom
+  lowest_pos <- min(bc_plot$data[,2])
+  dash_length <- abs(purrr::reduce(range(bc_plot$data[,2]), `-`)*0.1)
+  middle <- which.min(abs(sort(stat_vector, decreasing=T)))
+  
+  bc_plot_custom <- bc_plot + geom_segment(aes(x=x, xend=x), y=lowest_pos,
+                           yend=lowest_pos-dash_length) + 
+    geom_line(colour='#4daf4a') + 
+    geom_hline(yintercept=lowest_pos, colour='#cccccc') + 
+    geom_hline(yintercept=0, colour='#cccccc') + xlab('') +
+    theme_classic() +
+    geom_tile(data=tibble(rank=1:length(stat_vector), 
+                          y=lowest_pos-(1.25*dash_length)), 
+              aes(x=rank, y=y, fill=rank),
+                  width=1,
+                  height=0.5*dash_length) +
+    scale_fill_gradient2(low ='#b2182b', high='#2166ac', 
+                         mid='#f7f7f7', midpoint = middle) + 
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    theme(panel.grid=element_blank(), 
+          axis.text.x=element_blank(),
+          axis.ticks.x = element_blank(),
+          legend.position = 'none') + 
+    ggtitle(term) +
+    ylab('Enrichment score')
+  
+  return(bc_plot_custom)
+}
+
+signature_genes <- pathways['IGF1R signaling cascade'] %>% unlist()
+
+custom_barcode_plot(ranks, signature_genes,
+                    'IGF1R signaling')
+```
+
+# Organoid morphology
+
+```{r}
+morph_mat <- model.matrix(~morphology, colData(promise_expr_filtered_top))
+
+morph_fit <- limma::lmFit(assays(promise_expr_filtered_top)$expr, design = morph_mat)
+morph_fit_bayes <- limma::eBayes(morph_fit)
+
+toptable_morph <- topTable(morph_fit_bayes, number = Inf, coef = "morphologysolid") %>% rownames_to_column("id") %>% 
+  left_join(rowData(promise_expr_filtered_top) %>% as.data.frame() %>% rownames_to_column("id"))
+
+toptable_morph %>% ggplot(aes(P.Value)) + 
+  geom_histogram(bins = 100) + 
+  theme_classic() + 
+  geom_vline(xintercept = 0.05) + 
+  xlab("p-value")  +
+  ggtitle("p-value distriutions") 
+  #scale_y_log10()
+```
+
+
+```{r}
+toptable_morph %>% 
+  filter(adj.P.Val <= 0.05) %>%
+  arrange(desc(t))
+```
+
+```{r}
+promise_long %>% 
+  filter(symbol %in% c("DACH1", "PLA2G2A", "FZD7", "IFITM1")) %>% arrange(expr) %>% arrange(line) %>% 
+  group_by(line, rep, symbol, phenotype) %>% 
+  summarise(expr = mean(expr)) %>% 
+  left_join(organoid_size_fit) %>% 
+  ggplot(aes(phenotype, expr)) + 
+  ggrastr::geom_boxplot_jitter(width = .2) + 
+  geom_jitter(width = .1) +
+  #geom_boxplot() +
+  #geom_smooth(method = "lm") + 
+  facet_wrap(~ symbol, ncol =2)
+```
+
+```{r}
+# I only feed the top 5% most variable genes into the GO enrichment
+df = toptable_morph %>% drop_na() %>% 
+  group_by(entrez) %>% 
+  summarise(t = mean(t)) %>%
+  arrange(desc(t))
+ranks = setNames(df$t, as.character(df$entrez))
+#ranks = setNames(as.character(df$t), df$entrez)
+
+
+## GO term enrichment (biological process)
+gse_go <- gseGO(
+  geneList = ranks,
+  OrgDb = org.Hs.eg.db,
+  ont = 'BP',
+  nPerm = 1e5,
+  minGSSize = 10,
+  maxGSSize = 500,
+  pvalueCutoff = 0.2
+)
+
+go <- pairwise_termsim(gse_go) 
+emapplot(go)
+```
+
+```{r, eval = TRUE}
+## Reactome enrichment analysis
+gse_reactome <- gsePathway(
+  geneList = ranks,
+  organism = 'human',
+  nPerm = 1e5,
+  minGSSize = 10,
+  maxGSSize = 500,
+  pvalueCutoff = 0.2
+)
+
+reactome <- pairwise_termsim(gse_reactome) 
+emapplot(reactome)
+```
+
+
+```{r}
+## parse signatures and make list
+intestinal_sig <- readxl::read_excel(here('data/external/expression/merloz-suarez_sigantures.xls'), 
+                                     sheet = 1, skip = 4) %>% .[,1:4] %>%
+  gather(signature, symbol) %>% drop_na() %>% 
+  mutate(symbol = gsub('\\*', '', symbol))
+
+## run gsea with clusterprofiler
+df = toptable_morph %>% drop_na() %>% 
+  group_by(symbol) %>% 
+  summarise(t = mean(t)) %>%
+  arrange(desc(t))
+ranks_symbol = setNames(df$t, as.character(df$symbol))
+
+gse_sig <- GSEA(
+  geneList = ranks_symbol,
+  TERM2GENE = intestinal_sig,
+  nPerm = 1e5,
+  minGSSize = 1,
+  maxGSSize = 1000,
+  pvalueCutoff = 1
+)
+
+## output as tibble
+gse_sig_tbl <- as_tibble(gse_sig)
+```
+
+
+```{r}
+## lgr5 signature
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[2], 
+  title = paste0(gse_sig$ID[2], 
+                ' (p = ', round(gse_sig_tbl$pvalue[2], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[2], 2), ')')
+) 
+```
+
+
+```{r}
+## proliferation
+gseaplot2(
+  gse_sig, geneSetID = gse_sig$ID[1],
+  title = paste0(gse_sig$ID[1], 
+                ' (p = ', round(gse_sig_tbl$pvalue[1], 3), 
+                '; NES = ', round(gse_sig_tbl$NES[1], 2), ')')
+)
+```
+
+
+
+# Organoid size and morphology
+
+
+```{r, eval = FALSE}
+## model matrix
+mm <- model.matrix(~phenotype, data = sample_anno)
+
+## set technical replicate plots
+blocks <- as.factor(sample_anno$line)
+## compute within-block correlations
+corfit <- duplicateCorrelation(expr_mat, mm, block = blocks)
+
+## fit model and compute model coefficients
+fit_phenotype <- lmFit(expr_mat, mm, 
+                       block = blocks, 
+                       cor= corfit$consensus.correlation)
+fit_phenotype <- eBayes(fit_phenotype)
+
+## extract results and annotate gene symbols
+probe_to_symbol <- promise_expr %>% distinct(probe, symbol) %>% 
+  group_by(probe) %>% slice(1) %>% ungroup()
+phenotype_res <- topTable(fit_phenotype, coef = 'phenotypesolid', n = Inf) %>% 
+  as_tibble(rownames = 'probe') %>%
+  left_join(probe_to_symbol)
+```
+
+## other
+
+```{r, eval=FALSE}
+volc_data <- top3_res %>% 
+  mutate(group = ifelse(symbol %in% c('IGF2', 'MIR483', 'H19', 'INS-IGF2'), 'igf2', 'none')) %>%
+  mutate(label = ifelse((group != 'none') & (adj.P.Val < 0.01), symbol, ''))
+
+co05 <- volc_data %>% filter(adj.P.Val > 0.05) %>% pull(P.Value) %>%
+  head(1) %>% log10() %>% `*`(-1)
+
+ggplot() +
+  ggrastr::geom_point_rast(data=subset(volc_data, group == 'none'),
+             aes(logFC, -log10(P.Value)), colour='#dddddd') +
+  geom_point(data=subset(volc_data, group == 'igf2'),
+             aes(logFC, -log10(P.Value)), colour='#4285f4') +
+  geom_hline(yintercept = co05, linetype='dashed') +
+  ggrepel::geom_text_repel(data=subset(volc_data, group == 'igf2'),
+                  aes(logFC, -log10(P.Value), label=label)) +
+  ylab('P-value [-log10]') + xlab('Fold change [log2]') + 
+  scale_y_continuous(expand=c(0,0))
+```
+
+
+
+# Organoid size and gene expression
+
+```{r}
+sessionInfo()
+```
+

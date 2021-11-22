@@ -1,0 +1,995 @@
+---
+title: "Organoid Unsupervised Exploration"
+author: Niklas Rindtorff
+output:
+  #pdf_document: default
+  html_document:
+    keep_md: true
+params:
+  data: "data/processed/morphology/umap_absolute_all_drugs_sampled.Rds"
+  sample: "data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds"
+  output: "imaging"
+  remote: FALSE
+  cache: FALSE
+---
+
+```{r setup, include=FALSE}
+# defining lib path
+if(params$remote == TRUE){
+  .libPaths("/omics/groups/OE0049/b110_data/B110-Isilon2/promise/x86_64-pc-linux-gnu-library/4.0")
+}
+print(.libPaths())
+
+
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = params$cache,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+Loading packages
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(purrr)
+library(tibble)
+library(readr)
+library(here)
+library(ggrastr)
+library(cowplot)
+library(princurve)
+library(scico)
+library(ggridges)
+
+# parameter
+print("parameter input:")
+print(params$data)
+print(params$sample)
+```
+
+loading input data and annotation. Note that on the central cluster, with access to the complete data table, the definition of the input can easily be changed. For remote work, the subsampled dataset "umap_drugs_sampled.Rds" is the default choice.
+
+```{r}
+
+
+# I wish I could solve my path problems with the here() package, but experienced unreliable behavior 
+# PATH = "/dkfz/groups/shared/OE0049/B110-Isilon2/promise/"
+PATH = paste0(here::here(), "/")
+here::here()
+#umap_df <- read_rds(paste0(PATH, "data/processed/PhenotypeSpectrum/umap_absolute_all_drugs_tidy.Rds"))
+#umap_df <- read_rds(paste0(PATH, "data/processed/PhenotypeSpectrum/umap_absolute_all_drugs_sampled.Rds"))
+umap_df <- read_rds(here::here(params$data))
+umap_df_sample <- read_rds(here::here(params$sample))
+
+organoid_morphology <- read_delim(here::here("references/imaging/visual_classification_organoids.csv"), ";", escape_double = FALSE, trim_ws = TRUE) %>% 
+  dplyr::select(line = organoid, morphology = visual_inspection_v2)
+
+# reading PCA variance information
+#organoid_viability <- read_rds(here::here("data/processed/ldc_viability.rds"))
+pca_variance <- readRDS(here::here("promise/data/processed/morphology/pca_variance.Rds"))
+```
+
+
+# Data cube
+
+```{r}
+umap_df %>% dplyr::distinct(drug, line) %>% dplyr::count(line)
+```
+
+
+# PCA
+
+```{r}
+pca_variance %>% 
+  head(50) %>%
+  ggplot(aes(PC, sum_explained)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0.8, linetype = "dashed") + 
+  geom_vline(xintercept = 25) +
+  theme_classic() + 
+  ggsave(here("reports/figures", params$output, "pca_var.pdf"), width = 4, height = 4)
+```
+
+
+# Partition inspection
+
+We are able to observe 4 partitions in our data. 
+After manual inspection, it becomes cleat that the two smallest partitions are mostly consisting of 
+
+```{r}
+umap_df %>% 
+  ggplot(aes(v1, v2, color = factor(partition))) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "partition") + 
+  theme(legend.position = "bottom") + 
+    coord_fixed()
+```
+
+```{r}
+umap_df %>% 
+  dplyr::count(partition) %>% 
+  mutate(ratio = n/sum(n)) %>% 
+  arrange(desc(ratio))
+```
+
+I remove 2 partitions from all main figures for ease of reading. Below, it is easy to toggle the removal of partitions on and off to make sure this filtering step is robust
+
+```{r}
+gg_cluster <- umap_df %>%
+  filter(partition %in% c(1,2)) %>%
+  ggplot(aes(v1, v2, color = factor(cluster))) + 
+  ggrastr::geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_manual(values = c(RColorBrewer::brewer.pal(12, "Set3"), "#fb9a99")) +
+  cowplot::theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "partition") + 
+  theme(legend.position = "bottom") + 
+    coord_fixed()
+
+gg_cluster + ggsave(here("reports/figures", params$output, "gg_cluster.pdf"), width = 4, height = 4)
+
+
+```
+
+
+# Organoid Size Distributions
+
+I plot a size-distribution. 
+
+```{r, eval = TRUE}
+gg_size_dist <- umap_df %>% 
+  filter(partition %in% c(1,2)) %>%
+  ggplot(aes(size)) + 
+  geom_histogram() + 
+  theme_cowplot() + 
+  labs(caption = "all treatments, downsampled")
+
+gg_size_dist_log <- gg_size_dist + 
+  scale_x_log10()
+
+gg_size_dist_log + 
+  ggsave(here("reports/figures", params$output, "gg_size_dist.pdf"), width = 4, height = 4)
+```
+
+I add the eCDF.
+
+```{r}
+df <- umap_df %>% filter(partition %in% c(1,2))
+
+gg_ecdf <- ggplot(df %>% filter(drug == "DMSO")) +
+  stat_ecdf(aes(x = size, group = line), 
+              geom = "step", size = 1) +
+  #scale_color_manual(values = c("#00AFBB", "#E7B800"))+
+  labs(y = "f(size)",
+       x = "organoid size [pixels]") + 
+  theme_cowplot()
+
+gg_ecdf
+```
+
+```{r, eval = FALSE}
+# variance_explained %>% ggplot(aes(PC, var_explained)) + geom_point() + geom_vline(xintercept = 25) + scale_y_sqrt()
+
+
+# element wise multiplication
+mat = components %>% dplyr::select(-X1) %>% as.matrix() %>% .[,1:25] %>% matrix(ncol = 25)
+vector = sqrt(variance_explained$eigenvalue) %>% .[1:25]
+df = mat * vector
+
+index = df %>% abs() %>% rowSums() %>% tibble(max = ., index = 1:length(.)) %>% arrange(desc(max)) %>% head(25) %>% .$index
+
+pheatmap::pheatmap(mat = annotated_PC %>% dplyr::select(name, PC1:PC25) %>% .[index,] %>% remove_rownames() %>%  tibble::column_to_rownames('name'),
+                   annotation_row = annotated_PC %>% dplyr::select(name, class, channel) %>% .[index,] %>% tibble::column_to_rownames('name'),
+                   cluster_cols = FALSE)
+
+```
+
+
+For more details about distributions, please refer to *reports/Phenotypespectrum/'xyz'_dist.pdf*.
+
+```{r}
+line_param <- umap_df %>% filter(partition %in% c(1,2)) %>% 
+  #filter(drug == "DMSO") %>%
+  nest(-line, -replicate) %>% 
+  mutate(fit = map(data, ~ fitdistrplus::fitdist(.x$size, "lnorm")),
+         param = map(fit, ~ .x$estimate %>% broom::tidy()))
+
+df <- line_param %>% unnest(param) %>% 
+  filter(names == "meanlog") %>% 
+  group_by(line) %>% 
+  mutate(mean_meanlog = mean(x)) %>% 
+  arrange(mean_meanlog) %>% 
+  ungroup() %>%
+  mutate(line = factor(line, levels = .$line %>% unique()))
+
+organoid_size_fit <- df %>% dplyr::select(line, replicate, names, x, mean_meanlog)
+# organoid_size_fit %>% saveRDS(here::here("data/processed/morphology/organoid_size.Rds"))
+# organoid_size_fit <- readRDS(here::here("data/processed/morphology/organoid_size.Rds"))
+
+organoid_size_factor <- organoid_size_fit$line %>% levels()
+df <- organoid_size_fit
+
+df <- df %>% 
+    dplyr::select(line, replicate, x) %>%
+    # tidyr::pivot_wider(names_from = replicate, 
+    #             values_from = x)
+    tidyr::spread(key = replicate, value = x)
+
+r_size = df %>% ungroup() %>% dplyr::select(-line) %>% as.matrix %>% cor() %>% min()
+
+gg_size_replicate <- df %>% 
+  ggplot(aes(`1`, `2`)) +
+  geom_smooth(method = "lm", se = FALSE, color = "grey") +
+  geom_point() + 
+  ggrepel::geom_text_repel(data = df %>% filter(line %in% c("D021T01", "D046T01")), aes(label = line)) + 
+  theme_cowplot() + 
+  labs(x = "Replicate 1, ln(size)",
+       y = "Replicate 2, ln(size)",
+       caption = paste0("all treatments, downsampled, 2 replicates, r= ", round(r_size, 2))) + 
+  coord_fixed(ratio = 1) 
+  #geom_abline(slope = 1, color = "grey")
+  
+
+gg_size_replicate +
+  ggsave(here("reports/figures", params$output, "gg_size_correlation.pdf"), width = 4, height = 4)
+```
+
+```{r}
+
+organoid_size_factor_09 <- umap_df %>% filter(partition %in% c(1,2)) %>% group_by(line) %>% 
+  summarise(x = quantile(size_log, 0.9)) %>% 
+  #summarise(x = mean(size_log)) %>% 
+  arrange(x) %>% .$line
+
+
+gg_size_dist_morph_ridge <- umap_df_sample %>% filter(partition %in% c(1,2)) %>% filter(drug == "DMSO") %>% 
+  mutate(line = factor(line, levels = organoid_size_factor_09)) %>% 
+  ggplot() +
+  geom_density_ridges_gradient(aes(y = line, x = size_log, fill = stat(x)), scale = 1) +
+  #geom_density(aes(x = size_log, group = replicate, color = morphological_class)) + 
+  #facet_wrap(~ line) + 
+  scale_fill_viridis_c() +
+  labs(caption = "DMSO treated organoids",
+       x = "ln(size)",
+       fill = "size") + 
+  theme(legend.position = "bottom") +
+  theme_cowplot() + 
+  labs(caption = "DMSO treated, downsampled") +
+  coord_fixed(ratio = 1)
+
+gg_size_dist_morph_ridge + ggsave(here("reports/figures", params$output, "gg_size_dist_morph_ridge.pdf"), width = 4, height = 4)
+```
+
+```{r}
+gg_size_dist_morph_violin <- umap_df_sample %>% filter(partition %in% c(1,2)) %>% filter(drug == "DMSO") %>% 
+  mutate(line = factor(line, levels = organoid_size_factor_09)) %>% 
+  ggplot() +
+  geom_violin(aes(y = size_log, x = line, fill = stat(x)), scale = 1) +
+  #geom_density(aes(x = size_log, group = replicate, color = morphological_class)) + 
+  #facet_wrap(~ line) + 
+  scale_fill_viridis_c() +
+  labs(caption = "DMSO treated organoids",
+       x = "ln(size)",
+       fill = "size") + 
+  theme(legend.position = "bottom") +
+  theme_cowplot() + 
+  labs(caption = "DMSO treated, downsampled") +
+  coord_fixed(ratio = 1)
+
+gg_size_dist_morph_ridge_flip <- umap_df_sample %>% filter(partition %in% c(1,2)) %>% filter(drug == "DMSO") %>% 
+  mutate(line = factor(line, levels = organoid_size_factor_09)) %>% 
+  ggplot() +
+  geom_density_ridges_gradient(aes(y = line, x = size_log, fill = stat(x)), scale = 1) +
+  #geom_density(aes(x = size_log, group = replicate, color = morphological_class)) + 
+  #facet_wrap(~ line) + 
+  scale_fill_viridis_c() +
+  labs(caption = "DMSO treated organoids",
+       x = "ln(size)",
+       fill = "size") + 
+  theme(legend.position = "bottom") +
+  theme_cowplot() + 
+  labs(caption = "DMSO treated, downsampled") +
+  coord_fixed(ratio = 1) + 
+  coord_flip()
+
+gg_size_dist_morph_ridge_flip + ggsave(here("reports/figures", params$output, "gg_size_dist_morph_ridge_flip.pdf"), width = 8, height = 4)
+```
+
+
+```{r}
+umap_size <- function(umap){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = size_log)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_viridis_c() +
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "ln(size)") + 
+  theme(legend.position = "bottom") + 
+    coord_fixed()
+}
+
+gg_size <- umap_size(umap_df) + 
+  labs(caption = "all treatments, downsampled")
+
+gg_size  + ggsave(here("reports/figures", params$output, "gg_size_all.pdf"), width = 4, height = 4)
+```
+
+
+In general, DMSO treated organoid lines cover the same latent space than drug treated organoids. This is likely influenced by the large number of untreated organoids in the dataset.
+
+```{r}
+df <- umap_df 
+
+gg_size_supp <- df %>%
+  mutate(drug = if_else(drug == "DMSO", "DMSO", "other")) %>%
+  ggplot(aes(v1, v2, color = size_log)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_viridis_c() +
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2") + 
+  theme(legend.position = "bottom") +
+  facet_wrap(~ drug) + 
+  labs(caption = "downsampled")
+
+gg_size_supp + ggsave(paste0(PATH, "reports/figures/imaging/gg_size_treatment.pdf"))
+```
+
+# Paclitaxel case study
+
+
+```{r}
+
+drug_size <- umap_df_sample %>% filter(partition %in% c(1,2)) %>% filter(drug == "DMSO" | drug == "Paclitaxel") %>% 
+  mutate(concentration = ifelse(drug == "DMSO", 0, concentration)) %>%
+  #filter(morphological_class == "disorganized") %>% 
+  #filter(morphological_class != "other") %>% 
+  mutate(concentration = factor(concentration, levels = c("0", "0.0016", "0.008", "0.04", "0.2", "1.0")))
+
+ggdrug_size <- ggplot(drug_size) +
+  geom_density(aes(x = log(size), group = concentration, color = concentration), size = 1.5) + 
+  scico::scale_color_scico_d() +
+  theme_cowplot() + 
+  #scale_x_continuous(limits = c(0, 15000)) +
+  theme(legend.position = "bottom") + 
+  labs(color = "Paclitaxel Concentration Factor",
+       title = "Organoid size distribution",
+       x = "ln(size)")
+
+ggdrug_size + ggsave(here::here("reports/figures/imaging/size_treatment.pdf"), width = 5, height = 5)
+```
+
+```{r}
+drug_count <- drug_size %>%
+  dplyr::count(concentration, line, replicate, well)
+
+ggdrug_count <- ggplot(drug_count) +
+  geom_density(aes(x = n, group = concentration, color = concentration), size = 1.5) + 
+  scico::scale_color_scico_d() +
+  theme_cowplot() + 
+  theme(legend.position = "bottom") + 
+  labs(color = "Paclitaxel Concentration Factor",
+       title = "Organoid count distribution",
+       x = "number of objects per well") + 
+  scale_x_log10()
+
+ggdrug_count + ggsave(here::here("reports/figures/imaging/count_treatment.pdf"), width = 5, height = 5)
+```
+
+
+```{r}
+set.seed(234)
+loi = c("D022T01", "D046T01")
+
+
+df <- umap_df_sample  %>%
+  filter(partition %in% c(1,2)) %>%
+  filter(drug == "DMSO" | drug == "Paclitaxel") %>% 
+  mutate(concentration = ifelse(drug == "DMSO", 0, concentration)) %>% 
+  filter(line == loi)
+
+gg_drug <- umap_df_sample %>% filter(partition %in% c(1,2)) %>%
+  dplyr::select(-line, -concentration) %>%
+  ggplot(aes(v1, v2)) + 
+  geom_point_rast(alpha = 1, size = 0.35, color = "#f1f1f1") + 
+  geom_point_rast(data = df  %>%
+    group_by(concentration) %>% 
+    sample_n(1000, replace = TRUE),
+  aes(color = concentration),alpha = 1, size = 1.5, shape=16) + 
+  #facet_wrap( ~ concentration, ncol = 1) + 
+  #scale_color_brewer(type = "seq", palette = "YlOrRd") + 
+  #geom_density2d(color = "black") + 
+  theme_classic() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       caption = paste0(paste(loi, collapse=" "), ", Paclitaxel"),
+       color = "Concentration Factor") + 
+  scico::scale_color_scico_d() + 
+  facet_wrap(~ line, ncol = 2) +
+  theme(legend.position = "bottom") +
+  #theme_cowplot(font_size = 8) + 
+  theme(legend.position = "bottom") + 
+  coord_equal()
+ 
+gg_drug + ggsave(here::here("reports/figures/imaging/paclitaxel_shift.pdf"), width = 10, height = 5)
+```
+
+
+
+```{r}
+loi <- c("D022T01", "D046T01")
+
+drug_size_param <- drug_size %>% 
+  nest(-concentration, -line) %>% 
+  mutate(fit = map(data, ~ fitdistrplus::fitdist(.x$size, "lnorm")),
+         param = map(fit, ~ .x$estimate %>% broom::tidy()))
+
+df <- drug_size_param %>% unnest(param) %>% 
+  filter(names == "meanlog") %>%
+  mutate(concentration = factor(concentration, levels = c("0", "0.0016", "0.008", "0.04", "0.2", "1.0"))) 
+
+df <- drug_size %>% 
+  group_by(drug, line, concentration) %>% 
+  summarise(x = median(size_log))
+
+gg_size_drug <- df %>%
+  filter(line %in% loi) %>%
+  #mutate(concentration = as.numeric(as.character(concentration))) %>%
+  ggplot(aes(concentration, x)) + 
+    geom_point(color = "grey") + 
+  geom_line(data = df %>% dplyr::rename(line_h = line) , aes(group = line_h), color = "grey") +
+  geom_point(data = df %>% dplyr::rename(line_h = line), color = "grey") +
+  geom_point(color = "black") +
+  geom_line(aes(group = line), color = "black") +
+  labs(y = 'mu ln(size)' ,
+       x = "Concentration Factor",
+       caption = paste0(paste(loi, collapse=" "), ", Paclitaxel")) +
+  facet_wrap(~ line)+
+  theme_cowplot()
+
+gg_size_drug + ggsave(here::here("reports/figures/imaging/paclitaxel_doseresponse.pdf"), width = 10, height = 5)
+```
+## organoid viability classifier
+
+```{r, eval = TRUE}
+umap_ldc <- function(umap){
+  umap %>%
+  #filter(Size < 1000) %>%
+  ggplot(aes(v1, v2, color = prob_dead)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  scale_color_scico(palette = 'lajolla') + #lajolla #vikO
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "p(dead)") + 
+  theme(legend.position = "bottom") + 
+  guides(fill = guide_colourbar(barwidth = 0.5, barheight = 10))
+}
+
+gg_ldc <- umap_ldc(umap_df) +  coord_equal()
+
+gg_ldc + 
+  ggsave(here::here("reports/figures/drug_viability/ldc_umap.pdf"), width = 6, height = 6)
+```
+
+```{r}
+umap_df %>% 
+  ggplot(aes(size_log, permeability)) + 
+  geom_point_rast(alpha = 0.5, size = 0.35) + 
+  geom_smooth() + 
+  theme_cowplot()
+```
+
+```{r}
+umap_df %>% 
+  ggplot(aes(size_log, prob_live)) + 
+  #geom_jitter_rast(alpha = 0.5, size = 0.35) + 
+  geom_smooth() + 
+  theme_cowplot()
+```
+
+```{r}
+df <- umap_df %>%
+  group_by(plate, well) %>%
+  summarise(actin = mean(actin), 
+            permeability = mean(permeability),
+            dapi = mean(dapi),
+            size = mean(size_log),
+            prob_live = mean(prob_live)) 
+
+df %>%
+  ggplot(aes(size, prob_live)) + 
+  geom_point_rast(alpha = 0.2) +
+  geom_smooth()
+
+df %>%
+  ggplot(aes(actin, prob_live)) + 
+  geom_point_rast(alpha = 0.2)
+
+df %>%
+  ggplot(aes(dapi, prob_live)) + 
+  geom_point_rast(alpha = 0.2) + 
+  geom_smooth()
+
+df %>%
+  ggplot(aes(permeability, prob_live)) + 
+  geom_point_rast(alpha = 0.2) + 
+  geom_smooth()
+```
+
+CTG data
+LDC data
+average size data
+
+# Organoid Heterogeneity
+
+I plot 2 organoid lines treated with DMSO control
+
+```{r, eval = FALSE}
+set.seed(234)
+
+
+df <- umap_df  %>% filter(partition %in% c(1,2)) %>%
+  mutate(cystic = if_else(line == "D013T01" &  well == "D24" & plate == "D013T01P001L02", TRUE, FALSE)) %>%
+  mutate(compact = if_else(line == "D046T01" &  well == "D24" & plate == "D046T01P007L02", TRUE, FALSE))
+
+gg_cys_comp <- df %>% 
+  sample_frac(0.01) %>%
+  ggplot(aes(v1, v2, color = size_log)) + 
+  #scale_color_brewer(type = "qual", palette = 2) +
+  geom_point_rast(alpha = 0.1, size = 0.35) + 
+  geom_point_rast(color = "#F4B400", alpha = 1, size = 0.5, data = df %>% filter(cystic == TRUE)) +
+  geom_point_rast(color = "#DB4437", alpha = 1, size = 0.5, data = df %>% filter(compact == TRUE)) + 
+  scale_color_viridis_c() +
+  labs(color = "size",
+       caption = "yellow: D013T01, red: D055T01",
+       x = "UMAP 1",
+       y = "UMAP 2") +
+  theme_cowplot() + 
+  coord_fixed()
+
+gg_cys_comp
+```
+
+
+# Organoid line differences
+
+I create a single plot showing the two extreme organoid lines and their distribution within the embedding. 
+
+```{r}
+set.seed(123)
+
+loi <- c("D019T01", "D007T01",  "D030T01", "D018T01") #c("D055T01", "D007T01",  "D021T01", "D019T01", "D027T01")
+loi <- c("D020T01", "D007T01",  "D030T01", "D018T01")
+#loi <- umap_df$line %>% unique()
+
+df <- umap_df %>%
+  filter(drug == "DMSO") %>% 
+  filter(partition %in% c(1,2))
+
+
+gg_line <- df %>% dplyr::select(-line) %>%
+  ggplot(aes(v1, v2)) + 
+  geom_point_rast(alpha = 1, size = 0.35, color = "#f1f1f1") + 
+  geom_point_rast(data = umap_df %>%
+                    filter(drug == "DMSO") %>% 
+                   # filter(line %in% c("D021T01")) %>%
+    filter(line %in% loi) %>% 
+    mutate(line = factor(line, levels = loi)), #%>% 
+      #sample_frac(0.1),
+    #mutate(line = factor(line, levels = c("D021T01"))),
+  aes(color = line),alpha = .4, size = 0.35, shape=16) + 
+  facet_wrap( ~ line, ncol =2) +
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  #scale_color_manual(values = c(c("#D80D12", "#461C01", "#9a4c91", "#70BE6F", "#24345E"))) + 	
+  #geom_density2d(color = "black") + 
+  theme_classic() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2")+
+       #caption = "control treated organoids") + 
+  theme_cowplot(font_size = 8) + 
+  theme(legend.position = "nothing")
+
+gg_line + ggsave(paste0(PATH, "reports/figures/imaging/gg_size_four_lines.pdf"), width = 4, height = 4)
+```
+
+```{r}
+df <- umap_df %>%
+  left_join(organoid_morphology %>% mutate(line = paste0(line, "01"))) %>%
+  filter(drug == "DMSO") %>% 
+  filter(partition %in% c(1,2))
+
+gg_morph <- df %>% dplyr::select(-line) %>%
+  ggplot(aes(v1, v2)) + 
+  geom_point_rast(alpha = 1, size = 0.35, color = "#f1f1f1") + 
+  geom_point_rast(data = umap_df %>% left_join(organoid_morphology %>% mutate(line = paste0(line, "01"))) %>%
+                    filter(drug == "DMSO"), #%>% 
+      #sample_frac(0.1),
+    #mutate(line = factor(line, levels = c("D021T01"))),
+  aes(color = morphology),alpha = .4, size = 0.35, shape=16) + 
+  #facet_wrap( ~ line, ncol =2) +
+  scale_color_brewer(type = "qual", palette = "Set1") +
+  #scale_color_manual(values = c(c("#D80D12", "#461C01", "#9a4c91", "#70BE6F", "#24345E"))) + 	
+  #geom_density2d(color = "black") + 
+  theme_classic() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2")+
+       #caption = "control treated organoids") + 
+  theme_cowplot(font_size = 8)
+
+gg_morph + ggsave(paste0(PATH, "reports/figures/imaging/gg_morphology.pdf"), width = 4, height = 4)
+
+```
+
+
+```{r}
+df <- umap_df %>%
+  left_join(organoid_morphology %>% mutate(line = paste0(line, "01"))) %>%
+  filter(drug == "DMSO") %>% 
+  filter(partition %in% c(1,2))
+
+gg_screen_id <- df %>% dplyr::select(-line) %>%
+  ggplot(aes(v1, v2)) + 
+  geom_point_rast(alpha = 1, size = 0.35, color = "#f1f1f1") + 
+  geom_point_rast(data = umap_df %>% left_join(organoid_morphology %>% mutate(line = paste0(line, "01"))) %>%
+                    filter(drug == "DMSO"), #%>% 
+      #sample_frac(0.1),
+    #mutate(line = factor(line, levels = c("D021T01"))),
+  aes(color = screen_id),alpha = .4, size = 0.35, shape=16) + 
+  facet_wrap( ~ line, ncol =4) +
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  #scale_color_manual(values = c(c("#D80D12", "#461C01", "#9a4c91", "#70BE6F", "#24345E"))) + 	
+  #geom_density2d(color = "black") + 
+  theme_classic() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2")+
+       #caption = "control treated organoids") + 
+  theme_cowplot(font_size = 8) + 
+  theme(legend.position = "bottom")
+
+gg_screen_id + ggsave(paste0(PATH, "reports/figures/imaging/gg_screen_id.pdf"), width = 4, height = 4)
+
+```
+
+
+# Dye Intensity
+
+```{r, eval = TRUE}
+umap_df %>%
+  ggplot(aes(actin, fill = screen_id)) +
+  geom_density(alpha = 0.25) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r, eval = TRUE}
+umap_df %>%
+  ggplot(aes(permeability, fill = screen_id)) +
+  geom_density(alpha = 0.25) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r, eval = TRUE}
+umap_df %>%
+  ggplot(aes(dapi, fill = screen_id)) +
+  geom_density(alpha = 0.25) + 
+  scale_fill_brewer(type = 'qual') +
+  facet_wrap(~ line) +
+  theme_cowplot()
+```
+
+```{r, eval = TRUE}
+set.seed(123)
+
+umap_df %>%
+  filter(drug == "DMSO") %>%
+  #sample_n(10000) %>%
+  ggplot(aes(v1, v2, color = permeability)) + 
+  geom_point_rast(alpha = 0.75, size = 0.35) +
+   scale_colour_gradient(low = "white", high = "green") + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = "Permeability staining intensity") + 
+  theme(legend.position = "bottom") + 
+  ggsave(paste0(PATH, "reports/figures/imaging/gg_permeability.pdf"), width = 4, height = 4)
+
+umap_df %>%
+  filter(drug == "DMSO") %>%
+  #sample_n(10000) %>%
+  ggplot(aes(v1, v2, color = actin)) + 
+  geom_point_rast(alpha = 0.75, size = 0.35) +
+   scale_colour_gradient(low = "white", high = "red") + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = "Actin staining intensity") + 
+  theme(legend.position = "bottom") + 
+  ggsave(paste0(PATH, "reports/figures/imaging/gg_actin.pdf"), width = 4, height = 4)
+
+umap_df %>%
+  filter(drug == "DMSO") %>%
+  #sample_n(10000) %>%
+  ggplot(aes(v1, v2, color = dapi)) + 
+  geom_point_rast(alpha = 0.75, size = 0.35) +
+   scale_colour_gradient(low = "white", high = "blue") + 
+  theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       title = "DNA staining intensity") + 
+  theme(legend.position = "bottom") + 
+  ggsave(paste0(PATH, "reports/figures/imaging/gg_dapi.pdf"), width = 4, height = 4)
+
+```
+
+# correlation of organoid size, viability and LDC classification
+
+For this analysis I am comparing orgaonid size, CTG data and LDC classification results
+
+```{r}
+utils::data("organoid_viability", package = "SCOPEAnalysis")
+auc_ctg <- auc_ctg %>% filter(!Line %in% c("D021T01", "D054T01", "D055T01", "D015T01", "D052T01")) %>% 
+  mutate(id = paste0(Line, "_", library, "_", well)) %>%
+  arrange((id)) %>%
+  group_by(id) %>% 
+  summarise(viability = mean(viability)) %>%
+  dplyr::select(id, ctg = viability)
+mortality <- mortality %>% filter(!Line %in% c("D021T01", "D054T01", "D055T01", "D015T01", "D052T01")) %>% 
+  mutate(id = paste0(Line, "_", Layout, "_", Well.ID)) %>%
+  group_by(id) %>% 
+  summarise(Percent.Live = mean(Percent.Live)) %>%
+  dplyr::select(ldc = Percent.Live, id)
+organoid_size_drug <- readRDS(here::here("data/processed/morphology/organoid_size_drug.Rds")) %>%
+  mutate(id = paste0(line, "_", substr(plate, 12,14), "_", well)) %>% 
+  group_by(id) %>% 
+  summarise(mean = mean(mean)) %>%
+  dplyr::select(size = mean, id)
+organoid_intensity_drug <- readRDS(here::here("data/processed/morphology/organoid_intensity_drug.Rds")) %>%
+  mutate(id = paste0(line, "_", substr(plate, 12,14), "_", well)) %>% 
+  group_by(id) %>% 
+  summarise(permeability = mean(permeability),
+            dapi = mean(dapi),
+            actin = mean(actin)) %>%
+  dplyr::select(dapi, actin, permeability, id)
+
+df <- left_join(auc_ctg, mortality) %>% 
+  left_join(organoid_size_drug) %>%
+  left_join(organoid_intensity_drug)
+
+df %>%
+  ggplot(aes(ldc, ctg)) + 
+  geom_point() + 
+  theme(legend.title = element_blank()) + xlim(c(0, 1)) + ylim(c(0, 1)) + 
+  geom_hline(yintercept = 1) + 
+  geom_vline(xintercept = 1) +
+  theme_cowplot() + 
+   coord_equal() + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_ldc_well.pdf"), width = 4, height = 4)
+```
+
+```{r}
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(size, ctg)) + 
+  geom_point(color = "grey", alpha = 0.5) + 
+  geom_point(aes(color = line), data = df %>% 
+               mutate(line = substr(id, 1, 7)) %>% 
+               filter(line %in% c("D007T01", "D018T01", "D019T01"))) + 
+  geom_smooth(se = FALSE, 
+              method = "lm", 
+              aes(color = line), data = df %>% 
+               mutate(line = substr(id, 1, 7)) %>% 
+               filter(line %in% c("D007T01", "D018T01", "D019T01"))) +
+  geom_hline(yintercept = 1) + 
+  #geom_vline(xintercept = 1) +
+  #geom_smooth(se = FALSE) +
+  #theme(legend.title = element_blank()) + ylim(c(0, 1)) +
+  theme_cowplot() + 
+  theme(legend.position = "bottom") +
+  coord_fixed(ratio = 2) +
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  labs(caption = paste0("overall correlation ", cor(df$ctg, df$size, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_size_well_highlight.pdf"), width = 6, height = 6)
+```
+
+```{r}
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(ldc, ctg)) + 
+  geom_point(color = "grey", alpha = 0.5) + 
+  geom_point(aes(color = line), data = df %>% 
+               mutate(line = substr(id, 1, 7)) %>% 
+               filter(line %in% c("D007T01", "D018T01", "D019T01"))) + 
+  geom_smooth(se = FALSE, 
+              method = "lm", 
+              aes(color = line), data = df %>% 
+               mutate(line = substr(id, 1, 7)) %>% 
+               filter(line %in% c("D007T01", "D018T01", "D019T01"))) +
+  geom_hline(yintercept = 1) + 
+  geom_vline(xintercept = 1) +
+  #geom_smooth(se = FALSE) +
+  theme(legend.title = element_blank()) + ylim(c(0, 1)) + xlim(c(0, 1)) +
+  theme_cowplot() + 
+   coord_equal() + 
+  scale_color_brewer(type = "qual", palette = "Set2") +
+  labs(caption = paste0("overall correlation ", cor(df$ctg, df$ldc, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_ldc_well_highlight.pdf"), width = 6, height = 6)
+```
+
+
+## correlation on line-level
+
+```{r}
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(size, ctg)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  geom_hline(yintercept = 1) + 
+  #geom_vline(xintercept = 1) +
+  geom_smooth(se = FALSE) +
+  theme(legend.title = element_blank()) + ylim(c(0, 1)) +
+  theme_cowplot() + 
+  facet_wrap(~line) + 
+  labs(caption = paste0("correlation ", cor(df$ctg, df$size, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_size_well_perline.pdf"), width = 6, height = 6)
+
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(size, ldc)) + 
+  geom_point() + 
+  geom_hline(yintercept = 1) + 
+  geom_smooth(se = FALSE) +
+  theme_cowplot() + 
+  facet_wrap(~line) + 
+  labs(caption = paste0("correlation ", cor(df$ldc, df$size, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ldc_size_well_perline.pdf"), width = 6, height = 6)
+
+
+```
+
+```{r}
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(dapi, ctg)) + 
+  geom_point() + 
+  geom_hline(yintercept = 1) + 
+  geom_smooth(se = FALSE) +
+  theme_cowplot() + 
+  facet_wrap(~line) + 
+  labs(caption = paste0("correlation ", cor(df$ctg, df$dapi, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_dapi_well_perline.pdf"), width = 6, height = 6)
+
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(actin, ctg)) + 
+  geom_point() + 
+  geom_hline(yintercept = 1) + 
+  geom_smooth(se = FALSE) +
+  theme_cowplot() + 
+  facet_wrap(~line) + 
+  labs(caption = paste0("correlation ", cor(df$ctg, df$actin, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_actin_well_perline.pdf"), width = 6, height = 6)
+
+df %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  ggplot(aes(permeability, ctg)) + 
+  geom_point() + 
+  geom_hline(yintercept = 1) + 
+  geom_smooth(se = FALSE) +
+  theme_cowplot() + 
+  facet_wrap(~line) + 
+  labs(caption = paste0("correlation ", cor(df$ctg, df$permeability, use = "complete.obs") %>% round(digits = 4))) + 
+  ggsave(paste0(PATH, "reports/figures/drug_viability/gg_ctg_perm_well_perline.pdf"), width = 6, height = 6)
+```
+
+```{r}
+cor_df <- df %>% 
+  mutate(line = substr(id, 1, 7)) %>% 
+  nest(-line) %>% 
+  mutate(r = purrr::map(data, ~ .x %>% as.data.frame() %>% 
+  column_to_rownames("id") %>%
+  cor(use = "complete.obs") %>% head(1) %>% as.data.frame())) %>% 
+  unnest(r) %>% 
+  as_tibble() %>% 
+  dplyr::select(-data) %>% 
+  as.data.frame()
+
+cor_df %>% 
+  dplyr::select(-ctg) %>%
+  column_to_rownames("line") %>% 
+  pheatmap::pheatmap(cluster_cols = FALSE,
+                     filename = here::here("reports/figures/drug_viability/ctg_correlation_heatmap.pdf"))
+
+
+```
+
+
+
+# cystic vs solid organoid lines
+
+```{r, eval = TRUE}
+#UMAP Cystic (Lines 18, 13, 27, 30) vs. Solid (others) treated with DMSO, for Figure 1 / matching expression analysis done for cystic vs. rest
+
+set.seed(123)
+
+cystic_l <- organoid_morphology %>% filter(morphology == "cystic") %>%.$line %>% paste0(., "01")
+dense_l <- organoid_morphology %>% filter(morphology == "solid") %>%.$line %>% paste0(., "01")
+
+df <- umap_df %>%
+  filter(drug == "DMSO") %>% 
+  filter(partition %in% c(1,2)) %>%
+  mutate(morphology = case_when(line %in% cystic_l ~ "cystic",
+                                line %in% dense_l ~ "solid",
+                                 TRUE ~ "other"))
+
+gg_cystic <- umap_df %>% 
+  ggplot(aes(v1, v2)) + 
+  geom_point_rast(alpha = 1, size = 0.35, color = "#f1f1f1") + 
+  
+  geom_point_rast(data = df %>%
+    filter(morphology != "other") %>%
+      sample_frac(1),
+  aes(color = morphology),alpha = .1, size = 0.35, shape=16) +
+  
+  # geom_density_2d(data = df %>% #geom_density_2d_filled
+  #   filter(morphology != "other"), # %>% 
+  #   #  sample_frac(0.05)
+  #   aes(fill = morphology), size = 1.5) +
+
+  scale_color_brewer(type = "qual") +
+  #scale_fill_manual(values = c("#0571b0", "#ca0020")) + 	
+  #scale_color_manual(values = c("#0571b0", "#ca0020")) + 	
+  #geom_density2d(color = "black") + 
+  theme_classic() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2")+
+       #caption = "control treated organoids") + 
+  theme_cowplot(font_size = 8) + 
+  #theme(legend.position = "nothing")  + 
+  coord_fixed()
+
+
+gg_cystic + ggsave(here::here("reports/figures/mofa/gg_cystic.pdf"), width = 4, height = 4)
+```
+
+
+
+# Plot Export
+
+```{r, eval = FALSE}
+plot_grid(plot_grid(gg_size_dist_morph_ridge, gg_size_replicate, labels = c('A', 'B'), label_size = 12, ncol = 2),
+          gg_size,
+          plot_grid(gg_line, gg_cystic, labels = c('D', 'E'), label_size = 12, ncol = 2),
+          labels = c('', 'C', ''), label_size = 12, ncol = 1) +
+  ggsave(paste0(PATH, "reports/panels/imaging/panel_size_dist.pdf"), width = 8, height = 16)
+
+plot_grid(plot_grid(ggdrug_size, ggdrug_count, labels = c('A', 'B'), label_size = 12),
+          gg_drug,
+          gg_size_drug,
+          labels = c('', 'C', 'D'), label_size = 12, ncol = 1) +
+  ggsave(paste0(PATH, "reports/panels/imaging/panel_size_drug.pdf"), width = 8, height = 12)
+
+gg_size_supp
+
+```
+
+
+```{r}
+sessionInfo()
+```
+

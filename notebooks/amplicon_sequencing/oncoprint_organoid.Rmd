@@ -1,0 +1,219 @@
+---
+title: "Onco plots no manifest"
+author: "Erica Valentini"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+    smooth_scroll: yes
+  number_sections: no
+  highlight: tango
+  theme: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message=FALSE, cache=TRUE)
+```
+
+>This document was created to make __oncoplots__ (= heatmaps to show which patients have which mutations in which genes).
+
+>The data in this document come from 2 different experiments:
+
+>  1. __Organoids_old__: samples starting with P
+  2. __Organoids_new__: samples starting with D
+
+## Import data
+
+Import the file that contains the list of mutations identified by GATK annotated with VEP using the snakemake pipeline.
+Two old samples: P010T and P015T have been excluded.
+One new sample: P020T has been excluded.
+One gene AC008575.1 is overlapping with APC so we rename it to APC (the gene that the amplicon was targeting).
+
+```{r prepare-matrix, echo=FALSE}
+library(dplyr)
+library(reshape2)
+library(readr)
+library(stringr)
+
+colors = c("#BB645D","#486E90","#438F9B")
+
+#Import old P- samples
+GATK_VEP_combined_table_PON_QC_no_manifest_old <- read_delim("~/Work/organoid_oncoprint/GATK_VEP_combined_table_PON_QC_no_manifest.txt", "\t", escape_double = FALSE, col_types = cols(AD = col_character()), trim_ws = TRUE)
+
+#Import new D- samples
+GATK_VEP_combined_table_PON_QC_no_manifest_new <- read_delim("~/Work/organoid_oncoprint/GATK_VEP_combined_table_PON_QC_no_manifest_data_03_2018.txt","\t", escape_double = FALSE, trim_ws = TRUE)
+
+#Import interval from manifest
+interval_output <- read_delim("~/Work/organoid_oncoprint/interval_output.bed", "\t", escape_double = FALSE, col_names = FALSE, trim_ws = TRUE)
+colnames(interval_output) <- c("CHROM", "START", "STOP")
+
+#Fixing errors in file:
+replace_string <- function(x){str_replace(x, "^(\\.)$", "-")}
+GATK_VEP_combined_table_PON_QC_no_manifest_old <- mutate_all(GATK_VEP_combined_table_PON_QC_no_manifest_old, funs(replace_string))
+GATK_VEP_combined_table_PON_QC_no_manifest_new <- mutate_all(GATK_VEP_combined_table_PON_QC_no_manifest_new, funs(replace_string))
+
+#Filter samples:
+GATK_VEP_old.organoids <- dplyr::filter(GATK_VEP_combined_table_PON_QC_no_manifest_old, grepl("^P", SAMPLE))
+GATK_VEP_old.organoids <- dplyr::filter(GATK_VEP_old.organoids, SAMPLE != "P010T" & SAMPLE != "P015T")
+
+GATK_VEP_new.organoids<- GATK_VEP_combined_table_PON_QC_no_manifest_new %>% filter(grepl("^D", SAMPLE)) %>% filter(SAMPLE != "D020T")
+GATK_VEP_new.organoids$SAMPLE <- gsub("^D", "P", GATK_VEP_new.organoids$SAMPLE)
+
+GATK_VEP_all.organoids <- bind_rows(GATK_VEP_old.organoids, GATK_VEP_new.organoids)
+dim(GATK_VEP_all.organoids)
+
+dim(GATK_VEP_old.organoids)[1] + dim(GATK_VEP_new.organoids)[1] == dim(GATK_VEP_all.organoids)[1]
+
+GATK_VEP_all.organoids$SYMBOL <- gsub("AC008575.1", "APC", GATK_VEP_all.organoids$SYMBOL)
+```
+
+## Filter data: filter 1
+
+All the data are filtered according to two criteria:
+
+  1. Mutations in the manifest interval
+  1. IMPACT high or moderate
+  2. Variation has a COSMIC id (is it cancer-related)
+
+
+```{r filter}
+GATK.in_manifest <- GATK_VEP_all.organoids %>% filter(CHROM %in% interval_output$CHROM) %>% dplyr::select(CHROM, POS) %>% distinct() %>% left_join(interval_output) %>% mutate(in_range = if_else(POS > START & POS < STOP, "in", "out")) %>% filter(in_range == "in") %>% left_join(GATK_VEP_all.organoids)
+GATK.filter <- dplyr::select(GATK.in_manifest, SAMPLE, AD, AF, FS, Consequence, IMPACT, SYMBOL, BIOTYPE, gnomAD_AF, Existing_variation, Amino_acids, Protein_position, Codons, BaseQRankSum, SIFT, PolyPhen, CLIN_SIG, CANONICAL)
+GATK.filter <- GATK.filter %>% mutate(AD_before = str_split_fixed(AD, ",", 2)[,1]) %>% mutate(AD_after = str_split_fixed(AD, ",", 2)[,2])
+GATK.filter <- transform(GATK.filter, gnomAD_AF = as.numeric(gnomAD_AF), FS = as.numeric(FS), AF = as.numeric(AF), AD_before = as.numeric(AD_before), AD_after = as.numeric(AD_after))
+GATK.filter <- filter(GATK.filter, IMPACT == "HIGH" | IMPACT == "MODERATE")
+GATK.filter <- filter(GATK.filter, grepl("COSM", Existing_variation))
+```
+
+The __first filter__ is the following:
+  1. Polyphen NOT benign and SIFT not tolerated
+  2. AF > 0.1
+  3. FS < 60
+
+```{r filter_organoids}
+#Modify organoids:
+GATK.organoids.flt <- filter(GATK.filter, !(grepl("^benign", PolyPhen) & grepl("^tolerated", SIFT)) & AF > 0.1 & FS < 60)
+# GATK.organoids.flt <- filter(GATK.organoids, AF > 0.05)
+GATK.organoids.flt$Consequence <- str_split_fixed(GATK.organoids.flt$Consequence, ",", 2)[,1]
+GATK.organoids.flt <- filter(GATK.organoids.flt, !grepl("^inframe", Consequence))
+GATK.organoids.flt$Consequence[grepl("^splice", GATK.organoids.flt$Consequence)] <- "splice_variant"
+table(distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence)$Consequence)
+```
+
+### Oncoplot filter 1
+
+```{r oncoplot_organoids, fig.width=12, fig.height=8, echo=FALSE}
+GATK.organoids.ordered <- distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence) %>% group_by(SAMPLE, SYMBOL) %>% dplyr::summarise(Consequence_all=paste(Consequence, collapse = ";"))
+#Add missing samples:
+# for (i in 1:length(unique(GATK.filter$SAMPLE[!GATK.filter$SAMPLE %in% GATK.organoids.flt$SAMPLE]))) GATK.organoids.ordered <- add_row(as.data.frame(GATK.organoids.ordered), SAMPLE = unique(GATK.filter$SAMPLE[!GATK.filter$SAMPLE %in% GATK.organoids.flt$SAMPLE])[[i]], SYMBOL = "TP53")
+GATK.organoids.matrix <- acast(GATK.organoids.ordered, SAMPLE ~ SYMBOL, value.var = "Consequence_all")
+
+library(ComplexHeatmap)
+alter_fun = list(
+    background = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#E4E4E3", col = NA))
+    },
+    missense_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#486E90", col = NA))
+    },
+    frameshift_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#438F9B", col = NA))
+    },
+    splice_variant = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#9E90B1", col = NA))
+    },
+    stop_gained = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#BB645D", col = NA))
+    }
+)
+col = c("stop_gained" = "#BB645D", "missense_variant" = "#486E90", "frameshift_variant" = "#438F9B", "splice_variant" = "#9E90B1")
+
+ht = oncoPrint(t(GATK.organoids.matrix), get_type = function(x) strsplit(x, ";")[[1]],
+    alter_fun = alter_fun, col = col, show_column_names = TRUE, row_names_gp = gpar(fontsize = 7),
+    column_title = "OncoPrint organoids", column_order = colnames(t(GATK.organoids.matrix)) ,
+    heatmap_legend_param = list(title = "Consequence", at = c("missense_variant", "stop_gained","frameshift_variant", "splice_variant"), 
+        labels = c("Missense variant", "Stop codon gained","Frameshift variant", "Splice donor/acceptor variant"), nrow = 1, title_position = "leftcenter"))
+draw(ht, heatmap_legend_side = "bottom")
+
+```
+
+## Filter data: filter 2
+
+Another option for filtering in addition to the previous filter this second filter keeps:
+  1. Only canonical transcripts
+  2. gnomAD_AF, if present, < 0.001
+  3. Number of reads for alternative allele > 9
+
+```{r second_filter}
+#Apply filter:
+GATK.organoids.flt <- filter(GATK.filter, !(grepl("^benign", PolyPhen) & grepl("^tolerated", SIFT)) & AF > 0.1 & FS < 60 & (gnomAD_AF < 0.001 | is.na(gnomAD_AF)) & CANONICAL == "YES" & AD_after > 9)
+GATK.organoids.flt$Consequence <- str_split_fixed(GATK.organoids.flt$Consequence, ",", 2)[,1]
+GATK.organoids.flt <- filter(GATK.organoids.flt, !grepl("^inframe", Consequence))
+GATK.organoids.flt$Consequence[grepl("^splice", GATK.organoids.flt$Consequence)] <- "splice_variant"
+table(distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence)$Consequence)
+```
+
+### Oncoplot filter 2
+
+```{r oncoprint_second_filter, fig.width=12, fig.height=8, echo=FALSE}
+
+GATK.organoids.ordered <- distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence) %>% group_by(SAMPLE, SYMBOL) %>% dplyr::summarise(Consequence_all=paste(Consequence, collapse = ";"))
+#Add missing samples:
+for (i in 1:length(unique(GATK.filter$SAMPLE[!GATK.filter$SAMPLE %in% GATK.organoids.flt$SAMPLE]))) GATK.organoids.ordered <- add_row(as.data.frame(GATK.organoids.ordered), SAMPLE = unique(GATK.filter$SAMPLE[!GATK.filter$SAMPLE %in% GATK.organoids.flt$SAMPLE])[[i]], SYMBOL = "TP53")
+
+GATK.organoids.matrix <- acast(GATK.organoids.ordered, SAMPLE ~ SYMBOL, value.var = "Consequence_all")
+
+alter_fun = list(
+    background = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#E4E4E3", col = NA))
+    },
+    missense_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#486E90", col = NA))
+    },
+    frameshift_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#438F9B", col = NA))
+    },
+    splice_variant = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#9E90B1", col = NA))
+    },
+    stop_gained = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#BB645D", col = NA))
+    }
+)
+col = c("stop_gained" = "#BB645D", "missense_variant" = "#486E90", "frameshift_variant" = "#438F9B", "splice_variant" = "#9E90B1")
+
+ht = oncoPrint(t(GATK.organoids.matrix), get_type = function(x) strsplit(x, ";")[[1]],
+    alter_fun = alter_fun, col = col, show_column_names = TRUE, row_names_gp = gpar(fontsize = 7),
+    column_title = "OncoPrint organoids only canonical and gnom filter", column_order = colnames(t(GATK.organoids.matrix)) , row_order = rownames(t(GATK.organoids.matrix)), 
+    heatmap_legend_param = list(title = "Consequence", at = c("missense_variant", "stop_gained","frameshift_variant", "splice_variant"), 
+        labels = c("Missense variant", "Stop codon gained","Frameshift variant", "Splice donor/acceptor variant"), nrow = 1, title_position = "leftcenter"))
+draw(ht, heatmap_legend_side = "bottom")
+
+```
+
+## Make table
+
+```{r final_table}
+library(readr)
+final_table <- 
+  GATK.in_manifest %>% 
+  mutate(AD_before = str_split_fixed(AD, ",", 2)[,1]) %>% 
+  mutate(AD_after = str_split_fixed(AD, ",", 2)[,2]) %>% 
+  transform(AD_before = as.numeric(AD_before), AD_after = as.numeric(AD_after), gnomAD_AF = as.numeric(gnomAD_AF), FS = as.numeric(FS), AF = as.numeric(AF)) %>% 
+  filter(IMPACT == "HIGH" | IMPACT == "MODERATE") %>%
+  filter(grepl("COSM", Existing_variation)) %>% 
+  filter(AF > 0.1 & FS < 60 & (gnomAD_AF < 0.001 | is.na(gnomAD_AF)) & !(grepl("^benign", PolyPhen) & grepl("^tolerated", SIFT)) & CANONICAL == "YES") %>% 
+  mutate(Consequence = str_split_fixed(Consequence, ",", 2)[,1]) %>% 
+  filter(!grepl("^inframe", Consequence)) %>% 
+  select(SAMPLE, CHROM, POS, REF, ALT, SYMBOL, Protein_position, Amino_acids, Consequence, AF) %>%
+  distinct()
+
+glimpse(final_table)
+
+write_csv2(final_table, "~/Work/organoid_oncoprint/final_table.csv")
+```

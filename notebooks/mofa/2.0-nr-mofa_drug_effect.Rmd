@@ -1,0 +1,990 @@
+---
+title: "MOFA drug effect"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(MOFA2)
+library(here)
+#library(MOFAdata)
+library(ReactomePA)
+library(biomaRt)
+library(gridExtra)
+library(cowplot)
+```
+## Introduction
+I start out by loading the trained MOFA model and additional gene expression data.
+
+```{r}
+# input data
+morphology_profile <- readRDS(here::here("data/processed/morphology/pca_absolute_all_drugs_aggregate.Rds"))
+
+# input model
+model <- load_model(here("models/mofa/model.hdf5"))
+
+# model outputs
+weights <- model@expectations$Z$single_group %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+loadings_size <- model@expectations$W$size_view %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+loadings_expression <- model@expectations$W$expression %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+loadings_morphology <- model@expectations$W$morphology %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+loadings_drug_activity <- model@expectations$W$drug_activity %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+loadings_mutation <- model@expectations$W$mutation %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% janitor::clean_names()
+
+# additional data
+## UMAP morphology
+umap_df <- readRDS(here::here("data/processed/morphology/umap_absolute_all_drugs_sampled.Rds"))
+## gene expression baseline
+promise_long_filtered_top <- readRDS(here::here('data/processed/expression/promise_expr_filtered_tidy_top.rds'))
+## gene expression drug response
+# expr_long_gsk <- readRDS(here::here("data/processed/expression/gsk_expr_tidy.rds"))
+# expr_long_mek <- readRDS(here::here("data/processed/expression/mek_expr_tidy.rds"))
+```
+
+Next, I use the organoid phenotype profiles to estimate factor scores given the models trained loadings. I do not supply additional data.
+
+# morphology -> factor
+
+```{r}
+new_morphology <- morphology_profile %>% 
+  filter(concentration == "nan") %>%
+  mutate(rep = paste0("r", replicate)) %>% 
+  mutate(line = substr(line, 1, 4)) %>% 
+  mutate(line = paste0(line, "_", rep, "_", drug)) %>%
+  dplyr::select(line, contains("pc")) %>%
+  # I treat every drug induced phenotype as a dedicated line
+  # accounting for D020T duplicate
+  group_by(line) %>% 
+  summarise_at(vars(contains("pc")), funs(mean)) %>% 
+  ungroup() %>% column_to_rownames("line") %>% as.matrix() %>% 
+  scale(scale = FALSE, center = FALSE)
+
+new_morphology_conc <- morphology_profile %>%
+  #filter(concentration != "nan") %>%
+  mutate(rep = paste0("r", replicate)) %>% 
+  mutate(line = substr(line, 1, 4)) %>% 
+  mutate(line = paste0(line, "_", rep, "_", drug, "_", concentration)) %>%
+  dplyr::select(line, contains("pc")) %>%
+  # I treat every drug induced phenotype as a dedicated line
+  # accounting for D020T duplicate
+  group_by(line) %>% 
+  summarise_at(vars(contains("pc")), funs(mean)) %>% 
+  ungroup() %>% column_to_rownames("line") %>% as.matrix() %>% 
+  scale(scale = FALSE, center = FALSE)
+
+# extracting model loadings for morphology view
+W <- get_weights(model, "morphology_view")[[1]]
+Winv <- pracma::pinv(W)
+
+z_projected <-  new_morphology %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+z_projected_concentration <-  new_morphology_conc %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+```
+
+
+```{r}
+z_projected_anno <- z_projected %>% 
+  mutate(target = substr(id, 9, nchar(id))) %>% 
+  mutate(line = substr(id, 1, 7)) %>% 
+  dplyr::rename(drug_id = id, 
+                id = line)
+
+z_projected_anno_plot_df <- z_projected_anno %>% 
+  filter(target == "DMSO") %>%
+  left_join(weights) %>% 
+  dplyr::select(-target, -drug_id) %>% 
+  gather(variable, value, -id) %>% 
+  mutate(factor = if_else(variable %in% c("V1", "factor1"), "factor1", "none")) %>%
+  mutate(factor = if_else(variable %in% c("V2", "factor2"), "factor2", factor)) %>%
+  mutate(factor = if_else(variable %in% c("V3", "factor3"), "factor3", factor)) %>% 
+  mutate(source = if_else(grepl(variable, pattern = "factor"), "MOFA", "pseudoinverse")) %>% 
+  dplyr::select(-variable)
+
+df <- z_projected_anno_plot_df %>% 
+  spread(source, value)
+
+r <- cor(df$MOFA, df$pseudoinverse) %>% round(3)
+
+z_projected_anno_plot_df %>% 
+  spread(source, value) %>%
+  ggplot(aes(MOFA, pseudoinverse)) + 
+  geom_point() + 
+  facet_wrap(~ factor) + 
+  theme_cowplot() + 
+  geom_smooth(method = "lm") + 
+  labs(title = "morphology",
+       caption = paste0("cross-factor correlation ", r))
+```
+
+```{r}
+z_projected_anno_plot_df %>% 
+  spread(factor, value) %>% 
+  ggplot(aes(factor1, factor2, color = source)) + 
+  geom_point() + 
+  geom_path(aes(group = id), color = "black") + 
+  theme_cowplot() + 
+ # ggrepel::geom_text_repel(aes(label = id), data = z_projected_expression_plot %>% 
+ # spread(factor, value) %>% filter(source == "MOFA"), color = "black")
+  NULL
+```
+
+
+
+# morhphology: MOA
+
+
+```{r}
+## load drug annotation
+drug_anno <- readxl::read_excel(here::here('references/layouts/Compound_Annotation_Libraries_New.xlsx')) %>% distinct(drug = `Compound name`, target = `Primary Target`)
+
+z_projected_anno_tidy <- z_projected_anno %>% 
+  dplyr::rename(drug = target) %>%
+  left_join(drug_anno) %>%
+  mutate(line = substr(id, 1, 4))
+
+z_projected_anno_test <- z_projected_anno_tidy %>% semi_join(z_projected_anno_tidy %>% 
+                                                               dplyr::select(target, drug) %>%
+                                                               distinct() %>%
+                                            dplyr::count(target) %>% 
+                                            filter(n >=5)) %>% 
+  filter(drug != "DMSO")
+```
+
+
+
+```{r}
+drug_projection_test_result <- rbind(
+  lm(V1 ~ target, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor1"),
+  lm(V2 ~ target, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor2"),
+  lm(V3 ~ target, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor3")) 
+
+drug_projection_test_result <- drug_projection_test_result %>% 
+  filter(term != "(Intercept)") %>% 
+  dplyr::select(term, statistic, factor, p.value)
+```
+
+```{r}
+hist(drug_projection_test_result$p.value)
+```
+
+
+
+```{r}
+moa_factor_shift <- drug_projection_test_result %>% arrange(p.value) %>% 
+  mutate(fdr = p.adjust(p.value, method = "BH"))
+  
+
+moa_factor_shift_tbl <- moa_factor_shift%>% 
+  filter(fdr <= 0.2) %>%
+  head(15) %>%
+  tableGrob(., theme = ttheme_default(), rows = NULL)
+
+grid.arrange(moa_factor_shift_tbl)
+```
+
+
+```{r}
+moa_factor_shift %>%
+  ggplot(aes(statistic, fdr, color = factor, label = term)) + 
+  geom_point() + 
+  scale_y_reverse() + 
+  geom_hline(yintercept = 0.2) + 
+  theme_cowplot() + 
+  #facet_wrap( ~ factor)+ 
+  ggrepel::geom_text_repel(data = moa_factor_shift %>% filter(term == "targetMEK")) + 
+  ggrepel::geom_text_repel(data = moa_factor_shift %>% filter(term == "targetAurora Kinase"))
+  NULL
+```
+
+
+```{r}
+set.seed(12234533)
+df <- moa_factor_shift %>%
+  filter(factor == "factor1") %>%
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter((term == "targetmTOR") | (term %in% c("targetAurora Kinase", "targetCDK", "targetPLK")) & factor ==  "factor1")
+
+# gg_shift <- moa_factor_shift %>% 
+#   filter(factor == "factor1") %>%
+#   ggplot(aes(statistic)) + 
+#   geom_vline(xintercept = 0) +
+#   geom_histogram(aes(fill = factor), alpha = 0.2) + 
+#   geom_rug(aes(color = factor)) + 
+#   
+#   geom_vline(data = df, aes(xintercept = statistic, color = factor), linetype="dashed") + 
+#   geom_text(aes(x= df %>% filter(factor == "factor1") %>% .$statistic - .5, 
+#                 label= df %>% filter(factor == "factor1") %>% .$term, y=.350), color = "black") +
+#   geom_text(aes(x= df %>% filter(factor == "factor1") %>% .$statistic %>% .[1] + .5, 
+#                 label= df %>% filter(factor == "factor1") %>% .$term %>% .[1], y=.350), color = "black") + 
+#   geom_text(aes(x= df %>% filter(factor == "factor1") %>% .$statistic %>% .[2] + .5, 
+#               label= df %>% filter(factor == "factor1") %>% .$term %>% .[2], y=.370), color = "black") + 
+#   theme_cowplot() + 
+#   theme(legend.position = "bottom")
+# 
+# gg_shift + ggsave(here::here("reports/figures/mofa/drug_shift.pdf"), width = 3, height = 3)  
+
+
+gg_shift <- moa_factor_shift %>% 
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter(factor == "factor1") %>% 
+  ggplot(aes(statistic, factor, label = term, color = fdr_bool)) + 
+  geom_jitter(width = 0.1) +
+  geom_vline(xintercept = 0) +
+   ggrepel::geom_text_repel(data = df) + 
+  theme_cowplot() + 
+  scale_color_manual(values = c("grey", "black")) +
+  geom_rug() + 
+  theme(legend.position =  "nothing") + 
+  labs(caption = "FDR = 0.05")
+
+gg_shift + ggsave(here::here("reports/figures/mofa/f1_moa_shift.pdf"), width = 6, height = 2)  
+  
+```
+
+```{r}
+set.seed(123)
+
+df <- moa_factor_shift %>%
+  filter(factor == "factor2") %>%
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter((term %in% c("targetMEK", "targetFAK")))
+
+# gg_shift <- moa_factor_shift %>% 
+#   filter(factor != "factor3") %>%
+#   ggplot(aes(statistic)) + 
+#   geom_vline(xintercept = 0) +
+#   geom_density(aes(fill = factor), alpha = 0.2) + 
+#   geom_rug(aes(color = factor)) + 
+#   
+#   geom_vline(data = df, aes(xintercept = statistic, color = factor), linetype="dashed") + 
+#   geom_text(aes(x= df %>% filter(factor == "factor2") %>% .$statistic - .5, 
+#                 label= df %>% filter(factor == "factor2") %>% .$term, y=.350), color = "black") +
+#   geom_text(aes(x= df %>% filter(factor == "factor1") %>% .$statistic %>% .[1] + .5, 
+#                 label= df %>% filter(factor == "factor1") %>% .$term %>% .[1], y=.350), color = "black") + 
+#   geom_text(aes(x= df %>% filter(factor == "factor1") %>% .$statistic %>% .[2] + .5, 
+#               label= df %>% filter(factor == "factor1") %>% .$term %>% .[2], y=.370), color = "black") + 
+#   theme_cowplot() + 
+#   theme(legend.position = "bottom")
+
+gg_shift <- moa_factor_shift %>% 
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter(factor == "factor2") %>% 
+  ggplot(aes(statistic, factor, label = term, color = fdr_bool)) + 
+  geom_jitter(width = 0.1) +
+  geom_vline(xintercept = 0) +
+   ggrepel::geom_text_repel(data = df) + 
+  theme_cowplot() + 
+  scale_color_manual(values = c("grey", "black")) +
+  geom_rug() + 
+  theme(legend.position =  "nothing") + 
+  labs(caption = "FDR = 0.05")
+
+gg_shift + ggsave(here::here("reports/figures/mofa/f2_moa_shift.pdf"), width = 6, height = 2)  
+
+
+```
+
+
+aurora kinase, PLK, CDK, leads to reduced factor 1 - smaller organoids
+mTORi leads to increased factor 1 - larger organoids?
+MEK, FAK leads to increased factor 2 - more cystic organoids
+
+
+Wnt inhibitors lead to reduced factor 3 - 
+
+```{r}
+doi <- c("MEK", "ctrl")
+
+z_projected_anno_tidy %>% 
+  mutate(target = if_else(drug == "DMSO", "ctrl", target)) %>%
+  left_join(drug_projection_test_result %>% dplyr::rename(target = term)) %>%
+  #filter(line %in% c("D004_r1", "D004_r2", "D007_r1", "D007_r2", "D019_r1", "D019_r2")) %>%
+  filter(target %in% doi) %>%
+  ggplot(aes(target, V2, label = id)) + 
+  geom_jitter(width = 0.1) + 
+  ggsignif::geom_signif(comparisons = list(doi)) + 
+  theme_cowplot() + 
+  labs(y = "factor 2")
+
+
+```
+
+## concentration dependend effects
+
+I check wether these shifts in factor scores are a function of drug concentration
+
+```{r}
+z_projected_conc_anno <- z_projected_concentration %>% 
+  mutate(target = substr(id, 9, nchar(id))) %>% 
+  separate(target, c("target", "concentration"), sep = "_") %>% 
+  mutate(concentration = as.numeric(concentration)) %>%
+  mutate(line = substr(id, 1, 7)) %>%
+  mutate(target = ifelse(target == "", "DMSO", target))
+
+z_projected_conc_anno_tidy <- z_projected_conc_anno %>% 
+  dplyr::rename(drug = target) %>%
+  left_join(drug_anno)
+
+```
+
+### MEK inhibitors
+
+```{r}
+gg_f2_mek_conc <- z_projected_conc_anno_tidy %>% 
+  filter(drug %in% c("DMSO", "Binimetinib")) %>%
+  mutate(concentration = if_else(drug == "DMSO", 0.00032, concentration)) %>% #adding a pseudo conc for plotting
+  ggplot(aes(concentration, V2)) + 
+  geom_jitter(width = 0.1, aes(color = drug)) + 
+  scale_x_log10() + 
+  geom_smooth(color = "black") + 
+  geom_hline(yintercept = 0) +
+  theme_cowplot() + 
+  labs(y = "factor 2") + 
+  scale_color_manual(values = c("black", "grey")) + 
+  theme(legend.position = "bottom")
+
+gg_f2_mek_conc + ggsave(here::here("reports/figures/mofa/f2_mek_shift.pdf"), width = 4, height = 4)  
+```
+
+
+```{r}
+gg_f1_mek_conc <- z_projected_conc_anno_tidy %>% 
+  filter(drug %in% c("DMSO", "Binimetinib")) %>%
+  mutate(concentration = if_else(drug == "DMSO", 0.00032, concentration)) %>% #adding a pseudo conc for plotting
+  ggplot(aes(concentration, V1)) + 
+  geom_jitter(width = 0.1, aes(color = drug)) + 
+  scale_x_log10() + 
+  geom_smooth(color = "black") + 
+  geom_hline(yintercept = 0) +
+  theme_cowplot() + 
+  labs(y = "factor 1") + 
+  scale_color_manual(values = c("black", "grey")) + 
+  theme(legend.position = "bottom")
+
+gg_f1_mek_conc + ggsave(here::here("reports/figures/mofa/f1_mek_shift.pdf"), width = 4, height = 4)  
+```
+
+```{r}
+gg_f3_mek_conc <- z_projected_conc_anno_tidy %>% 
+  filter(drug %in% c("DMSO", "Binimetinib")) %>%
+  mutate(concentration = if_else(drug == "DMSO", 0.00032, concentration)) %>% #adding a pseudo conc for plotting
+  ggplot(aes(concentration, V3)) + 
+  geom_jitter(width = 0.1, aes(color = drug)) + 
+  scale_x_log10() + 
+  geom_smooth(color = "black") + 
+  geom_hline(yintercept = 0) +
+  theme_cowplot() + 
+  labs(y = "factor 3") + 
+  scale_color_manual(values = c("black", "grey"))
+
+gg_f3_mek_conc + ggsave(here::here("reports/figures/mofa/f3_mek_shift.pdf"), width = 4, height = 4)  
+```
+
+
+
+```{r, eval = TRUE}
+doi <- c("DMSO", "Binimetinib")
+
+gg_f2_shift_signif<- z_projected_conc_anno_tidy %>% 
+  filter(drug %in% doi) %>%
+  filter(concentration == 0.04 | drug == "DMSO") %>%
+  ggplot(aes(drug, V2, label = id)) + 
+  geom_jitter(width = 0.1) + 
+  ggsignif::geom_signif(comparisons = list(doi)) + 
+  theme_cowplot() + 
+  labs(caption = "3rd concentration from 5")
+
+gg_f2_shift_signif + ggsave(here::here("reports/figures/mofa/f2_mek_shift_test.pdf"), width = 4, height = 4)  
+```
+
+Organoid size does not change as a function of MEKi treatment
+
+```{r, eval = FALSE}
+umap_df %>%
+  filter(drug %in% c("DMSO", "Binimetinib")) %>%
+  mutate(concentration = ifelse(drug == "DMSO", 0.00032, concentration)) %>% #adding a pseudo conc for plotting
+  mutate(concentration = as.numeric(concentration)) %>%
+  ggplot(aes(concentration, v2)) + 
+  geom_jitter(width = 0.1, aes(color = drug)) + 
+  scale_x_log10() + 
+  geom_smooth(color = "black") + 
+  geom_hline(yintercept = 0) +
+  theme_cowplot() + 
+  labs(y = "factor 2") + 
+  scale_color_manual(values = c("black", "grey"))
+```
+
+I demonstrate that organoid size does not change with rising MEKi treatments, even when only analyzing alive organoids
+
+```{r, eval = FALSE}
+umap_df %>%
+  filter(drug == "Binimetinib") %>%
+  filter(prob_live == 1) %>%
+  mutate(concentration = as.numeric(concentration)) %>%
+  ggplot(aes(concentration, size_log)) + 
+  geom_jitter(width = 0.1) + 
+  stat_summary(fun.y=mean, colour="blue", geom="line", size = 1) + # draw a mean line in the data
+  scale_x_log10() + 
+  labs(title = "Binimetinib, filtering for alive organoids") +
+  #facet_grid(prediction ~ line) + 
+  theme_cowplot()
+```
+
+### mTOR inhibitors
+
+
+```{r, eval = TRUE}
+doi <- c("DMSO", "WYE-125132 (WYE-132)")
+
+gg_f1_shift_signif<- z_projected_conc_anno_tidy %>% 
+  filter(drug %in% doi) %>%
+  ggplot(aes(drug, V2, label = id)) + 
+  geom_jitter(width = 0.1) + 
+  ggsignif::geom_signif(comparisons = list(doi)) + 
+  theme_cowplot() 
+
+gg_f1_shift_signif + ggsave(here::here("reports/figures/mofa/f1_mtor_shift_test.pdf"), width = 4, height = 4)  
+```
+
+
+
+# morhphology: drug
+
+
+```{r, eval=TRUE}
+ 
+drug_projection_test_result_drug <- rbind(
+  lm(V1 ~ drug + line, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor1"),
+  lm(V2 ~ drug + line, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor2"),
+  lm(V3 ~ drug + line, data = z_projected_anno_test) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor3")) 
+
+drug_projection_test_result_drug <- drug_projection_test_result_drug %>% 
+  filter(term != "(Intercept)") %>% 
+  dplyr::select(term, statistic, factor, p.value)
+```
+
+```{r, eval=TRUE}
+hist(drug_projection_test_result_drug$p.value)
+```
+
+```{r, eval =TRUE}
+moa_factor_shift <- drug_projection_test_result_drug %>% arrange(statistic) %>% 
+  mutate(fdr = p.adjust(p.value, method = "BH")) 
+
+moa_factor_shift_tbl <- moa_factor_shift%>% 
+  filter(fdr <= 0.2) %>%
+  head(15) %>%
+  tableGrob(., theme = ttheme_default(), rows = NULL)
+
+grid.arrange(moa_factor_shift_tbl)
+```
+
+
+```{r}
+moa_factor_shift %>%
+  filter(!grepl(term, pattern = "D0")) %>% 
+  filter(factor == "factor1") %>%
+  filter(statistic > 0) %>% 
+  mutate(drug = substr(term, 5, nchar(.))) %>%
+  left_join(drug_anno) %>%
+  arrange(desc(statistic))
+```
+
+when accounting for line differences, mTOR inhibitors (PP242 and WYE-132) are among the strongest inductors of factor 1
+
+
+
+
+```{r}
+drug_shift_test <- moa_factor_shift %>%
+  filter(!grepl(term, pattern = "D0")) %>% 
+  filter(factor == "factor1") %>%
+  mutate(drug = substr(term, 5, nchar(.))) %>%
+  left_join(drug_anno)
+
+aggregate_drugs <- drug_shift_test %>% group_by(target) %>% summarise_at(vars(contains("statistic")), funs("median"))
+
+include_drugs <- aggregate_drugs %>% arrange(desc(statistic)) %>% .$target
+
+gg_f1_drug_shift <- drug_shift_test %>%
+  drop_na() %>%
+  mutate(target = factor(target, levels = include_drugs)) %>%
+  ggplot(aes(y = target, x = statistic)) + 
+  #geom_point() + 
+  geom_vline(xintercept = 0, color = "grey") + 
+  ggridges::geom_density_ridges() +
+  
+  #coord_flip() + 
+  cowplot::theme_cowplot()
+
+gg_f1_drug_shift + ggsave(here::here("reports/figures/mofa/f1_ridge_drug_shift.pdf"), width = 4, height = 3)
+
+```
+
+```{r}
+drug_shift_test <- moa_factor_shift %>%
+  filter(!grepl(term, pattern = "D0")) %>% 
+  filter(factor == "factor2") %>%
+  mutate(drug = substr(term, 5, nchar(.))) %>%
+  left_join(drug_anno)
+
+aggregate_drugs <- drug_shift_test %>% group_by(target) %>% summarise_at(vars(contains("statistic")), funs("mean"))
+
+include_drugs <- aggregate_drugs %>% arrange(desc(statistic)) %>% .$target
+
+gg_f2_drug_shift <- drug_shift_test %>%
+  drop_na() %>%
+  mutate(target = factor(target, levels = include_drugs)) %>%
+  ggplot(aes(y = target, x = statistic)) + 
+  #geom_point() + 
+  geom_vline(xintercept = 0, color = "grey") + 
+  ggridges::geom_density_ridges() +
+  
+  #coord_flip() + 
+  cowplot::theme_cowplot()
+
+gg_f2_drug_shift + ggsave(here::here("reports/figures/mofa/f2_ridge_drug_shift.pdf"), width = 4, height = 3)
+
+```
+
+```{r}
+drug_shift_test %>% arrange(desc(statistic)) %>% filter(factor == "factor2")
+```
+
+
+
+```{r}
+z_projected_anno_test
+```
+
+
+## factor shift MOA by line
+
+
+```{r}
+z_projected_anno_test_line <- z_projected_anno_test %>% mutate(line = substr(line, 1, 4))
+
+drug_projection_test_result_line <- rbind(
+  lm(V1 ~ target + line, data = z_projected_anno_test_line) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor1"),
+  lm(V2 ~ target + line, data = z_projected_anno_test_line) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor2"),
+  lm(V3 ~ target + line, data = z_projected_anno_test_line) %>% summary() %>% broom::tidy() %>% mutate(factor = "factor3")) 
+
+drug_projection_test_result_line <- drug_projection_test_result_line %>% 
+  filter(term != "(Intercept)") %>% 
+  dplyr::select(term, statistic, factor, p.value)
+```
+
+```{r}
+hist(drug_projection_test_result_line$p.value)
+```
+
+
+
+```{r}
+moa_factor_shift_line <- drug_projection_test_result_line %>% arrange(p.value) %>% 
+  mutate(fdr = p.adjust(p.value, method = "BH"))
+  
+
+moa_factor_shift_tbl <- moa_factor_shift_line%>% 
+  filter(fdr <= 0.2) %>%
+  head(15) %>%
+  tableGrob(., theme = ttheme_default(), rows = NULL)
+
+grid.arrange(moa_factor_shift_tbl)
+```
+
+decomposing the results
+
+```{r}
+moa_factor_shift_line_tidy <- moa_factor_shift_line %>%
+  separate(term, c("line", "drug"), remove = FALSE, sep = ":") %>%
+  mutate(type = case_when(is.na(line) ~ "drug",
+                          is.na(drug) ~ "line", 
+                          TRUE ~ "interaction"))
+```
+
+
+D018T01 is exceptionally strong in factor 2, when treated with MEK inhibitors the line shows a strong response with a shift in factor 1. At a first glance, this is in conflict with the observation that factor 2 high lines are relatively insensitive to MEK inhibtors.
+
+
+```{r}
+moa_factor_shift_line %>%
+  ggplot(aes(statistic, fdr, color = factor, label = term)) + 
+  geom_point() + 
+  scale_y_reverse() + 
+  geom_hline(yintercept = 0.2) + 
+  theme_cowplot() + 
+  facet_wrap( ~ factor)+ 
+  ggrepel::geom_text_repel(data = moa_factor_shift %>% filter(term == "targetMEK")) + 
+  ggrepel::geom_text_repel(data = moa_factor_shift %>% filter(term == "targetAurora Kinase"))
+  NULL
+```
+
+## factor 1
+
+```{r}
+moa_factor_shift_line_tidy %>% 
+  filter(factor == "factor2") %>%
+  filter(type != "interaction") %>%
+  
+  filter(fdr < 0.2)
+```
+
+factor 1 only using morphology (FDR < 0.1)
+* line 46, 18, 10 significantly associated with factor1 up 
+* line 22, 30 with decreased factor 1
+* mTORi leads to increase in factor 1
+* CDK and AURK to a decrease in factor 1
+
+When accounting for line differences, we observed a downward shift in factor1 score for organoids treated with CDK and AURK inhibitors. These findings where in line with the observation that organoids size was reduced visibly in CDK treated organoids. In contrast, mTORi treated organoids showed an increased factor1 score. Given the overrepresentation of IGF signaling mediators within the factor1 loading, we hypothesized that mTOR inhibitor treatment might lead to a previously described disinhibition of IGFR1 signaling. To validate these results we 
+
+
+factor 2 
+* line 18, 22, 30, 10 factor 2 up
+* MEKi leads to increase in factor 2, so did AURK, PLK, JNK
+
+The increase in MEKi loading is seen across lines. At the same time MEKi activity has a negative weight within factor2, generally suggesting that factor2 high organoids are relatively MEKi resistant. Given the shift of MEKi treated organoids within factor2 and the relative resistance of organoid lines that are factor2 high in an unperturbed state, we hypothesized that factor2 represents a MEK inhibited state. Organoid lines in this state are generally not perturbed by additional MEK inhibition while the general set of organoid lines respond with an increase in factor2 in phenotype space. <cite Tianzuo>, Based on this model, we  effect was concentration dependent we analyzed the factor2 score for all organoid lines in a concentration depend manner. To further investigate this relationship we performed qPCR for the intestinal stem cell marker Lgr5, a key marker of the intestinal stem cell signature which is enriched within the factor2 loadings. Organoids showed an increase in Lgr5 expression when treated with MEK inhibitors, recapituling the increase in factor2 loading
+
+factor 3
+* line 22, 20 and 46 with factor 3 up
+* line 30, and 7 with factor 3 low
+* JNK, Src to decrease
+
+```{r}
+moa_factor_shift_line_tidy %>% 
+  filter(factor == "factor3") %>%
+  filter(type == "interaction") %>%
+  filter(fdr < 0.1)
+```
+factor1 
+* line18 responds to many drugs with factor 1 *decrease*, incl IGF, MEK, PDGFR and EGFR. The same is true for AURK, p38
+
+factor 2
+* line46 example for strong factor 2 *decrease* JNK, Src
+
+factor 3
+* line 7 with *increase* to drugs
+
+
+# gene expression -> factor
+
+## training data
+
+```{r}
+mofa_expression <- promise_long_filtered_top %>% 
+  # renaming columns
+  mutate(line = paste0(line, "_", rep)) %>%
+  dplyr::select(sample = line,
+                feature = symbol, # setting feature to symbol
+                value = expr) %>% 
+  mutate(view = "expression") %>% 
+  # averaging feature value
+  group_by(feature, sample, view) %>%
+  summarise(value = mean(value)) %>%
+  # renaming feature jic
+  mutate(feature = paste0(feature, "_", view)) %>%
+  dplyr::select(sample, feature, view, value) %>% 
+  drop_na() %>% 
+  filter(feature != "_expression")
+
+new_expression <- mofa_expression %>%
+  dplyr::select(-view) %>%
+  spread(sample, value) %>%
+  column_to_rownames("feature") %>%
+  as.matrix() %>%
+  t() %>% 
+  scale(center = TRUE, scale = TRUE)
+  
+
+W <- get_weights(model, "expression")[[1]]
+Winv <- pracma::pinv(W)
+
+z_projected_expression <-  new_expression %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+```
+
+
+```{r}
+z_projected_exp_anno <- z_projected_expression %>% 
+  mutate(line = substr(id, 1, 7))
+
+z_projected_expression_plot <- z_projected_expression %>% 
+  left_join(weights) %>% 
+  
+  gather(variable, value, -id) %>% 
+  mutate(factor = if_else(variable %in% c("V1", "factor1"), "factor1", "none")) %>%
+  mutate(factor = if_else(variable %in% c("V2", "factor2"), "factor2", factor)) %>%
+  mutate(factor = if_else(variable %in% c("V3", "factor3"), "factor3", factor)) %>% 
+  mutate(source = if_else(grepl(variable, pattern = "factor"), "MOFA", "pseudoinverse")) %>% 
+  dplyr::select(-variable) 
+
+z_projected_expression_plot %>%
+  spread(source, value) %>% 
+  ggplot(aes(MOFA, pseudoinverse)) + 
+  geom_point() + 
+  facet_wrap(~ factor) + 
+  theme_cowplot() + 
+  geom_smooth(method = "lm") + 
+  labs(title = "gene expression")
+```
+```{r}
+z_projected_expression_plot %>% 
+  spread(factor, value) %>% 
+  ggplot(aes(factor1, factor2, color = source)) + 
+  geom_point() + 
+  geom_path(aes(group = id), color = "black") + 
+  theme_cowplot() + 
+  ggrepel::geom_text_repel(aes(label = id), data = z_projected_expression_plot %>% 
+  spread(factor, value) %>% filter(source == "MOFA"), color = "black")
+```
+
+
+## drug treatment 
+
+### GSK inhibitors
+
+```{r, eval = FALSE}
+gsk_expression <- expr_long_gsk %>%
+  mutate(sample = paste0(line, "_r", rep)) %>% 
+  mutate(sample = paste0(sample, "_", treatment)) %>% 
+  mutate(feature = paste0(symbol, "_expression")) %>%
+  dplyr::select(value = expr, sample, feature) %>% 
+  group_by(feature, sample) %>%
+  summarise(value = mean(value)) %>%
+  spread(sample, value) %>%
+  column_to_rownames("feature") %>%
+  as.matrix() %>%
+  t() %>% 
+  scale(center = TRUE, scale = FALSE)
+
+gsk_expression <- gsk_expression[,colnames(gsk_expression) %in% colnames(new_expression)]
+joint_expression <- rbind(gsk_expression, new_expression)
+
+W <- get_weights(model, "expression")[[1]]
+Winv <- pracma::pinv(W)
+
+z_projected_expression_gsk <-  gsk_expression %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+z_projected_expression_joint <-  joint_expression %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+
+joint_expression %*% t(Winv) %>% pheatmap::pheatmap(cluster_cols = FALSE)
+
+```
+
+```{r, eval = FALSE}
+gsk_expression %*% t(Winv) %>% pheatmap::pheatmap(cluster_cols = FALSE)
+```
+
+```{r, eval = FALSE}
+
+df <- z_projected_expression_gsk %>%
+  as.data.frame() %>%
+  separate(id, c("line", "replicate", "treatment")) 
+
+lm(V3 ~ line + treatment, data = df) %>% summary()
+
+df %>% 
+  ggplot(aes(treatment, V3, color = line)) + 
+  geom_point(size = 2) + 
+  theme_cowplot() + 
+  labs(y = "factor 3") + 
+  scale_color_brewer(type = "qual")
+```
+
+lines with high factor 3 appear to not respond morphologically to GSK inhibitors. Lines that have been treated with GSK inhibitors, move up in factor 3. We can interpret this as the organoids being pushed by the drug in factor space into a direction, which is associated with lower response to GSK inhibitors (possibly because GSK activity is already inhibited in this state).
+Factor 3 high organoids are more sensitive to AURK inhibitors. Existing literature suggests a crosstalk between AURK and GSK, Akt respectively. A possible mechanism could be that factor 3 high lines show a strong activiation of mTOR and Wnt signaling due to GSK3b inhibition, which could be partially explained by AURK based phosphorylation of GSK. In case GSK is inhibited pharmacologically, the lines do not respond much, because the pathway is already non-active. In case AURK is inhibited, the lines respond strongly - probably because they rely on AURK signaling to maintain viability, possibly via a crosstalk of GSK3b and Akt/mTOR signaling. (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2642527/)
+
+### MEK inhibitors
+
+```{r, eval = FALSE}
+mek_expression <- expr_long_mek %>%
+  mutate(sample = paste0(line, "_", treatment)) %>% 
+  mutate(sample = paste0(sample, "_", names)) %>% 
+  mutate(feature = paste0(Symbol, "_expression")) %>%
+  dplyr::select(value = expr, sample, feature) %>% 
+  group_by(feature, sample) %>%
+  summarise(value = mean(value)) %>%
+  spread(sample, value) %>%
+  column_to_rownames("feature") %>%
+  as.matrix() %>%
+  t()%>% 
+  scale(center = TRUE, scale = FALSE)
+
+
+joint_expression <- left_join(new_expression %>% t() %>% as.data.frame() %>% rownames_to_column("id"), 
+          mek_expression %>% t() %>% as.data.frame() %>% rownames_to_column("id")) %>% 
+  column_to_rownames("id") 
+
+joint_expression <- joint_expression %>% 
+  mutate_if(is.numeric,coalesce,0) %>%
+  as.matrix() 
+
+mek_expression <- joint_expression[,-c(1:22)] %>% t()
+joint_expression <- joint_expression %>% t()
+
+
+
+W <- get_weights(model, "expression")[[1]]
+Winv <- pracma::pinv(W)
+
+z_projected_expression_mek <-  mek_expression %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+z_projected_expression_joint <-  joint_expression %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("id")
+
+mek_expression %*% t(Winv) %>% pheatmap::pheatmap(cluster_cols = FALSE)
+
+```
+
+```{r, eval = FALSE}
+z_projected_expression_mek %>% 
+  ggplot(aes(V2, id)) + 
+  geom_point()
+```
+
+```{r, eval = FALSE}
+
+df <- z_projected_expression_mek %>%
+  as.data.frame() %>%
+  separate(id, c("line", "treatment", "name")) 
+
+lm(V3 ~ line + treatment, data = df) %>% summary()
+
+df %>% 
+  ggplot(aes(treatment, V3, color = line)) + 
+  geom_point(size = 2) + 
+  theme_cowplot() + 
+  labs(y = "factor 3") + 
+  scale_color_brewer(type = "qual")
+```
+
+```{r, eval = FALSE}
+lm(V2 ~ line + treatment, data = df) %>% summary()
+
+df %>% 
+  ggplot(aes(treatment, V2, color = line)) + 
+  geom_point(size = 2) + 
+  theme_cowplot() + 
+  labs(y = "factor 2") + 
+  scale_color_brewer(type = "qual")
+```
+
+
+```{r, eval = FALSE}
+joint_expression %*% t(Winv)  %>% pheatmap::pheatmap(cluster_cols = FALSE)
+```
+
+
+```{r, eval = FALSE}
+joint_expression %>% colSums(na.rm = TRUE) %>% hist()
+```
+
+#### factor weights for intestinal stemness related genes
+
+```{r, eval = FALSE}
+loadings_expression %>% 
+  filter(grepl(id, "LGR5"))
+```
+LGR5 or EPHB1 are not members of the top differentially expressed genes. However, they are a core marker of the  intestinal stem cell identity signature. I am now looking specifically at the expression of these target genes and how they are modulated under various drug treatments.  
+
+```{r, eval = FALSE}
+expr_long_mek %>% 
+  filter(Symbol %in% c("LGR5", "EPHB2", "ASCL2")) %>%
+  ggplot(aes(treatment, expr, color = line)) + 
+  geom_point() + 
+  theme_cowplot() + 
+  #ggsignif::geom_signif(comparisons = list(c("DMSO", "MEKi"))) +
+  facet_wrap(~Symbol)
+  
+```
+
+```{r, eval = FALSE}
+df <- expr_long_mek %>% 
+  filter(Symbol %in% c("LGR5"))
+
+lm(expr ~ line + treatment, data = df) %>% summary()
+```
+
+
+```{r, eval = FALSE}
+df <- expr_long_mek %>% 
+  filter(Symbol %in% c("EPHB2"))
+
+lm(expr ~ line + treatment, data = df) %>% summary()
+```
+
+```{r, eval = FALSE}
+df <- expr_long_mek %>% 
+  filter(Symbol %in% c("ASCL2"))
+
+lm(expr ~ line + treatment, data = df) %>% summary()
+```
+
+
+
+
+# factor -> gene expression
+
+```{r, eval = FALSE}
+z_projected_matrix <- z_projected %>% column_to_rownames("id") %>% as.matrix()
+
+expression_inference <- z_projected_matrix %*% t(get_weights(model, "expression")[[1]]) %>% as.data.frame() %>% rownames_to_column("id") %>% as_tibble() %>% 
+  separate(id, c("line", "drug"), sep = 7) %>% 
+  mutate(drug = substr(drug , 2, nchar(drug))) %>% 
+  mutate(drug = ifelse(drug == "", "DMSO", drug))
+```
+
+
+```{r, eval = FALSE}
+expression_inference_tidy <- expression_inference %>%  gather(symbol, expr, -drug, -line) %>% mutate(symbol = substr(symbol, 1, nchar(symbol)-nchar("_expression"))) 
+
+expression_dmso_inference <- promise_long_filtered_top %>% 
+  dplyr::select(-line) %>% 
+  dplyr::rename(line = id) %>% 
+  dplyr::select(line, expr, symbol) %>% 
+  left_join(expression_inference_tidy %>% filter(drug == "DMSO") %>% dplyr::rename(inference = expr))
+```
+
+```{r, eval = FALSE}
+expression_dmso_inference %>% 
+  drop_na() %>%
+  ggplot(aes(expr, inference)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth(aes(group = line))
+```
+
+# single organoid morphology -> factor
+
+```{r, eval = FALSE}
+new_morphology <- readRDS(here::here("data/processed/PhenotypeSpectrum/pca_absolute_all_drugs_sampled.Rds")) %>% 
+  dplyr::select(contains("pc"), uuid) %>% 
+  column_to_rownames("uuid") %>%
+  as.matrix() %>% scale(center = TRUE, scale = FALSE)
+
+z_projected_organoid <-  new_morphology %*% t(Winv) %>% as.data.frame()%>% rownames_to_column("uuid")
+
+umap_factor <- umap_df %>% 
+  inner_join(z_projected_organoid) %>%
+  filter(line != "D020T02") 
+
+gg_factor_umap <- umap_factor %>% 
+  dplyr::select(-size_factor) %>%
+  dplyr::rename(factor1 = V1, factor2 = V2, factor3 = V3) %>%
+  pivot_longer(cols = contains("factor"), names_to = "number", values_to = "value") %>%
+  ggplot(aes(v1, v2, color = log(value))) + 
+  ggrastr::geom_point_rast(alpha = 0.1, size = 0.35) + 
+  scale_color_viridis_c() +
+  cowplot::theme_cowplot() +
+  labs(x = "UMAP 1",
+       y = "UMAP 2",
+       color = "factor value") + 
+  facet_wrap(~ number) +
+  theme(legend.position = "bottom") + 
+    coord_fixed()
+
+gg_factor_umap + ggsave(here("factor_overview_organoid_level.pdf"), height = 6 , width = 6)
+```
+
+

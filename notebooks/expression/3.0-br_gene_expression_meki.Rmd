@@ -1,0 +1,552 @@
+---
+title: "Gene expression changes upon MEK inhibition in patient derived CRC organoids"
+author: "Benedikt Rauscher"
+date: "1/20/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F, warning = F, results = 'hide')
+```
+
+# Dependencies
+
+```{r}
+library(MEKWnt2018)
+library(affy)
+library(limma)
+library(clusterProfiler)
+library(ReactomePA)
+library(enrichplot)
+library(org.Hs.eg.db)
+library(pheatmap)
+library(reshape2)
+library(tidyverse)
+library(patchwork)
+library(cowplot)
+library(here)
+```
+
+Define function namespace.
+
+```{r}
+filter <- dplyr::filter
+select <- dplyr::select
+rename <- dplyr::rename
+slice <- dplyr::slice
+```
+
+Set parameters for plotting.
+
+```{r}
+theme_set(theme_cowplot())
+```
+
+# Illumina chips
+
+## Data loading and normalization
+
+We load the gene expression data from an R object that was published with Zhan et al., 2018.
+
+```{r}
+## list of cel files
+data('expr_organoids_norm', package='MEKWnt2018')
+```
+
+We generate a shared gene expression matrix for all datasets.
+
+```{r}
+expr_mat <- expr_organoids_norm %>%
+  map(exprs) %>%
+  map(~ as_tibble(.x, rownames = 'probe')) %>%
+  reduce(inner_join) %>%
+  as.data.frame() %>% column_to_rownames('probe')
+
+## exclude line 15 because it was not screened
+expr_mat <- expr_mat[,!grepl('Organoid 15', colnames(expr_mat))]
+```
+
+We exclude the samples where MEK inhibition was rescued by additionally treating with a CTNNB1 inhibitor (sample name contains P5/P10).
+
+```{r}
+expr_mat <- expr_mat[,!grepl(' P5 | P10 ', colnames(expr_mat))]
+
+## visualize as heatmap
+pheatmap(cor(expr_mat))
+```
+
+As expected we see the biggest differences between the organoid lines but within each line trametinib and DMSO treated samples are distinguishable.
+
+## Differential gene expression
+
+We use the limma package for differential gene expression analysis. First we remove unexpressed genes to reduce false positives.
+
+```{r, results='hide', warning=F, message=F}
+## sample info (line + treatment)
+sample_info <- tibble(names = colnames(expr_mat)) %>% 
+  mutate(treatment = ifelse(grepl('TRAM|T10', names), 'MEKi', 'DMSO'), 
+         line = gsub('^\"Organoid ', '', names)) %>% 
+  separate(line, c('line', 'rest'), extra = 'merge', sep = ' ') %>% 
+  mutate(line = gsub('\"', '', gsub('T', '', line)),
+         group = paste(treatment, line, sep='_')) %>%
+  select(-rest)
+
+## check matrix and sample info fit together
+stopifnot(identical(colnames(expr_mat), sample_info$names))
+
+## model matrix for DGE analysis, general meki effect, regress line effects
+mm1 <- model.matrix(~line + treatment, data = sample_info)
+
+## fit model  all lines
+fit <- lmFit(expr_mat, mm1)
+fit <- eBayes(fit)
+
+## make a results table and map probes to gene symbols
+data('probe_mapping_ilmn', package='MEKWnt2018')
+mek_res <- topTable(fit, coef = 'treatmentMEKi', n = Inf) %>% 
+  as_tibble(rownames = 'ProbeID') %>%
+  left_join(probe_mapping_ilmn)
+```
+
+We visualize a number of high ranking genes to validate the analysis.
+
+```{r}
+expr_long <- expr_mat %>% as_tibble(rownames = 'ProbeID') %>% 
+  left_join(probe_mapping_ilmn) %>% 
+  pivot_longer(names_to = 'names', values_to = 'expr', -c(ProbeID, Entrez_Gene_ID, Symbol)) %>% 
+  inner_join(sample_info)
+
+## plot examples 
+expr_long %>% filter(Symbol %in% c('KRT20', 'KRT5', 'TFF1', 'CD44',
+                                   'EPHB2', 'ASCL2', 'OLFM4', 'BIRC5',
+                                   'AXIN2', 'DUSP6')) %>% 
+  ggplot(aes(treatment, expr, color = line)) + 
+  geom_jitter(width = 0.2) + 
+  facet_wrap(~ Symbol + ProbeID, scales = 'free_y') +
+  panel_border()
+```
+
+### Line 19 only
+
+In Tianzuo's paper we included the PRI treated sample for the DGE analysis in organoid 19 but filtered data from other lines.
+
+```{r}
+expr_mat_19 <- exprs(expr_organoids_norm$o19_norm)
+present_19 <- detectionCall(expr_organoids_norm$o19_norm)
+expr_mat_19 <- expr_mat_19[present_19 > 0,]
+
+sample_info_19 <- tibble(names = colnames(expr_mat_19)) %>%
+  extract(names, c('treatment', 'rep'),
+          regex = '^.*19T (.+) (R\\d).+$', remove = F) %>%
+  mutate(treatment = gsub(' ', '', treatment))
+
+mm19 <- model.matrix(~0 + treatment, data = sample_info_19)
+
+## fit model
+fit19 <- lmFit(expr_mat_19, mm19)
+fit19 <- eBayes(fit19)
+## fit additional contrast model for line 19 only
+contr <- makeContrasts(treatmentT10 - treatmentDMSO,
+                       levels = colnames(mm19))
+fit192 <- contrasts.fit(fit19, contr)
+fit192 <- eBayes(fit192)
+
+## make a results table and map probes to gene symbols
+mek_res19 <- topTable(fit192, coef = 'treatmentT10 - treatmentDMSO', n = Inf) %>%
+  as_tibble(rownames = 'ProbeID') %>%
+  left_join(probe_mapping_ilmn)
+```
+
+
+## Gene set enrichment
+
+Since there is a decent signal in the combined DGE test and the MEK inhibitor phenotype is visible in all lines we proceed with gene set enrichment analysis.
+
+### Gene Ontology
+
+We use the clusterProfiler + fgsea packages to perform a ranked gene set enrichment analysis in order to identify differentially expressed pathways.
+
+```{r}
+## select strongest probe for each entrez id
+res_filtered <- mek_res %>% group_by(Entrez_Gene_ID) %>% 
+  top_n(1, -P.Value) %>% ungroup()
+
+## create ranked list for enrichment
+ranks <- setNames(res_filtered$t, as.character(res_filtered$Entrez_Gene_ID))
+ranks <- sort(ranks, decreasing = T)
+
+## GO term enrichment (biological process)
+# gse_go <- gseGO(
+#   geneList = ranks,
+#   OrgDb = org.Hs.eg.db,
+#   ont = 'BP',
+#   eps = 0,
+#   minGSSize = 100,
+#   maxGSSize = 500
+# )
+```
+
+We can generate a network plot using clusterProfiler in order to get an overview of the results.
+
+```{r}
+# emapplot(pairwise_termsim(gse_go))
+```
+
+An upregulation of ribosome biogenesis might indicate a mode of action via mTOR. The link between GSK3 and TSC is known and both a highly correlated in the DepMap CRISPR data.
+
+### Reactome
+
+We do the same for Reactome instead of GO terms. A convenience function for enrichment against Reactome is implemented in the 'ReactomePA' package. Conceptually this function works the same way as the clusterProfiler functions.
+
+```{r}
+## Reactome enrichment analysis
+gse_reactome <- gsePathway(
+  geneList = ranks,
+  organism = 'human',
+  minGSSize = 100,
+  maxGSSize = 500,
+  eps = 0
+)
+```
+
+Again we plot an enrichment map to visualize the results.
+
+```{r}
+emapplot(pairwise_termsim(gse_reactome))
+```
+
+### Intestinal crypt signatures
+
+We perform GSEA for the humanized intestinal crypt signatures published in Merloz-Suarez et al (Cell Stem Cell, 2011).
+
+```{r}
+## parse signatures and make list
+intestinal_sig <- readxl::read_excel(here('data/gene_expression/merloz-suarez_sigantures.xls'), 
+                                     sheet = 1, skip = 4) %>% .[,1:4] %>%
+  gather(signature, symbol) %>% drop_na() %>% 
+  mutate(symbol = gsub('\\*', '', symbol))
+
+## run gsea with clusterprofiler
+res_symbol <- mek_res %>% 
+  group_by(Symbol) %>% arrange(P.Value) %>% slice(1) %>% ungroup()
+ranks_symbol <- sort(setNames(res_symbol$t, res_symbol$Symbol), decreasing = T)
+
+gse_sig <- GSEA(
+  geneList = ranks_symbol,
+  TERM2GENE = intestinal_sig,
+  minGSSize = 1,
+  maxGSSize = 1000,
+  eps = 0,
+  pvalueCutoff = 1
+)
+
+## output as tibble
+gse_sig_tbl_ilmn <- as_tibble(gse_sig)
+```
+
+We see a significant upregulation of the proliferation signature and a downregulation of the Lgr5 ISC signature in solid compared to cystic organoids. We generate barcode plots to visualize these enrichments.
+
+```{r}
+bc_plots <- map(1:nrow(gse_sig_tbl_ilmn), ~ {
+  gseaplot2(
+    gse_sig, geneSetID = gse_sig$ID[.x], 
+      title = paste0(gse_sig$ID[.x], 
+                    ' (p = ', round(gse_sig_tbl_ilmn$pvalue[.x], 3), 
+                    '; NES = ', round(gse_sig_tbl_ilmn$NES[.x], 2), ')')
+  )
+})
+
+reduce(bc_plots, `+`)
+```
+
+There is a strong upregulation of the proliferation signature, but both stemness signatures remain unchanged.
+
+#### Line 19 only
+
+We plot the GSEA results for line 19 only so we can compare with the Affymetrix data.
+
+```{r}
+## run again for line 19 results only
+res_symbol19 <- mek_res19 %>%
+  group_by(Symbol) %>% arrange(P.Value) %>% slice(1) %>% ungroup()
+ranks_symbol19 <- sort(setNames(res_symbol19$t, res_symbol19$Symbol),
+                       decreasing = T)
+
+gse_sig19 <- GSEA(
+  geneList = ranks_symbol19,
+  TERM2GENE = intestinal_sig,
+  minGSSize = 1,
+  maxGSSize = 1000,
+  eps = 0,
+  pvalueCutoff = 1
+)
+
+## output as tibble
+gse_sig_tbl_ilmn19 <- as_tibble(gse_sig19)
+
+bc_plots <- map(1:nrow(gse_sig_tbl_ilmn19), ~ {
+  gseaplot2(
+    gse_sig19, geneSetID = gse_sig19$ID[.x], 
+      title = paste0(gse_sig19$ID[.x], 
+                    ' (p = ', round(gse_sig_tbl_ilmn19$pvalue[.x], 3), 
+                    '; NES = ', round(gse_sig_tbl_ilmn19$NES[.x], 2), ')')
+  )
+})
+
+reduce(bc_plots, `+`)
+```
+
+
+# Affymetrix chip
+
+We generated additional microarrays using an Affymetrix chip where we treated organoid line 19 with Trametinib and DMSO. Do these experiments match with the ones done using Illumina chips?
+
+We start by loading and normalizing the data from CEL files.
+
+```{r}
+## list of cel files including dmso treated gsk3i samples
+cel_files <- list.files(here('data/gene_expression/mek_inhibitor/MEK_inhibition/'),
+                        full.names = T, pattern = '.CEL')
+## list also cel files of gsk experiments to increase sample size
+cel_files_gsk <- list.files(here('data/gene_expression/gsk3_inhibitor/cel_files/'),
+                        full.names = T, pattern = '.CEL')
+
+## parse and normalize
+affy_batch <- ReadAffy(filenames = c(cel_files, cel_files_gsk))
+expr_mat <- expresso(
+  affy_batch,
+  bgcorrect.method = 'rma',
+  normalize.method = 'quantiles',
+  pmcorrect.method = 'pmonly',
+  summary.method = 'avgdiff'
+)
+expr_mat <- log(exprs(expr_mat))
+
+## exclude 0-variance probes
+expr_mat <- expr_mat[apply(expr_mat, 1, var) > 0,]
+
+## create an annotation for the samples
+sample_info <- tibble(names = colnames(expr_mat)) %>%
+  mutate(treatment = ifelse(grepl('GSK3I', names), 'GSK3i', 
+                     ifelse(grepl('TRAM', names), 'MEKi', 'DMSO')),
+         batch = ifelse(grepl('^GSM', names), 'b1', 'b2'),
+         line = ifelse(grepl('19T', names), 'D019T', 'D007T'),
+         group = paste(line, treatment, sep='_'))
+
+## create an annotation for the probe IDs
+load(here('data/gene_expression/promise_expr.rda'))
+probe_anno <- promise_expr %>% distinct(probe, symbol, entrez)
+## confirm that chip model was the same
+table(probe_anno$probe %in% rownames(expr_mat))
+```
+
+I generate a heatmap of the expression values to check if there are strong batch effects between the two experiments.
+
+```{r}
+## generate heatmap annotation
+hm_anno <- sample_info %>% 
+  mutate_all(as.factor) %>%
+  as.data.frame() %>% column_to_rownames('names')
+
+## visualize distance matrix
+pheatmap(as.matrix(dist(t(expr_mat))),
+         annotation_row = hm_anno)
+```
+
+Line effects dominate but there are batch effects that we should account for.
+
+## Differential gene expression
+
+Next we perform the same DGE analysis as above (except that we don't have to regress out line-specific differences).
+
+```{r}
+## check matrix and sample info fit together
+stopifnot(identical(colnames(expr_mat), sample_info$names))
+
+## model matrix for DGE analysis, general meki effect, regress line effects
+mm <- model.matrix(~0 + batch + group, data = sample_info)
+## fit model 
+fit <- lmFit(expr_mat, mm)
+fit <- eBayes(fit)
+## fit additional contrast model for line 19 only
+contr <- makeContrasts(groupD019T_MEKi - groupD019T_DMSO,
+                       levels = colnames(mm))
+fit19 <- contrasts.fit(fit, contr)
+fit19 <- eBayes(fit19)
+
+## make a results table and map probes to gene symbols
+mek_res_affy <- topTable(fit19, coef = 1, n=Inf) %>% 
+  as_tibble(rownames = 'probe') %>%
+  left_join(probe_anno)
+```
+
+There are 47 significant changes <5% FDR. I plot some of the highest ranking genes.
+
+```{r}
+expr_long_affy <- expr_mat %>% as_tibble(rownames = 'probe') %>% 
+  left_join(probe_anno) %>% 
+  pivot_longer(names_to = 'names', values_to = 'expr', 
+               -c(probe, entrez, symbol)) %>% 
+  inner_join(sample_info)
+
+## plot examples 
+expr_long_affy %>% filter(symbol %in% c('TGFBI', 'DUSP6')) %>% 
+  ggplot(aes(treatment, expr, color = line)) + 
+  geom_jitter(width = 0.2) + 
+  facet_wrap(~ symbol + probe, scales = 'free_y') +
+  panel_border()
+
+## examples from tianzuo's paper
+expr_long_affy %>% filter(symbol %in% c('KRT20', 'KRT5', 'TFF1', 'CD44', 'EPHB2', 'ASCL2', 'OLFM4', 'BIRC5', 'AXIN2')) %>% 
+  ggplot(aes(treatment, expr, color = line)) + 
+  geom_jitter(width = 0.2) + 
+  facet_wrap(~ symbol + probe, scales = 'free_y') +
+  panel_border()
+```
+
+The small number of significant differences is simply due to the fact that we have very limited sample sizes (n = 2 per treatment). DUSP6 is the top hit, which was also a hit in the Illumina analysis.
+
+Do the hits overlap with the Illumina based hit list. This list is based also other lines so we would not expect perfect overlap but some correlation should be visible.
+
+```{r}
+## illumina t statistics
+mek_ilmn_t <- mek_res %>% group_by(Symbol) %>% 
+  top_n(1, -P.Value) %>% ungroup() %>% 
+  select(symbol = Symbol, illumina = t)
+
+## affymetrix
+mek_affy_t <- mek_res_affy %>% group_by(symbol) %>% 
+  top_n(1, -P.Value) %>% ungroup() %>% 
+  select(symbol, affymetrix = t)
+
+## compare
+mek_ilmn_t %>% inner_join(mek_affy_t) %>% 
+  ggplot(aes(illumina, affymetrix)) + 
+  geom_point() + 
+  geom_abline(linetype = 'dashed') + 
+  ggpubr::stat_cor()
+```
+
+There is decent correlation.
+
+## Gene set enrichment
+
+We perform the same gene set enrichment analysis as above.
+
+### Gene ontology
+
+```{r}
+## select strongest probe for each entrez id
+res_filtered <- mek_res_affy %>% group_by(entrez) %>% 
+  top_n(1, -P.Value) %>% ungroup()
+
+## create ranked list for enrichment
+ranks <- setNames(res_filtered$t, as.character(res_filtered$entrez))
+ranks <- sort(ranks, decreasing = T)
+
+## GO term enrichment (biological process)
+gse_go <- gseGO(
+  geneList = ranks,
+  OrgDb = org.Hs.eg.db,
+  ont = 'BP',
+  eps = 0,
+  minGSSize = 100,
+  maxGSSize = 500
+)
+```
+
+We can generate a network plot using clusterProfiler in order to get an overview of the results.
+
+```{r}
+emapplot(pairwise_termsim(gse_go))
+```
+
+### Intestinal crypt signatures
+
+```{r}
+## run gsea with clusterprofiler
+res_symbol <- mek_res_affy %>% 
+  filter(!is.na(symbol)) %>%
+  group_by(symbol) %>% arrange(P.Value) %>% slice(1) %>% ungroup()
+ranks_symbol <- sort(setNames(res_symbol$t, res_symbol$symbol), decreasing = T)
+
+gse_sig_affy <- GSEA(
+  geneList = ranks_symbol,
+  TERM2GENE = intestinal_sig,
+  minGSSize = 1,
+  maxGSSize = 1000,
+  eps = 0,
+  pvalueCutoff = 1
+)
+
+## output as tibble
+gse_sig_tbl_affy <- as_tibble(gse_sig_affy)
+```
+
+We see a significant upregulation of the proliferation signature and a downregulation of the Lgr5 ISC signature in solid compared to cystic organoids. We generate barcode plots to visualize these enrichments.
+
+```{r}
+bc_plots <- map(1:nrow(gse_sig_tbl_affy), ~ {
+  gseaplot2(
+    gse_sig_affy, geneSetID = gse_sig_affy$ID[.x], 
+      title = paste0(gse_sig_affy$ID[.x], 
+                    ' (p = ', round(gse_sig_tbl_affy$pvalue[.x], 3), 
+                    '; NES = ', round(gse_sig_tbl_affy$NES[.x], 2), ')')
+  )
+})
+
+reduce(bc_plots, `+`)
+```
+
+Strangely the intestinal signature enrichment results do not fit together. Proliferation is strongly upregulated based on the Illumina data (including 3 lines), but downregulated in the Affymetrix data (line 19 only). We compare the core_enrichment genes between the two test results.
+
+```{r}
+## genes driving illumina enrichment
+ce19_ilmn <- gse_sig_tbl_ilmn19 %>% 
+  separate_rows(core_enrichment, sep = '/') %>%
+  pull(core_enrichment)
+
+## genes driving affymetrix enrichment
+ce19_affy <- gse_sig_tbl_affy %>% 
+  separate_rows(core_enrichment, sep = '/') %>%
+  pull(core_enrichment)
+
+## is there overlap?
+#overlap <- intersect(ce19_affy, ce19_ilmn)
+overlap <- signatures$Proliferation
+
+## compare gene expression
+compare_t <- mek_res19 %>% filter(Symbol %in% overlap) %>% 
+  group_by(Symbol) %>% top_n(1, -P.Value) %>% ungroup() %>%
+  select(symbol = Symbol, illumina_19only = t) %>% 
+  inner_join(mek_res_affy %>% filter(symbol %in% overlap) %>% 
+               group_by(symbol) %>% top_n(1, -P.Value) %>% ungroup() %>% 
+               select(symbol, affymetrix = t))
+
+## plot scatter
+compare_t %>% ggplot(aes(illumina_19only, affymetrix)) +
+  geom_point() + 
+  geom_abline(linetype = 'dashed') + 
+  geom_vline(xintercept = 0, linetype = 'dashed') +
+  geom_hline(yintercept = 0, linetype = 'dashed')
+```
+
+There is a bunch of stuff that seems downregulated in the affymetrix data, but for which I don't see anything in the Illumina data.
+
+I check out LGR5 signature genes in detail.
+
+```{r}
+lgr5_sig <- filter(intestinal_sig, signature == 'Hu-Lgr5-ISC') %>% pull(symbol)
+
+
+```
+
+
+# Session info
+
+```{r, results='show'}
+sessionInfo()
+```
+

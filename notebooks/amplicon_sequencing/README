@@ -1,0 +1,11 @@
+This analysis was done using a Snakemake workflow. 
+The whole analysis with input and output files is stored in the protected directory B110-Isilon3/valentini/amplicon_analysis
+In the current directory one can find only the scripts (called by the Snakemake workflow) and the workflow itself for data protection reasons.
+
+In order to run the workflow please install snakemake and all the programs listed at the top of the file in in the "Programs needed" section.
+
+The "oncoprint_organoid.Rmd" file can be used to recreate the oncoprint independently of the Snakemake workflow.
+
+
+
+

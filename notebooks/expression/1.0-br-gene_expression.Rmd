@@ -1,0 +1,285 @@
+---
+title: "Differential gene expression across organoid phenotypes"
+author: "Benedikt Rauscher"
+date: "11/15/2020"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F, warning = F)
+```
+
+# Dependencies
+
+```{r}
+library(SummarizedExperiment)
+library(DESeq2) #optional
+library(glmnet)
+library(pheatmap)
+library(reshape2)
+library(tidyverse)
+library(cowplot)
+library(here)
+```
+
+Define function namespace.
+
+```{r}
+filter <- dplyr::filter
+select <- dplyr::select
+rename <- dplyr::rename
+slice <- dplyr::slice
+count <- dplyr::count
+```
+
+Set parameters for plotting.
+
+```{r}
+theme_set(theme_cowplot())
+```
+
+# Data loading
+
+We load the gene expression data from an Rdata object from file.
+
+```{r}
+load(here('data/processed/expression/promise_expr.rda'))
+
+organoid_morphology <- read_delim(here::here("references/imaging/visual_classification_organoids.csv"), ";", escape_double = FALSE, trim_ws = TRUE) %>% 
+  dplyr::select(line = organoid, morphology = visual_inspection_v2)
+
+## annotate phenotype group
+solid <- c('D004', 'D007', 'D010', 'D019', 'D020', 
+           'D022', 'D046', 'D054', 'D055')
+cystic <- c('D013', 'D018', 'D021', 'D027', 'D030')
+
+## long data frame
+promise_long <- assays(promise_expr)$expr %>% 
+  as_tibble(rownames = 'probe') %>% 
+  pivot_longer(values_to = 'expr', names_to = 'id', -probe) %>%
+  left_join(as_tibble(rowData(promise_expr), rownames = 'probe')) %>%
+  inner_join(as_tibble(colData(promise_expr), rownames = 'id')) %>%
+  select(-chip_name)
+
+## adding phenotype information
+promise_long <- promise_long %>% 
+  mutate(phenotype = ifelse(line %in% solid, 'solid', 
+                     ifelse(line %in% cystic, 'cystic', 'other'))) %>% 
+  filter(phenotype != 'other')
+```
+
+# Quality control
+
+We perform a clustering to check if the samples are grouped by line of origin.
+
+```{r}
+## make expr matrix
+expr_mat <- assays(promise_expr)$expr
+
+## generate heatmap annotation
+anno <- promise_long %>% 
+  distinct(line, rep, phenotype) %>% 
+  unite(id, line, rep) %>% 
+  mutate_all(as.factor) %>%
+  as.data.frame() %>% column_to_rownames('id')
+
+## visualize distance matrix
+pheatmap(as.matrix(dist(t(expr_mat))),
+         annotation_row = anno)
+
+## visualize most variable probes
+pheatmap(expr_mat[order(apply(expr_mat, 1, sd), decreasing = T)[1:500],], 
+         annotation_col = anno)
+```
+
+'D021_2017-05-19' looks like a technical outlier so we exclude D021T01 from the data. We do not see a clear separation of cystic and solid organoid lines based on the clustering.
+
+D054T01 and D055T01 have been shown to be cross-contaminated, most likely from D046T01. We remove the samples from the dataset.
+
+```{r}
+## exclude outlier
+promise_long <- promise_long %>% filter(!line %in% c('D054', 'D055', 'D021'))
+```
+
+# Unsupervised analysis
+
+I perform a principal component analysis of individual lines at the gene level in order to develop insights into which factors drive variation in the gene expression data.
+
+```{r}
+## select most highly expressed probe to represent each gene
+select_probes <- promise_long %>% group_by(symbol, probe) %>% 
+  summarise(avg_probe = mean(expr)) %>% ungroup() %>%
+  group_by(symbol) %>% top_n(1, avg_probe) %>% ungroup() %>% pull(probe)
+
+## summarize replicates
+gene_expr <- promise_long %>% 
+  # group_by(line, symbol, probe, phenotype) %>%
+  # summarise(expr = mean(expr)) %>% ungroup() %>%
+  filter(probe %in% select_probes)
+
+## get to 1000 variable genes, do PCA
+gene_expr_mat <- gene_expr %>% acast(symbol ~ line + rep, 
+                                     value.var = 'expr')
+pca <- prcomp(t(gene_expr_mat[order(apply(gene_expr_mat, 1, sd), decreasing = T)[1:1000],]))
+
+## annotate and plot pca results
+pca_res <- as_tibble(pca$x, rownames = 'id') %>% select(id, PC1:PC5) %>% 
+  inner_join(distinct(gene_expr %>% distinct(id, phenotype))) %>% 
+  inner_join(gene_expr %>% filter(symbol == 'MIR483') %>% 
+               distinct(id, IGF = expr))
+
+pca_res %>% ggplot(aes(PC1, PC2, color = IGF, shape = phenotype)) +
+  geom_point(size = 2) + 
+  ggrepel::geom_text_repel(aes(label = id), min.segment.length = 0) + 
+  scale_color_gradient(low = '#cccccc', high = '#111111')
+```
+
+```{r}
+top_genes = select_probes %>% length()
+top_genes = top_genes * 0.05
+top_genes
+```
+
+
+I plot H19/IGF2 imprinting genes across lines.
+
+```{r}
+promise_long %>% mutate(symbol = ifelse(probe == '202410_x_at', 'IGF2', symbol)) %>%
+  filter(symbol %in% c('H19', 'MIR483', 'IGF2')) %>%   
+  ggplot(aes(line, expr, fill = phenotype)) + 
+  stat_summary(fun = 'mean', geom = 'bar') + 
+  geom_point() + 
+  facet_wrap(~ symbol + probe, ncol = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+promise_long %>% filter(symbol %in% c('PEG10') | (probe == '214218_s_at')) %>%   
+  ggplot(aes(line, expr, fill = phenotype)) + 
+  stat_summary(fun = 'mean', geom = 'bar') + 
+  geom_point() + 
+  facet_wrap(~ symbol + probe, ncol = 1) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+# Expression markers of drug response
+
+Do any of the gene expression probes predict whether an organoid line will respond to a drug treatment? I fit a penalized regression model with the AUROC curve from the SVM analysis as dependent and the gene expression measurements as independent variables. I use a LASSO appraoch to cut down on the number of coefficients since my sample sizes are very low.
+
+```{r}
+## load auroc from file
+data('aucroc', package = 'SCOPEAnalysis')
+
+## exclude lknes 21, 54, 55
+aucroc <- aucroc %>% filter(!line %in% c('D055T01', 'D021T01', 'D020T02', 'D021T01'))
+
+## matrix with independnt variables (gene expression), merge reps
+x_lasso <- promise_long %>% 
+  group_by(line, symbol, probe, phenotype) %>%
+  summarise(expr = mean(expr)) %>% ungroup() %>%
+  filter(probe %in% select_probes) %>%
+  mutate(line = paste0(line, 'T01')) %>%
+  acast(line ~ symbol, value.var = 'expr')
+## center by subtracting means and retain genes with high var.
+x_lasso <- apply(x_lasso, 2, function(x) x - mean(x))
+x_lasso <- x_lasso[,order(apply(x_lasso, 2, var), decreasing=T)[1:1000]]
+
+drug_expr <- aucroc %>% group_by(drug) %>%
+  filter(!any(is.na(auroc))) %>%
+  group_modify(~{
+    ## fit model
+    stopifnot(identical(rownames(x_lasso), .x$line))
+    fit <- cv.glmnet(
+      x = x_lasso,
+      y = .x$auroc,
+      family = 'gaussian',
+      # alpha = 0.5, 
+      grouped = F
+    )
+    ## extract non-zero coefficients
+    as_tibble(as.matrix(coef(fit, s = fit$lambda.min)),
+              rownames = 'symbol') %>%
+      `colnames<-`(c('symbol', 'coef')) %>%
+      filter(coef > 0)
+  }) %>% ungroup()
+
+## check best coefficients
+drug_expr <- drug_expr %>% filter(symbol != '(Intercept)') %>% 
+  arrange(desc(coef))
+```
+
+Check if there are correlations in the gene expression data for some of the top coefficients.
+
+```{r}
+plot(filter(aucroc, drug == 'AZ 960')$auroc, x_lasso[,'KIT'])
+
+plot(filter(aucroc, drug == 'AZD1080')$auroc, x_lasso[,'TUBB6'])
+
+plot(filter(aucroc, drug == 'WYE-125132 (WYE-132)')$auroc, x_lasso[,'LEF1'])
+
+plot(filter(aucroc, drug == 'WYE-125132 (WYE-132)')$auroc, x_lasso[,'H19'])
+```
+
+I load drug target annotations from file. Do the same drugs have the same targets?
+
+```{r, eval = FALSE}
+## load drug annotation
+drug_anno <- readxl::read_excel('data/Compound_Annotation_Libraries_New.xlsx') %>% distinct(drug = `Compound name`, target = `Primary Target`)
+
+## annotate model coefficients
+drug_expr <- drug_expr %>% left_join(drug_anno)
+```
+
+Generate network diagram.
+
+```{r, eval = FALSE}
+library(tidygraph)
+library(ggraph)
+
+## correlation between gene expr as links
+genes <- drug_expr %>% pull(symbol)
+gene_cor <- cor(x_lasso[,colnames(x_lasso) %in% genes])
+diag(gene_cor) <- NA
+gene_cor <- gene_cor %>% as_tibble(rownames = 'source') %>%
+  pivot_longer(names_to = 'target', values_to = 'val', -source) %>%
+  filter(val > 0.85) %>% 
+  mutate(edge_type = 'gene_cor')
+
+## lasso coefficients
+drug_assoc <- drug_expr %>% 
+  select(source = drug, target = symbol, val = coef) %>%
+  mutate(edge_type = 'drug_assoc')
+
+## combine and make graph
+g <- gene_cor %>% bind_rows(drug_assoc) %>% 
+  as_tbl_graph() %>% 
+  activate(nodes) %>%
+  arrange(name) %>%
+  mutate(type = ifelse(name %in% genes, 'gene', 'drug'))
+
+## drug target annotation for network
+targ_anno <- drug_anno %>% rename(name = drug) %>% 
+  bind_rows(distinct(tibble(name = genes, target = 'none'))) %>% 
+  filter(!is.na(name), name %in% as_tibble(g)$name) %>%  
+  arrange(name)
+
+g <- g %>% activate(nodes) %>% mutate(target = targ_anno$target)
+
+## visualize
+g %>% ggraph(layout = 'kk') + 
+  geom_edge_link(aes(color = edge_type)) + 
+  geom_node_point(size = 2, aes(color = target)) +
+  geom_node_text(aes(label = name), colour = 'black', vjust = 0.4) 
+```
+
+
+
+# Session info
+
+```{r, results = 'show'}
+sessionInfo()
+```
+

@@ -1,0 +1,108 @@
+---
+title: "Onco plots snakemake"
+author: "Erica Valentini"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  rmd: "oncoprint_snakemake.Rmd"
+output:
+  html_document:
+  highlight: tango
+  number_sections: no
+  theme: default
+  toc: yes
+  toc_depth: 3
+  toc_float:
+    collapsed: no
+    smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document.
+
+Files include from snakemake: `r snakemake@input`.
+
+## Source
+<a download="oncoprint_snakemake.Rmd" href="`r base64enc::dataURI(file = params$rmd, mime = 'text/rmd', encoding = 'base64')`">R Markdown source file (to produce this document)</a>
+
+## Import data
+
+```{r prepare-matrix}
+library(dplyr)
+library(reshape2)
+library(readr)
+library(stringr)
+
+GATK_VEP_combined_table_PON_QC_sm <- read_delim(snakemake@input[[1]], "\t", escape_double = FALSE, col_types = cols(AD = col_character()), trim_ws = TRUE)
+#GATK_VEP_combined_table_PON_QC_sm <- read_delim("/Users/valentini/Documents/amplicon_analysis/data_03_2018/snakemake/GATK_VEP_combined_table_PON_QC_no_manifest.txt", "\t", escape_double = FALSE, col_types = cols(AD = col_character()), trim_ws = TRUE)
+
+#Fixing errors in file:
+replace_string <- function(x){str_replace(x, "^(\\.)$", "-")}
+GATK_VEP_combined_table_PON_QC_sm <- mutate_all(GATK_VEP_combined_table_PON_QC_sm, funs(replace_string))
+# GATK_VEP_combined_table_PON_QC_sm$SAMPLE <- gsub("F012A", "F013A", GATK_VEP_combined_table_PON_QC_sm$SAMPLE)
+# GATK_VEP_combined_table_PON_QC_sm$SAMPLE <- gsub("F0U43", "F043U", GATK_VEP_combined_table_PON_QC_sm$SAMPLE)
+# GATK_VEP_combined_table_PON_QC_sm$SAMPLE <- gsub("F0U45", "F045U", GATK_VEP_combined_table_PON_QC_sm$SAMPLE)
+GATK_VEP_combined_table_PON_QC_sm$SYMBOL <- gsub("AC008575.1", "APC", GATK_VEP_combined_table_PON_QC_sm$SYMBOL)
+```
+
+## Filter data
+
+```{r divide_subsets}
+GATK.filter <- dplyr::select(GATK_VEP_combined_table_PON_QC_sm, SAMPLE, AD, AF, FS, Consequence, IMPACT, SYMBOL, BIOTYPE, gnomAD_AF, Existing_variation, Amino_acids, Protein_position, Codons, BaseQRankSum, SIFT, PolyPhen, CLIN_SIG)
+GATK.filter <- transform(GATK.filter, gnomAD_AF = as.numeric(gnomAD_AF), BaseQRankSum = as.numeric(BaseQRankSum), FS = as.numeric(FS))
+GATK.filter <- filter(GATK.filter, IMPACT == "HIGH" | IMPACT == "MODERATE")
+GATK.filter <- filter(GATK.filter, grepl("COSM", Existing_variation))
+
+#Modify organoids:
+GATK.organoids <- filter(GATK.filter, grepl("^D", SAMPLE))
+GATK.organoids.flt <- filter(GATK.organoids, !(grepl("^benign", PolyPhen) & grepl("^tolerated", SIFT)) & AF > 0.1 & FS < 60)
+# GATK.organoids.flt <- filter(GATK.organoids, AF > 0.05)
+GATK.organoids.flt$Consequence <- str_split_fixed(GATK.organoids.flt$Consequence, ",", 2)[,1]
+GATK.organoids.flt <- filter(GATK.organoids.flt, !grepl("^inframe", Consequence))
+GATK.organoids.flt$Consequence[grepl("^splice", GATK.organoids.flt$Consequence)] <- "splice_variant"
+table(distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence)$Consequence)
+
+```
+
+## Oncoplot
+
+### Oncoplot organoids
+
+```{r oncoplot_organoids, fig.width=12, fig.height=8}
+GATK.organoids.ordered <- distinct(GATK.organoids.flt, SAMPLE, SYMBOL, Consequence) %>% group_by(SAMPLE, SYMBOL) %>% dplyr::summarise(Consequence_all=paste(Consequence, collapse = ";"))
+#Add missing samples:
+# for (i in 1:length(unique(GATK.organoids$SAMPLE[!GATK.organoids$SAMPLE %in% GATK.organoids.flt$SAMPLE]))) GATK.organoids.ordered <- add_row(as.data.frame(GATK.organoids.ordered), SAMPLE = unique(GATK.organoids$SAMPLE[!GATK.organoids$SAMPLE %in% GATK.organoids.flt$SAMPLE])[[i]], SYMBOL = "TP53")
+GATK.organoids.matrix <- acast(GATK.organoids.ordered, SAMPLE ~ SYMBOL, value.var = "Consequence_all")
+
+library(ComplexHeatmap)
+alter_fun = list(
+    background = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#E4E4E3", col = NA))
+    },
+    missense_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#486E90", col = NA))
+    },
+    frameshift_variant = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#438F9B", col = NA))
+    },
+    splice_variant = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#9E90B1", col = NA))
+    },
+    stop_gained = function(x, y, w, h) {
+        grid.rect(x, y, w*0.33, h-unit(0.5, "mm"), gp = gpar(fill = "#BB645D", col = NA))
+    }
+)
+col = c("stop_gained" = "#BB645D", "missense_variant" = "#486E90", "frameshift_variant" = "#438F9B", "splice_variant" = "#9E90B1")
+
+ht = oncoPrint(t(GATK.organoids.matrix), get_type = function(x) strsplit(x, ";")[[1]],
+    alter_fun = alter_fun, col = col, show_column_names = TRUE, row_names_gp = gpar(fontsize = 7),
+    column_title = "OncoPrint organoids",
+    heatmap_legend_param = list(title = "Consequence", at = c("missense_variant", "stop_gained","frameshift_variant", "splice_variant"), 
+        labels = c("Missense variant", "Stop codon gained","Frameshift variant", "Splice donor/acceptor variant"), nrow = 1, title_position = "leftcenter"))
+draw(ht, heatmap_legend_side = "bottom")
+
+```
