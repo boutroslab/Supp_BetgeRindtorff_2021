@@ -1,0 +1,12 @@
+Package: CRISclassifier
+Type: Package
+Title: Colorectal Cancer Intrinsic Classfier
+Version: 1.0.0
+Date: 2016-05-31
+Author: Claudo Isella & Luigi Marchionni
+Maintainer: Claudio Isella <claudio.isella@ircc.it> & Luigi Marchionni <marchion@jhu.edu>
+Description: Package to perform CRIS classification of colorectal cancer gene expression profile.
+License: GPL-2
+biocViews: Software
+NeedsCompilation: no
+Packaged: 2017-02-13 15:22:43 UTC; cisella

@@ -1,0 +1,272 @@
+%\VignetteIndexEntry{CRIS_Manual}
+%\VignetteKeywords{Expression Analysis}
+%\VignetteDepends{CRISclassifier}
+%\VignettePackage{CRISclassifier}
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{Sweave}
+%\setlength{\parindent}{0cm} \setlength{\parskip}{12pt}
+%\renewcommand{\baselinestretch}{1.2}
+
+\begin{document}
+
+\title{\texttt{CRIS}: a colorectal cancer classifier 
+based on cell autonomous gene expression}
+
+\author{Claudio Isella, Luigi Marchionni, Enzo Medico and Andrea Bertotti}
+
+
+\maketitle
+
+\vspace{12pt}
+
+\begin{abstract}
+
+Recent work built on published transcriptional subtypes 
+of colorectal cancer (CRC) has shown that tumor stromal 
+content heavily impacts CRC classification, with 
+clinical and biological implications. Lineage-dependent 
+transcriptional components of stromal origin could 
+therefore dominate over more subtle, yet relevant, gene 
+expression traits inherent to cancer cells. 
+
+Based on the notion that in patient-derived xenografts 
+(PDXs) stromal cells of the human tumor are substituted 
+by their murine counterparts, we assessed cancer-cell 
+intrinsic transcriptional features by human-specific 
+expression profiling of 515 PDXs from 244 CRC patients. 
+We identified five CRC intrinsic subtypes (CRIS) endowed 
+with molecular, functional and phenotypic peculiarities, 
+many of which were not previously evidenced: (i) CRIS-A: 
+mucinous, glycolytic, and enriched for microsatellite 
+instability or mutations in KRAS; (ii) CRIS-B: marked 
+TGF-Beta pathway activity, epithelial-mesenchymal 
+transition, and poor prognosis; (iii) CRIS-C: elevated 
+EGFR signaling and sensitivity to treatment with EGFR 
+inhibitors; (iv) CRIS-D: WNT activation accompanied by 
+IGF2 overexpression and amplification; (v) CRIS-E: 
+Paneth cell-like phenotype and higher frequency of 
+TP53 mutation. 
+
+CRIS subtypes successfully categorized independent 
+sets of primary and metastatic CRC tumors, with 
+limited overlap on existing transcriptional classes and 
+unprecedented predictive and prognostic performances. 
+Integration of cancer-cell intrinsic classification by 
+CRIS with stroma-centered transcriptional profiles 
+further enhanced prognostic significance.
+
+\end{abstract}
+\newpage
+\tableofcontents
+\newpage
+\section{Introduction}
+A number of classification systems based on gene expression have
+been proposed that stratify colorectal cancer (CRC) in subgroups
+with distinct molecular and clinical features\cite{Sadanandam,
+DeSousa,Marisa, Roepman, Budinska, Schlicker, Perez}. 
+These classification efforts have been
+recently consolidated by a multi-institutional initiative that
+comprehensively cross-compared the different subtype assignments
+on a common set of samples, leading to the definition of the
+Consensus Molecular Subtypes (CMS)\cite{Guinney}.
+
+Interestingly, we and others independently reported that a large
+portion of the genes sustaining the SSM subtype (CMS4 within the
+consensus molecular subtypes) are of stromal origin\cite{Isella, 
+Calon}.
+
+Likelly, in whole tumor lysates the transcriptional 
+consequences of biologically
+meaningful traits that are inherent to cancer cells might be obscured
+by the presence of a dominant, lineage-dependent transcriptional
+component of stromal origin.
+
+To tackle this issue, we exploited a large collection (n = 515
+samples from 244 patients) of patient-derived xenografts (PDXs),
+in which the stromal components of the original tumor are
+substituted by their murine counterparts so that detection 
+of their transcripts can
+be avoided by appropriate use of human-specific arrays. 
+By doing so, we defined the CRIS subtypes and generated an 
+NTP based classifier \cite{Hoshida}.
+This package is ment to provide feasible access to the CRIS
+classification of CRC gene expression profile. 
+The classifier will subdivide colorectal cancer in 5 
+distinct subtypes on the basis of 
+5 five centroids, collectivelly defined by 566 unique gene symbols.
+
+The package is loaded with the command
+
+
+\section{CRIS NTP classifier}
+<<Library, results=hide>>=
+library(CRISclassifier)
+@
+In the first example we illustrate how to 
+classify colorectal cancer gene expression profiles according to 
+CRIS. In the example we are employ a demo dataset of 38 cancer cell lines. 
+The function requires the gene expression data matrix 
+in linear format defined as .gct file, and the first colmun 
+annotated to gene Symbol. 
+
+<<echo=T>>=
+demo <- list.files(pattern="txt.gz$", system.file("data",package="CRISclassifier"), full.names=TRUE)
+print(demo)
+cris_classifier(input.exp.filename = demo, output.name="cris", nresmpl=1)
+
+@
+
+The function will generate a default output in the file-system:
+CRIS\_prediction\_result.xls: Prediction result for the input dataset
+CRIS\_features.xls: List of marker genes mapped in the dataset
+CRIS\_heatmap.png: Heatmap of marker genes in the dataset
+CRIS\_FDR\_sample\_bar.png: Predicted sample labels at 
+FDR\_0.2\_CRIS\_FDR.png Plot of FDR
+CRIS\_heatmap\_legend.png Color map for SD -3 - +3.
+\section{ CRIS TSP classifier }
+The \emph{CRISclassifier} package also allows to predict CRIS classes based on gene expression 
+using a classifier based on kTSP \cite{Marchionni,Geman,Tan}.
+
+THe \emph{predictCRISclassKTSP} function allows to predic CRIS classes using a pre-defined 
+kTSP set. This function accepts a numeric matrix contining gene expresion values as its
+only argument. The rownames of this gene expression data must containg valid gene symbols
+corresponding to the used by the classifiers. The function can handle missing genes,
+provided that the remaning pais allow to perform all 10 pairwise comparisons among the five
+CRIS classes (CRISA, CRISB, CRISC, CRISD, and CRISE)
+
+Load the library.
+<<eval=FALSE,echo=TRUE,cache=FALSE>>=
+require(predictCRIS)
+@
+
+Load the example data contained in the \emph{predictCRIS} package.
+<<loadData,eval=TRUE,echo=TRUE,cache=FALSE>>=
+data(matList)
+data(phenoList)
+@
+
+
+The object \emph{matList} is a list of matrices containing 
+differential gene expression data from 2 distinct dataset.
+The first matrix accounts for all CRISS genes used by the kTSP classifier (80 genes), 
+while the second matrix only accounts for 72 of the 80 genes.
+analysis resulst from three distinct experiments.
+The object \emph{phenoList} contains the corresponding CRIS classes
+obtained by using all 526 CRIS genes and the Nearest Template Predictor (NTP).
+Below is shown the structure of these objects:
+
+<<eval=TRUE,echo=TRUE,cache=FALSE>>=
+sapply(matList, class)
+sapply(matList, dim)
+sapply(phenoList, class)
+sapply(phenoList, length)
+sapply(phenoList, summary)
+@
+
+
+\subsection{Classifying samples using the kTSO set}
+
+To classify new samples using the kTSP classifiers one can use the
+\emph{predictCRISclassKTSP} as follows (for one dataset):
+
+<<kTSPclassify, eval=TRUE,echo=TRUE,cache=FALSE>>=
+### Valid gene expression matrix with all CRIS genes
+newMat <- matList$Training
+### To make predictions on 1 matrix
+newPreds <- predictCRISclassKTSP(newMat)
+### Counts classifications
+summary(newPreds)
+### NPT classification
+refClass <- phenoList$Training
+@
+
+
+To classify new samples using the kTSP classifiers one can use the
+\emph{predictCRISclassKTSP} as follows (for multiple  datasets):
+
+<<kTSPmultiClassify, eval=TRUE,echo=TRUE,cache=FALSE>>=
+### For all matrices
+newPredsList <- lapply(matList, predictCRISclassKTSP)
+### Count classifications
+lapply(newPredsList, summary)
+@
+\section{ System Information}
+Session information:
+<<sessioInfo, echo=TRUE, eval=TRUE >>=
+toLatex(sessionInfo())
+@ 
+
+
+
+
+\section{References}
+%\addcontentsline{toc}{chapter}{References}
+\begin{thebibliography}
+\scriptsize{
+\bibitem{Sadanandam} Sadanandam, A. et al. 
+    \emph{A colorectal cancer classification system 
+that associates cellular phenotype and responses to therapy}       
+    Nat Med 19, 619-25 (2013)
+\bibitem{DeSousa}    De Sousa E Melo, F. et al. 
+    \emph{Poor-prognosis colon cancer is defined by a 
+molecularly distinct subtype and develops from serrated 
+precursor lesions.} 
+    Nat Med 19, 614-8 (2013)
+\bibitem{Marisa}    Marisa, L. et al. 
+    \emph{Gene expression classification of colon 
+cancer into molecular subtypes: characterization, 
+validation, and prognostic value.} 
+    PLoS Med 10, e1001453 (2013)
+\bibitem{Roepman} Roepman, P. et al. 
+    \emph{Colorectal cancer intrinsic subtypes 
+predict chemotherapy benefit, deficient mismatch repair 
+and epithelial-to-mesenchymal transition.} 
+    Int J Cancer 134, 552-62 (2014).
+\bibitem{Budinska} Budinska, E. et al. 
+    \emph{Gene expression patterns unveil a new level
+of molecular heterogeneity in colorectal cancer.}
+    J Pathol 231, 63-76 (2013)
+\bibitem{Schlicker} Schlicker, A. et al. 
+    \emph{Subtypes of primary colorectal tumors 
+correlate with response to targeted treatment in colorectal 
+cell lines.} 
+    BMC Med Genomics 5, 66 (2012)
+\bibitem{Perez} Perez-Villamil, B. et al. 
+    \emph{Colon cancer molecular subtypes identified 
+by expression profiling and associated to stroma, mucinous 
+type and different clinical behavior.} 
+    BMC Cancer 12, 260 (2012)
+\bibitem{Isella} Isella, C. et al. 
+    \emph{Stromal contribution to the colorectal 
+cancer transcriptome. }
+    Nat Genet (2015)
+\bibitem{Calon} Calon, A. et al.
+    \emph{Stromal gene expression defines 
+poor-prognosis subtypes in colorectal cancer.} 
+    Nat Genet (2015)
+\bibitem{Guinney} Guinney, J. et al. 
+    \emph{The consensus molecular subtypes of 
+colorectal cancer.}
+    Nat Med (2015)
+\bibitem{Hoshida} Hoshida, Y.
+    \emph{Nearest Template Prediction: A 
+Single-Sample-Based Flexible Class Prediction with 
+Confidence Assessment}
+    PlosOne Nov. (2010) http://dx.doi.org/10.1371/journal.pone.0015543
+}
+\bibitem{Tan}  Tan, A et al. 
+     \emph{Simple decision rules for classifying human cancers from gene expression profiles}
+     Bioinformatics (2005)    
+\bibitem{Geman}  Geman, A et al. 
+     \emph{Classifying gene expression profiles from pairwise mRNA comparisons}
+     Stat Appl Genet Mol Biol (204)
+\bibitem{Marchionni} Marchionni, L et al. 2013
+     \emph{Breast Neoplasms; Cohort Studies; Computational Biology; Gene Expression Profiling; Humans; Prognosis; Reproducibility of Results; Software}
+     BMC Genomics 2013
+
+
+\end{thebibliography}
+\end{document}

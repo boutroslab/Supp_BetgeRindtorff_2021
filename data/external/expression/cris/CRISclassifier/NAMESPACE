@@ -1,0 +1,5 @@
+importFrom("grDevices", "dev.off", "png", "rgb")
+importFrom("graphics", "box", "hist", "image", "par", "plot", "rect")
+importFrom("stats", "cor", "sd")
+importFrom("utils", "combn", "data", "read.delim", "write.table")
+export(predictCRISclassKTSP, cris_classifier)	
