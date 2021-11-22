@@ -1,0 +1,6 @@
+from OrganoidFeatures import OrganoidFeatures
+import Utils
+import Config
+import OrganoidViabilityClassifier
+
+OrganoidViabilityClassifier.run_on_all_lines_without_dx()

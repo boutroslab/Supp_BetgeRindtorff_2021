@@ -1,0 +1,110 @@
+2018-07-09: Version 0.1.28 (Jan Sauer)
+- Updated thumbnailImages to allow 2 channels
+
+2018-07-04: Version 0.1.27 (Jan Sauer)
+- Added renameTIFF
+
+2018-04-02: Version 0.1.26 (Jan Sauer)
+- Updated thumbnail function to truncate outliers rather than scale by them
+
+2018-03-25: Version 0.1.25 (Jan Sauer)
+- Bugfix in loadProjection
+- Added background correction to loadProjection
+
+2018-02-16: Version 0.1.24 (Jan Sauer)
+- Adjusted feature extraction to only perform feature calculation on 
+  organoids, NOT clumps and NOT the haralick features without segmentation
+
+2018-02-16: Version 0.1.23 (Jan Sauer)
+- Added PROMISEsegmentationOnly
+
+2017-09-26: Version 0.1.22 (Jan Sauer)
+- Updated thumbnail function to normalize each channel individually
+
+2017-09-26: Version 0.1.21 (Jan Sauer)
+- Updated functions to combine features well features and load features
+
+2017-09-21: Version 0.1.20 (Jan Sauer)
+- Fixed feature extraction
+    - Function should now run considerably faster
+    - Note that the old features are most likely NOT 
+      compatible with these new ones anymore
+
+2017-09-13: Version 0.1.19 (Jan Sauer)
+- Expanded feature extraction
+    - extractOrganoidFeatures() extracts organoid-specific 
+      features as well as the global foreground texture 
+      features.
+    - extractOrganoidFeatures_texture() extracts only the 
+      foreground texture features without regard to individual
+      organoids.
+
+2017-09-12: Version 0.1.18 (Jan Sauer)
+- Added function to combine well features into one file 
+  (featureExtration.R --> combineWellFeatures())
+- Added helper function to load a library belonging to a plate 
+  (loadLibrary.R)
+- Added helper function to load features
+  (feature_api.R --> loadFeatures())
+
+2017-09-11: Version 0.1.17 (Jan Sauer)
+- Added a primitive feature extraction function
+    - Does not differentiate between organoids yet
+
+2017-08-01: Version 0.1.16 (Jan Sauer)
+- Updated the workflows to include the segmentation thumbnail creation
+- Added a dedicated segmentation workflow
+
+2017-07-24: Version 0.1.15 (Jan Sauer)
+- Added thumbnail functions for the the DNN segmentation output
+- Added segmentation to the workflow(s)
+- Added a function to move TIF Diagnostic files out of the incoming directory
+
+2017-06-26: Version 0.1.14 (Jan Sauer)
+- Added two sub workflows to only project or to only convert TIF to HDF5
+    - workflow.R/PROMISEconversion.R and workflow.R/PROMISEprojection.R
+
+2017-06-21: Version 0.1.13 (Jan Sauer)
+- Minor changes to fix bugs
+- Added intensity distribution calculation (calcIntensityDistribution) 
+  to the workflow
+
+2017-06-16: Version 0.1.12 (Jan Sauer)
+- Added checkLogs.R
+    > Checks the PBS/Torque logs for errors and creates a shells script
+      to remove bad files and rerun those wells
+
+2017-05-05: Version 0.1.11 (Jan Sauer)
+- Added feature_api.R
+    > Adds three new functions ("get_features_by_compound", 
+      "get_features_by_well", "get_all_compounds") as an interface to the 
+      feature hdf5 files (currently only tested on "inception" features)
+
+2017-03-14: Version 0.1.10 (Jan Sauer)
+- Updated featureExtraction.R to create the image masks slightly differently
+
+2017-02-09: Version 0.1.9 (Jan Sauer)
+- Updated thumbnails.R -> thumbnailImages() to be able to handle both
+  9-field and 4-field microscope setups.
+- Added an extra variable (fields_layout) to watchdogConfig.R/guard.R, which
+  indicates how the fields should be arranged in the previews/stitching, e.g.
+  fields_layout = c("1", "2", "3", "4") indicates that the fields are 
+  arranged as:
+        1 | 2
+        -----
+        4 | 3
+
+2017-02-06: Version 0.1.9 (Jan Sauer)
+- Added this changelog
+- Updated watchdogConfig.R/guard.R to allow differing excitement and output 
+  channels, e.g. instead of image filenames containing "DAPI - DAPI", they 
+  can now have the scheme "Green - DAPI", where "Green" is the wavelength 
+  descriptor of the exciting laser. This change is only reflected in the
+  functional code by a change in 'singleImageFilename()', which determines
+  the excitement wavelength by index matching, e.g.
+    > channels("Cy3", "FITC", "DAPI")
+    > excitementWavelengths("Green", "Blue", "UV")
+  will match the values as "Green - Cy3", "Blue - FITC", and "UV - DAPI".
+  'singleImageFilename()' must now be called with the configdir as an
+  additional argument
+

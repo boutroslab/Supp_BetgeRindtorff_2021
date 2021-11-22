@@ -1,0 +1,4 @@
+code within the models directory is used to process raw data from the feature level onwards.
+*FeatureAnalysis library contains python scripts to process the raw feature data by filtering and scaling it
+*umap contains code for the UMAP projection of intermediate feature data
+*clustering contains code related to various clustering methods for UMAP or PCA level feature data

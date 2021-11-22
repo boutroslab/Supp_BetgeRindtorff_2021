@@ -1,0 +1,16 @@
+#! /usr/bin/bash
+
+module load R/3.6.2
+module load pandoc/2.2.1
+module load gdal/3.0.2
+module load anaconda3/2019.07
+
+# run:
+# bsub -R "rusage[mem=150GB]" ./SoftwarePackage/PhenotypeSpectrum/run_umap_dmso.bsub -o SoftwarePackage/PhenotypeSpectrum/out.bsub -e SoftwarePackage/PhenotypeSpectrum/error.bsub
+
+Rscript SoftwarePackage/PhenotypeSpectrum/R/UMAP_organoids.R \
+        "data/interim/PhenotypeSpectrum/hdf5_pca_absolute_dmso.Rds" \
+        "data/interim/PhenotypeSpectrum/harmony_umap_absolute_dmso.Rds" \
+        "data/interim/PhenotypeSpectrum/hdf5_umap_absolute_dmso.Rds" \
+        "123" \
+        "data/metadata/Screenings_Imaging_Manuscript.xlsx"

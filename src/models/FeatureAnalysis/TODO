@@ -1,0 +1,5 @@
+- Merge 'BlurryOrganoidClassifier.py' into 'OrganoidFeatures.py' and retain interface function
+- Move naming scheme for processed features into Config.py or Utils.py
+- Move all naming conventions into Config.py (files and hdf5 keys)
+- Refactor the 'drug' parameter so that only the lowest-level functions explicitly query it
+  and all class generators, e.g. load_line, just pass it along in their kwargs dict
