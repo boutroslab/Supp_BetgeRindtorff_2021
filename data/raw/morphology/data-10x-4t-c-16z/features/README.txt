@@ -1,0 +1,1 @@
+data can be found at /data/valentini/promise/PROMISE/data-10x-4t-c-16z/features on the B110 cluster. Provided is an example file for plate D004T01P003L02.
