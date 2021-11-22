@@ -1,0 +1,3 @@
+Python isn't as flexible with CSV formats as R so the libraries have 
+to be standardized further. In particular, it has issues with field
+delimiters being used in text as well and partially quoted fields.

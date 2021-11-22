@@ -1,0 +1,14 @@
+﻿organoid;visual_inspection_morphology_2017;visual_class_2_2017;visual_inspection_v2; visual_inspection_size_2017;visual_class_1_2017;visual_size_ranking_2018;visual_cystic_ranking_2018;clustering_jan
+D004T;solid;1;solid;medium;1;6;6;intermediate
+D007T;solid;1;solid;medium;1;5;1;solid
+D010T;solid;1;solid;medium;1;8;1;solid
+D013T;cystic;2;cystic;big;5;12;12;cystic
+D015T;solid;1;;medium;1;;;solid
+D018T;cystic;2;cystic;big;5;14;14;cystic
+D019T;solid;1;solid;small;2;2;8;intermediate
+D020T;solid;1;solid;medium;1;5;7;intermediate
+D021T;cystic;2;;small;3;1;9;intermediate
+D022T;solid;1;solid;medium;1;7;7;intermediate
+D027T;cystic;2;cystic;medium;4;10;10;cystic
+D030T;cystic;2;cystic;medium;4;11;11;cystic
+D046T;solid;1;solid;big;6;9;4;solid

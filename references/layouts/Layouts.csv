@@ -1,0 +1,2689 @@
+Product.Name;Well_ID_384;Row_ID_384;Col_ID_384;Target;Pathway;concentration;Library_ID
+Linifanib (ABT-869);A01;A;1;PDGFR, VEGFR;Protein Tyrosine Kinase;NA;2
+Y-27632 2HCl;A02;A;2;ROCK;Others;NA;2
+Cediranib (AZD2171);A03;A;3;VEGFR, Flt;Protein Tyrosine Kinase;NA;2
+Avagacestat (BMS-708163);A04;A;4;Gamma-secretase;Proteases;NA;2
+Motesanib Diphosphate (AMG-706);A05;A;5;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;2
+TWS119;A06;A;6;GSK-3;PI3K/Akt/mTOR;NA;2
+Sunitinib Malate;A07;A;7;VEGFR, PDGFR, c-Kit, Flt;Microbiology;NA;2
+AZ 960;A08;A;8;JAK;JAK/STAT;NA;2
+SL-327;A09;A;9;MEK;Others;NA;2
+MK-0752;A10;A;10;Gamma-secretase;Proteases;NA;2
+SU11274;A11;A;11;c-Met;Neuronal Signaling;NA;2
+CHIR-98014;A12;A;12;GSK-3;PI3K/Akt/mTOR;NA;2
+Vatalanib (PTK787) 2HCl;A13;A;13;VEGFR, c-Kit, Flt;Others;NA;2
+WHI-P154;A14;A;14;JAK, EGFR;JAK/STAT;NA;2
+Foretinib (GSK1363089);A15;A;15;c-Met, VEGFR;Others;NA;2
+IWR-1-endo;A16;A;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+AT9283;A17;A;17;Bcr-Abl, JAK, Aurora Kinase;Others;NA;2
+BIO;A18;A;18;GSK-3;PI3K/Akt/mTOR;NA;2
+Lenvatinib (E7080);A19;A;19;VEGFR;Protein Tyrosine Kinase;NA;2
+K02288;A20;A;20;TGF-beta/Smad;TGF-beta/Smad;NA;2
+WZ8040;A21;A;21;EGFR;Protein Tyrosine Kinase;NA;2
+Filgotinib (GLPG0634);A22;A;22;JAK;JAK/STAT;NA;2
+DMSO;A23;A;23;NA;NA;NA;2
+DMSO;A24;A;24;NA;NA;NA;2
+AG-1024;B01;B;1;IGF-1R;Protein Tyrosine Kinase;NA;2
+GNF-5;B02;B;2;Bcr-Abl;Angiogenesis;NA;2
+BX-912;B03;B;3;PDK-1;PI3K/Akt/mTOR;NA;2
+DMSO;B04;B;4;NA;NA;NA;2
+Aurora A Inhibitor I;B05;B;5;Aurora Kinase;Cell Cycle;NA;2
+VX-11e;B06;B;6;ERK;MAPK;NA;2
+Pimasertib (AS-703026);B07;B;7;MEK;MAPK;NA;2
+DMSO;B08;B;8;NA;NA;NA;2
+Quizartinib (AC220);B09;B;9;Flt;Angiogenesis;NA;2
+LJI308;B10;B;10;S6 Kinase;PI3K/Akt/mTOR;NA;2
+PHT-427;B11;B;11;Akt, PDK-1;PI3K/Akt/mTOR;NA;2
+DMSO;B12;B;12;NA;NA;NA;2
+BIRB 796 (Doramapimod);B13;B;13;p38 MAPK;MAPK;NA;2
+VE-821;B14;B;14;ATM/ATR;DNA Damage;NA;2
+AZD8330;B15;B;15;MEK;MAPK;NA;2
+DMSO;B16;B;16;NA;NA;NA;2
+GSK461364;B17;B;17;PLK;Cell Cycle;NA;2
+BMS-582949;B18;B;18;p38 MAPK;MAPK;NA;2
+Mubritinib (TAK 165);B19;B;19;HER2;Protein Tyrosine Kinase;NA;2
+DMSO;B20;B;20;NA;NA;NA;2
+Volasertib (BI 6727);B21;B;21;PLK;Cell Cycle;NA;2
+DMSO;B22;B;22;NA;NA;NA;2
+DMSO;B23;B;23;NA;NA;NA;2
+DMSO;B24;B;24;NA;NA;NA;2
+Axitinib;C01;C;1;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;2
+Enzastaurin (LY317615);C02;C;2;PKC;Neuronal Signaling;NA;2
+Dovitinib (TKI-258, CHIR-258);C03;C;3;c-Kit, FGFR, Flt, VEGFR, PDGFR;Angiogenesis;NA;2
+Ruxolitinib (INCB018424);C04;C;4;JAK;JAK/STAT;NA;2
+Nilotinib (AMN-107);C05;C;5;Bcr-Abl;Angiogenesis;NA;2
+Semagacestat (LY450139);C06;C;6;Gamma-secretase;Proteases;NA;2
+Temsirolimus (CCI-779, NSC 683864);C07;C;7;mTOR;Neuronal Signaling;NA;2
+DAPT (GSI-IX);C08;C;8;Gamma-secretase, Beta Amyloid;Proteases;NA;2
+Crizotinib (PF-02341066);C09;C;9;c-Met, ALK;Others;NA;2
+ICG-001;C10;C;10;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+Brivanib (BMS-540215);C11;C;11;VEGFR, FGFR;GPCR & G Protein;NA;2
+GW788388;C12;C;12;TGF-beta/Smad;TGF-beta/Smad;NA;2
+U0126-EtOH;C13;C;13;MEK;Others;NA;2
+S-Ruxolitinib (INCB018424);C14;C;14;JAK;JAK/STAT;NA;2
+GSK690693;C15;C;15;Akt;Others;NA;2
+SANT-1;C16;C;16;Smoothened;Stem Cells &  Wnt;NA;2
+Brivanib Alaninate (BMS-582664);C17;C;17;VEGFR, FGFR;Others;NA;2
+Ro 31-8220 Mesylate;C18;C;18;PKC;TGF-beta/Smad;NA;2
+CP-724714;C19;C;19;EGFR, HER2;Protein Tyrosine Kinase;NA;2
+AR-A014418;C20;C;20;GSK-3;PI3K/Akt/mTOR;NA;2
+ENMD-2076;C21;C;21;Flt, Aurora Kinase, VEGFR;Angiogenesis;NA;2
+STA-21;C22;C;22;STAT;JAK/STAT;NA;2
+DMSO;C23;C;23;NA;NA;NA;2
+DMSO;C24;C;24;NA;NA;NA;2
+Amuvatinib (MP-470);D01;D;1;c-Met, c-Kit, PDGFR, Flt, c-RET;Protein Tyrosine Kinase;NA;2
+GNE-7915;D02;D;2;LRRK;Autophagy;NA;2
+Genistein;D03;D;3;EGFR;Protein Tyrosine Kinase;NA;2
+DMSO;D04;D;4;NA;NA;NA;2
+PHA-680632;D05;D;5;Aurora Kinase;Cell Cycle;NA;2
+FIIN-2;D06;D;6;FGFR;Protein Tyrosine Kinase;NA;2
+HMN-214;D07;D;7;PLK;Cell Cycle;NA;2
+DMSO;D08;D;8;NA;NA;NA;2
+Hesperadin;D09;D;9;Aurora Kinase;Cell Cycle;NA;2
+ONO-4059;D10;D;10;BTK;Angiogenesis;NA;2
+KRN 633;D11;D;11;VEGFR, PDGFR;Protein Tyrosine Kinase;NA;2
+DMSO;D12;D;12;NA;NA;NA;2
+Tie2 kinase inhibitor;D13;D;13;Tie-2;Protein Tyrosine Kinase;NA;2
+AG-18;D14;D;14;EGFR;Protein Tyrosine Kinase;NA;2
+KW-2449;D15;D;15;Flt, Bcr-Abl, Aurora Kinase;Angiogenesis;NA;2
+DMSO;D16;D;16;NA;NA;NA;2
+R406;D17;D;17;Syk, Flt;Angiogenesis;NA;2
+AMG 337;D18;D;18;c-Met;Protein Tyrosine Kinase;NA;2
+PP242;D19;D;19;mTOR;PI3K/Akt/mTOR;NA;2
+DMSO;D20;D;20;NA;NA;NA;2
+Palomid 529 (P529);D21;D;21;mTOR;PI3K/Akt/mTOR;NA;2
+DMSO;D22;D;22;NA;NA;NA;2
+DMSO;D23;D;23;NA;NA;NA;2
+DMSO;D24;D;24;NA;NA;NA;2
+Saracatinib (AZD0530);E01;E;1;Src, Bcr-Abl;Angiogenesis;NA;2
+SB431542;E02;E;2;TGF-beta/Smad;Others;NA;2
+PD184352 (CI-1040);E03;E;3;MEK;MAPK;NA;2
+Thiazovivin;E04;E;4;ROCK;Cell Cycle;NA;2
+NVP-AEW541;E05;E;5;IGF-1R;Protein Tyrosine Kinase;NA;2
+Theophylline;E06;E;6;TGF-beta/Smad;TGF-beta/Smad;NA;2
+VX-680 (Tozasertib, MK-0457);E07;E;7;Aurora Kinase;Endocrinology & Hormones;NA;2
+CYT387;E08;E;8;JAK;JAK/STAT;NA;2
+PHA-665752;E09;E;9;c-Met;Others;NA;2
+NVP-BSK805 2HCl;E10;E;10;JAK;JAK/STAT;NA;2
+Refametinib (RDEA119, Bay 86-9766);E11;E;11;MEK;Others;NA;2
+PF-5274857;E12;E;12;Hedgehog/Smoothened;Stem Cells &  Wnt;NA;2
+ZM 447439;E13;E;13;Aurora Kinase;Others;NA;2
+Pirfenidone;E14;E;14;TGF-beta/Smad;TGF-beta/Smad;NA;2
+JNJ-38877605;E15;E;15;c-Met;Others;NA;2
+KY02111;E16;E;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+AG-490 (Tyrphostin B42);E17;E;17;JAK, EGFR;Others;NA;2
+GF109203X;E18;E;18;PKC;TGF-beta/Smad;NA;2
+TGX-221;E19;E;19;PI3K;PI3K/Akt/mTOR;NA;2
+FH535;E20;E;20;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+CUDC-101;E21;E;21;HDAC, EGFR, HER2;Epigenetics;NA;2
+ZM 39923 HCl;E22;E;22;JAK;JAK/STAT;NA;2
+DMSO;E23;E;23;NA;NA;NA;2
+DMSO;E24;E;24;NA;NA;NA;2
+JNJ-7706621;F01;F;1;CDK, Aurora Kinase;Cell Cycle;NA;2
+Decernotinib (VX-509);F02;F;2;JAK;JAK/STAT;NA;2
+TG100-115;F03;F;3;PI3K;PI3K/Akt/mTOR;NA;2
+DMSO;F04;F;4;NA;NA;NA;2
+VX-745;F05;F;5;p38 MAPK;MAPK;NA;2
+Bikinin;F06;F;6;GSK-3;PI3K/Akt/mTOR;NA;2
+AEE788 (NVP-AEE788);F07;F;7;EGFR, Flt, VEGFR, HER2;Protein Tyrosine Kinase;NA;2
+DMSO;F08;F;8;NA;NA;NA;2
+BIX 02188;F09;F;9;MEK;MAPK;NA;2
+CC-223;F10;F;10;mTOR;PI3K/Akt/mTOR;NA;2
+AT7867;F11;F;11;Akt, S6 kinase;PI3K/Akt/mTOR;NA;2
+DMSO;F12;F;12;NA;NA;NA;2
+H 89 2HCl;F13;F;13;S6 Kinase;PI3K/Akt/mTOR;NA;2
+CEP-32496;F14;F;14;Raf;MAPK;NA;2
+RAF265 (CHIR-265);F15;F;15;Raf, VEGFR;MAPK;NA;2
+DMSO;F16;F;16;NA;NA;NA;2
+SGI-1776 free base;F17;F;17;Pim;JAK/STAT;NA;2
+Oclacitinib;F18;F;18;JAK;JAK/STAT;NA;2
+CYT387;F19;F;19;JAK;JAK/STAT;NA;2
+DMSO;F20;F;20;NA;NA;NA;2
+Degrasyn (WP1130);F21;F;21;DUB, Bcr-Abl;Angiogenesis;NA;2
+DMSO;F22;F;22;NA;NA;NA;2
+DMSO;F23;F;23;NA;NA;NA;2
+DMSO;F24;F;24;NA;NA;NA;2
+Selumetinib (AZD6244);G01;G;1;MEK;MAPK;NA;2
+SB216763;G02;G;2;GSK-3;Others;NA;2
+Dasatinib;G03;G;3;Src, Bcr-Abl, c-Kit;Angiogenesis;NA;2
+GSK429286A;G04;G;4;ROCK;Cell Cycle;NA;2
+Pazopanib HCl;G05;G;5;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;2
+LDE225 (NVP-LDE225,Erismodegib);G06;G;6;Smoothened;Stem Cells &  Wnt;NA;2
+Y-27632 2HCl;G07;G;7;ROCK;Others;NA;2
+LY2157299;G08;G;8;TGF-beta/Smad;TGF-beta/Smad;NA;2
+ZSTK474;G09;G;9;PI3K;Neuronal Signaling;NA;2
+TG101209;G10;G;10;Flt, JAK, c-RET;JAK/STAT;NA;2
+OSI-906 (Linsitinib);G11;G;11;IGF-1R;Others;NA;2
+Tofacitinib (CP-690550,Tasocitinib);G12;G;12;JAK;JAK/STAT;NA;2
+GDC-0879;G13;G;13;Raf;Others;NA;2
+Go 6983;G14;G;14;PKC;TGF-beta/Smad;NA;2
+Triciribine;G15;G;15;Akt;Others;NA;2
+BMS-833923;G16;G;16;Hedgehog/Smoothened;GPCR & G Protein;NA;2
+SNS-032 (BMS-387032);G17;G;17;CDK;Others;NA;2
+RepSox;G18;G;18;TGF-beta/Smad;TGF-beta/Smad;NA;2
+WZ3146;G19;G;19;EGFR;Protein Tyrosine Kinase;NA;2
+WIKI4;G20;G;20;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+Tivozanib (AV-951);G21;G;21;VEGFR, c-Kit, PDGFR;Protein Tyrosine Kinase;NA;2
+Pacritinib (SB1518);G22;G;22;JAK;JAK/STAT;NA;2
+DMSO;G23;G;23;NA;NA;NA;2
+DMSO;G24;G;24;NA;NA;NA;2
+CHIR-99021 (CT99021);H01;H;1;GSK-3;PI3K/Akt/mTOR;NA;2
+Vacquinol-1;H02;H;2;JNK;MAPK;NA;2
+MGCD-265;H03;H;3;c-Met, VEGFR, Tie-2;Protein Tyrosine Kinase;NA;2
+DMSO;H04;H;4;NA;NA;NA;2
+Thiazovivin;H05;H;5;ROCK;Cell Cycle;NA;2
+BLZ945;H06;H;6;CSF-1R;Protein Tyrosine Kinase;NA;2
+PHA-793887;H07;H;7;CDK;Cell Cycle;NA;2
+DMSO;H08;H;8;NA;NA;NA;2
+BIX 02189;H09;H;9;MEK;MAPK;NA;2
+GSK621;H10;H;10;AMPK;PI3K/Akt/mTOR;NA;2
+BMS-777607;H11;H;11;c-Met;Protein Tyrosine Kinase;NA;2
+DMSO;H12;H;12;NA;NA;NA;2
+TWS119;H13;H;13;GSK-3;PI3K/Akt/mTOR;NA;2
+AZD5363;H14;H;14;Akt;PI3K/Akt/mTOR;NA;2
+AZD1480;H15;H;15;JAK;JAK/STAT;NA;2
+DMSO;H16;H;16;NA;NA;NA;2
+BMS-794833;H17;H;17;c-Met, VEGFR;Protein Tyrosine Kinase;NA;2
+BI-78D3;H18;H;18;JNK;MAPK;NA;2
+SB590885;H19;H;19;Raf;MAPK;NA;2
+DMSO;H20;H;20;NA;NA;NA;2
+BKM120 (NVP-BKM120, Buparlisib);H21;H;21;PI3K;PI3K/Akt/mTOR;NA;2
+DMSO;H22;H;22;NA;NA;NA;2
+DMSO;H23;H;23;NA;NA;NA;2
+DMSO;H24;H;24;NA;NA;NA;2
+Nintedanib (BIBF 1120)_uncertain;I01;I;1;VEGFR, PDGFR, FGFR;Protein Tyrosine Kinase;NA;2
+Vismodegib (GDC-0449);I02;I;2;Hedgehog, P-gp;Neuronal Signaling;NA;2
+Ridaforolimus (Deforolimus, MK-8669);I03;I;3;mTOR;PI3K/Akt/mTOR;NA;2
+SB525334;I04;I;4;TGF-beta/Smad;TGF-beta/Smad;NA;2
+PD0325901;I05;I;5;MEK;DNA Damage;NA;2
+Taladegib (LY2940680);I06;I;6;Hedgehog,Hedgehog/Smoothened;Stem Cells &  Wnt;NA;2
+Enzastaurin (LY317615);I07;I;7;PKC;Neuronal Signaling;NA;2
+Hesperetin;I08;I;8;Histamine Receptor;TGF-beta/Smad;NA;2
+SB216763;I09;I;9;GSK-3;Others;NA;2
+YO-01027;I10;I;10;Gamma-secretase;Proteases;NA;2
+KU-55933 (ATM Kinase Inhibitor);I11;I;11;ATM;Others;NA;2
+Sotrastaurin;I12;I;12;PKC;TGF-beta/Smad;NA;2
+LY294002;I13;I;13;PI3K;Others;NA;2
+CHIR-99021 (CT99021) HCl;I14;I;14;PI3K/Akt/mTOR;PI3K/Akt/mTOR;NA;2
+Cabozantinib (XL184, BMS-907351);I15;I;15;VEGFR, c-Met, Flt, Tie-2, c-Kit;Others;NA;2
+LGK-974;I16;I;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+Barasertib (AZD1152-HQPA);I17;I;17;Aurora Kinase;Others;NA;2
+AZD2858;I18;I;18;GSK-3;PI3K/Akt/mTOR;NA;2
+CYC116;I19;I;19;Aurora Kinase, VEGFR;Cell Cycle;NA;2
+HO-3867;I20;I;20;STAT;JAK/STAT;NA;2
+YM201636;I21;I;21;PI3K;PI3K/Akt/mTOR;NA;2
+Wnt agonist 1;I22;I;22;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+DMSO;I23;I;23;NA;NA;NA;2
+DMSO;I24;I;24;NA;NA;NA;2
+PD173074;J01;J;1;FGFR, VEGFR;Angiogenesis;NA;2
+G-749;J02;J;2;FLT3;Angiogenesis;NA;2
+Rigosertib (ON-01910);J03;J;3;PLK;Cell Cycle;NA;2
+DMSO;J04;J;4;NA;NA;NA;2
+SP600125;J05;J;5;JNK;MAPK;NA;2
+LFM-A13;J06;J;6;BTK;Angiogenesis;NA;2
+PIK-93;J07;J;7;PI3K, VEGFR;PI3K/Akt/mTOR;NA;2
+DMSO;J08;J;8;NA;NA;NA;2
+AZD7762;J09;J;9;Chk;Cell Cycle;NA;2
+DASA-58;J10;J;10;PKM2;Others;NA;2
+PD318088;J11;J;11;MEK;MAPK;NA;2
+DMSO;J12;J;12;NA;NA;NA;2
+Acadesine;J13;J;13;AMPK;PI3K/Akt/mTOR;NA;2
+TCS 359;J14;J;14;FLT3;Angiogenesis;NA;2
+PF-4708671;J15;J;15;S6 Kinase;PI3K/Akt/mTOR;NA;2
+DMSO;J16;J;16;NA;NA;NA;2
+NVP-BHG712;J17;J;17;VEGFR, Src, Raf, Bcr-Abl;Protein Tyrosine Kinase;NA;2
+Olmutinib (HM61713, BI 1482694);J18;J;18;EGFR;Protein Tyrosine Kinase;NA;2
+Apatinib;J19;J;19;VEGFR;Protein Tyrosine Kinase;NA;2
+DMSO;J20;J;20;NA;NA;NA;2
+Asiatic Acid;J21;J;21;p38 MAPK;MAPK;NA;2
+DMSO;J22;J;22;NA;NA;NA;2
+DMSO;J23;J;23;NA;NA;NA;2
+DMSO;J24;J;24;NA;NA;NA;2
+Afatinib (BIBW2992)_uncertain;K01;K;1;EGFR;Protein Tyrosine Kinase;NA;2
+AT9283;K02;K;2;Bcr-Abl, JAK, Aurora Kinase;Others;NA;2
+Gefitinib (ZD1839);K03;K;3;EGFR;Protein Tyrosine Kinase;NA;2
+LY2811376;K04;K;4;5-alpha Reductase;Proteases;NA;2
+PI-103;K05;K;5;DNA-PK, PI3K, mTOR;Neuronal Signaling;NA;2
+AZD1480;K06;K;6;JAK;JAK/STAT;NA;2
+AC480 (BMS-599626);K07;K;7;HER2;Neuronal Signaling;NA;2
+Indirubin;K08;K;8;GSK-3;PI3K/Akt/mTOR;NA;2
+SB203580;K09;K;9;p38 MAPK;Transmembrane Transporters;NA;2
+LY411575;K10;K;10;Gamma-secretase;Proteases;NA;2
+GSK1904529A;K11;K;11;IGF-1R;Others;NA;2
+WP1066;K12;K;12;JAK;JAK/STAT;NA;2
+OSU-03012 (AR-12);K13;K;13;PDK-1;Others;NA;2
+Tofacitinib (CP-690550) Citrate;K14;K;14;JAK;JAK/STAT;NA;2
+Everolimus (RAD001);K15;K;15;mTOR;Others;NA;2
+AZD1080;K16;K;16;GSK-3;PI3K/Akt/mTOR;NA;2
+PLX-4720;K17;K;17;Raf;Others;NA;2
+PD173955;K18;K;18;Bcr-Abl;Angiogenesis;NA;2
+WZ4002;K19;K;19;EGFR;Protein Tyrosine Kinase;NA;2
+GNF-5;K20;K;20;Bcr-Abl;Angiogenesis;NA;2
+OSI-930;K21;K;21;c-Kit, VEGFR;Protein Tyrosine Kinase;NA;2
+Oclacitinib;K22;K;22;JAK;JAK/STAT;NA;2
+DMSO;K23;K;23;NA;NA;NA;2
+DMSO;K24;K;24;NA;NA;NA;2
+WYE-354;L01;L;1;mTOR;PI3K/Akt/mTOR;NA;2
+AT13148;L02;L;2;Akt;PI3K/Akt/mTOR;NA;2
+Ki8751;L03;L;3;VEGFR, c-Kit, PDGFR;Protein Tyrosine Kinase;NA;2
+DMSO;L04;L;4;NA;NA;NA;2
+AZD6482;L05;L;5;PI3K;PI3K/Akt/mTOR;NA;2
+SB239063;L06;L;6;p38 MAPK;MAPK;NA;2
+Ponatinib (AP24534);L07;L;7;Bcr-Abl, VEGFR, FGFR, PDGFR, Flt;Angiogenesis;NA;2
+DMSO;L08;L;8;NA;NA;NA;2
+R406 (free base);L09;L;9;Syk;Angiogenesis;NA;2
+GSK2292767;L10;L;10;PI3K;PI3K/Akt/mTOR;NA;2
+KU-60019;L11;L;11;ATM;DNA Damage;NA;2
+DMSO;L12;L;12;NA;NA;NA;2
+PF-573228;L13;L;13;FAK;Angiogenesis;NA;2
+Tyrphostin AG 1296;L14;L;14;PDGFR;Protein Tyrosine Kinase;NA;2
+LY2784544;L15;L;15;JAK;JAK/STAT;NA;2
+DMSO;L16;L;16;NA;NA;NA;2
+OSI-420;L17;L;17;EGFR;Protein Tyrosine Kinase;NA;2
+7,8-Dihydroxyflavone;L18;L;18;Trk receptor;Protein Tyrosine Kinase;NA;2
+CAL-101 (Idelalisib, GS-1101);L19;L;19;PI3K;PI3K/Akt/mTOR;NA;2
+DMSO;L20;L;20;NA;NA;NA;2
+Honokiol;L21;L;21;Akt, MEK;PI3K/Akt/mTOR;NA;2
+DMSO;L22;L;22;NA;NA;NA;2
+DMSO;L23;L;23;NA;NA;NA;2
+DMSO;L24;L;24;NA;NA;NA;2
+BMS-536924;M01;M;1;IGF-1R;Protein Tyrosine Kinase;NA;2
+AG-490 (Tyrphostin B42);M02;M;2;JAK, EGFR;Others;NA;2
+Imatinib Mesylate (STI571);M03;M;3;PDGFR, c-Kit, Bcr-Abl;Protein Tyrosine Kinase;NA;2
+Fasudil (HA-1077) HCl;M04;M;4;ROCK;Cell Cycle;NA;2
+Rapamycin (Sirolimus);M05;M;5;mTOR;DNA Damage;NA;2
+LY2784544;M06;M;6;JAK;JAK/STAT;NA;2
+Masitinib (AB1010);M07;M;7;c-Kit, PDGFR, FGFR, FAK;Others;NA;2
+Quercetin;M08;M;8;PI3K, PKC, Src, Sirtuin;Epigenetics;NA;2
+SB202190 (FHPI);M09;M;9;p38 MAPK;PI3K/Akt/mTOR;NA;2
+SB415286;M10;M;10;GSK-3;PI3K/Akt/mTOR;NA;2
+PF-04217903;M11;M;11;c-Met;Others;NA;2
+CEP-33779;M12;M;12;JAK;JAK/STAT;NA;2
+Danusertib (PHA-739358);M13;M;13;Aurora Kinase, FGFR, Bcr-Abl, c-RET, Src;Others;NA;2
+XL019;M14;M;14;JAK;JAK/STAT;NA;2
+BMS-754807;M15;M;15;IGF-1R;Others;NA;2
+1-Azakenpaullone;M16;M;16;GSK-3;PI3K/Akt/mTOR;NA;2
+Roscovitine (Seliciclib,CYC202);M17;M;17;CDK;Others;NA;2
+IWP-L6;M18;M;18;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+PD98059;M19;M;19;MEK;MAPK;NA;2
+Decernotinib (VX-509);M20;M;20;JAK;JAK/STAT;NA;2
+KU-0063794;M21;M;21;mTOR;PI3K/Akt/mTOR;NA;2
+PRI-724;M22;M;22;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+DMSO;M23;M;23;NA;NA;NA;2
+DMSO;M24;M;24;NA;NA;NA;2
+Vemurafenib (PLX4032, RG7204);N01;N;1;Raf;MAPK;NA;2
+WH-4-023;N02;N;2;Src;Angiogenesis;NA;2
+Ruxolitinib (INCB018424);N03;N;3;JAK;JAK/STAT;NA;2
+DMSO;N04;N;4;NA;NA;NA;2
+TSU-68 (SU6668, Orantinib);N05;N;5;VEGFR, PDGFR , FGFR;Protein Tyrosine Kinase;NA;2
+ANA-12;N06;N;6;Trk receptor;Protein Tyrosine Kinase;NA;2
+SAR245409 (XL765);N07;N;7;PI3K, mTOR;PI3K/Akt/mTOR;NA;2
+DMSO;N08;N;8;NA;NA;NA;2
+CP-673451;N09;N;9;PDGFR;Protein Tyrosine Kinase;NA;2
+STA-21;N10;N;10;STAT;JAK/STAT;NA;2
+BS-181 HCl;N11;N;11;CDK;Cell Cycle;NA;2
+DMSO;N12;N;12;NA;NA;NA;2
+BMS-265246;N13;N;13;CDK;Cell Cycle;NA;2
+NSC 23766;N14;N;14;Rac;Cell Cycle;NA;2
+AST-1306;N15;N;15;EGFR;Protein Tyrosine Kinase;NA;2
+DMSO;N16;N;16;NA;NA;NA;2
+PIK-293;N17;N;17;PI3K;PI3K/Akt/mTOR;NA;2
+LY3023414;N18;N;18;Akt;PI3K/Akt/mTOR;NA;2
+PIK-294;N19;N;19;PI3K;PI3K/Akt/mTOR;NA;2
+DMSO;N20;N;20;NA;NA;NA;2
+Indirubin;N21;N;21;GSK-3;PI3K/Akt/mTOR;NA;2
+DMSO;N22;N;22;NA;NA;NA;2
+DMSO;N23;N;23;NA;NA;NA;2
+DMSO;N24;N;24;NA;NA;NA;2
+Bosutinib (SKI-606);O01;O;1;Src;Angiogenesis;NA;2
+XAV-939;O02;O;2;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+Lapatinib (GW-572016) Ditosylate;O03;O;3;EGFR, HER2;Protein Tyrosine Kinase;NA;2
+RO4929097;O04;O;4;Y-Secretase;Proteases;NA;2
+Sorafenib Tosylate;O05;O;5;VEGFR, PDGFR, Raf;Neuronal Signaling;NA;2
+SB505124;O06;O;6;TGF-beta/Smad;TGF-beta/Smad;NA;2
+GDC-0941;O07;O;7;PI3K;Metabolism;NA;2
+Astragaloside A;O08;O;8;others;TGF-beta/Smad;NA;2
+MK-2206 2HCl;O09;O;9;Akt;Others;NA;2
+TG101348 (SAR302503);O10;O;10;JAK;JAK/STAT;NA;2
+MLN8054;O11;O;11;Aurora Kinase;Others;NA;2
+Baricitinib (LY3009104, INCB028050);O12;O;12;JAK;Epigenetics;NA;2
+BI 2536;O13;O;13;PLK;Others;NA;2
+Wnt-C59 (C59);O14;O;14;Wnt/beta-catenin;Stem Cells &  Wnt;NA;2
+Alisertib (MLN8237);O15;O;15;Aurora Kinase;Others;NA;2
+RKI-1447;O16;O;16;ROCK;Cell Cycle;NA;2
+SNS-314 Mesylate;O17;O;17;Aurora Kinase;Others;NA;2
+SH-4-54;O18;O;18;STAT;JAK/STAT;NA;2
+Regorafenib (BAY 73-4506);O19;O;19;c-Kit, Raf, VEGFR;Protein Tyrosine Kinase;NA;2
+IM-12;O20;O;20;GSK-3;PI3K/Akt/mTOR;NA;2
+Flavopiridol (Alvocidib);O21;O;21;CDK;Cell Cycle;NA;2
+DMSO;O22;O;22;NA;NA;NA;2
+DMSO;O23;O;23;NA;NA;NA;2
+DMSO;O24;O;24;NA;NA;NA;2
+BX-795;P01;P;1;PDK-1, IKK;PI3K/Akt/mTOR;NA;2
+IM-12;P02;P;2;GSK-3;PI3K/Akt/mTOR;NA;2
+Pelitinib (EKB-569);P03;P;3;EGFR;Protein Tyrosine Kinase;NA;2
+DMSO;P04;P;4;NA;NA;NA;2
+GSK429286A;P05;P;5;ROCK;Cell Cycle;NA;2
+Ro-3306;P06;P;6;CDK;Cell Cycle;NA;2
+AT7519;P07;P;7;CDK;Cell Cycle;NA;2
+DMSO;P08;P;8;NA;NA;NA;2
+AZD8055;P09;P;9;mTOR;PI3K/Akt/mTOR;NA;2
+ETC-1002;P10;P;10;AMPK;PI3K/Akt/mTOR;NA;2
+Fasudil (HA-1077) HCl;P11;P;11;ROCK;Cell Cycle;NA;2
+DMSO;P12;P;12;NA;NA;NA;2
+Lapatinib;P13;P;13;EGFR, HER2;Protein Tyrosine Kinase;NA;2
+PRT062607 (P505-15, BIIB057) HCl;P14;P;14;Syk;Angiogenesis;NA;2
+AZD8931 (Sapitinib);P15;P;15;EGFR, HER2;Protein Tyrosine Kinase;NA;2
+DMSO;P16;P;16;NA;NA;NA;2
+AZ 960;P17;P;17;JAK;JAK/STAT;NA;2
+DMSO;P18;P;18;NA;NA;NA;2
+Telatinib;P19;P;19;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;2
+DMSO;P20;P;20;NA;NA;NA;2
+Quercetin;P21;P;21;PI3K, PKC, Src, Sirtuin;Epigenetics;NA;2
+DMSO;P22;P;22;NA;NA;NA;2
+DMSO;P23;P;23;NA;NA;NA;2
+DMSO;P24;P;24;NA;NA;NA;2
+Chrysophanic Acid;A01;A;1;EGFR, mTOR;Protein Tyrosine Kinase;NA;3
+Anacardic Acid;A02;A;2;Histone Acetyltransferase;Epigenetics;NA;3
+LY2603618;A03;A;3;Chk;Cell Cycle;NA;3
+DMSO;A04;A;4;NA;NA;NA;3
+PF-00562271;A05;A;5;FAK;Angiogenesis;NA;3
+SC1;A06;A;6;ERK;MAPK;NA;3
+R547;A07;A;7;CDK;Cell Cycle;NA;3
+DMSO;A08;A;8;NA;NA;NA;3
+TAK-901;A09;A;9;Aurora Kinase;Cell Cycle;NA;3
+PLX7904;A10;A;10;Raf;MAPK;NA;3
+TG101348 (SAR302503);A11;A;11;JAK;JAK/STAT;NA;3
+DMSO;A12;A;12;NA;NA;NA;3
+Tivantinib (ARQ 197);A13;A;13;c-Met;Protein Tyrosine Kinase;NA;3
+Butein;A14;A;14;EGFR;Protein Tyrosine Kinase;NA;3
+MK-2461;A15;A;15;c-Met, FGFR, PDGFR;Protein Tyrosine Kinase;NA;3
+DMSO;A16;A;16;NA;NA;NA;3
+Dabrafenib (GSK2118436);A17;A;17;Raf;MAPK;NA;3
+DMSO;A18;A;18;NA;NA;NA;3
+TPCA-1;A19;A;19;IKK;NF-_B;NA;3
+DMSO;A20;A;20;NA;NA;NA;3
+IKK-16 (IKK Inhibitor VII);A21;A;21;IKK;NF-_B;NA;3
+DMSO;A22;A;22;NA;NA;NA;3
+DMSO;A23;A;23;NA;NA;NA;3
+DMSO;A24;A;24;NA;NA;NA;3
+PF-477736;B01;B;1;Chk;Cell Cycle;NA;3
+Y-27632 2HCl;B02;B;2;ROCK;Others;NA;3
+Piceatannol;B03;B;3;Syk;Angiogenesis;NA;3
+Avagacestat (BMS-708163);B04;B;4;Gamma-secretase;Proteases;NA;3
+AP26113;B05;B;5;ALK;Protein Tyrosine Kinase;NA;3
+TWS119;B06;B;6;GSK-3;PI3K/Akt/mTOR;NA;3
+PD168393;B07;B;7;EGFR;Protein Tyrosine Kinase;NA;3
+AZ 960;B08;B;8;JAK;JAK/STAT;NA;3
+RN486;B09;B;9;BTK;Angiogenesis;NA;3
+MK-0752;B10;B;10;Gamma-secretase;Proteases;NA;3
+AZD3463;B11;B;11;ALK;Protein Tyrosine Kinase;NA;3
+CHIR-98014;B12;B;12;GSK-3;PI3K/Akt/mTOR;NA;3
+SSR128129E;B13;B;13;FGFR;Angiogenesis;NA;3
+WHI-P154;B14;B;14;JAK, EGFR;JAK/STAT;NA;3
+GF109203X;B15;B;15;PKC;TGF-beta/Smad;NA;3
+IWR-1-endo;B16;B;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+FRAX597;B17;B;17;PAK;Cytoskeletal Signaling;NA;3
+BIO;B18;B;18;GSK-3;PI3K/Akt/mTOR;NA;3
+TG003;B19;B;19;CDK;Cell Cycle;NA;3
+K02288;B20;B;20;TGF-beta/Smad;TGF-beta/Smad;NA;3
+KN-62;B21;B;21;Ca2+/calmodulin-dependent protein kinase II (CaMKII);Others;NA;3
+Filgotinib (GLPG0634);B22;B;22;JAK;JAK/STAT;NA;3
+DMSO;B23;B;23;NA;NA;NA;3
+DMSO;B24;B;24;NA;NA;NA;3
+Phenformin HCl;C01;C;1;AMPK;PI3K/Akt/mTOR;NA;3
+Filgotinib (GLPG0634);C02;C;2;JAK;JAK/STAT;NA;3
+DCC-2036 (Rebastinib);C03;C;3;Bcr-Abl;Angiogenesis;NA;3
+DMSO;C04;C;4;NA;NA;NA;3
+Trametinib (GSK1120212);C05;C;5;MEK;MAPK;NA;3
+SU6656;C06;C;6;Src;Angiogenesis;NA;3
+WAY-600;C07;C;7;mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;C08;C;8;NA;NA;NA;3
+AMG-900;C09;C;9;Aurora Kinase;Cell Cycle;NA;3
+AZD3759;C10;C;10;EGFR;Protein Tyrosine Kinase;NA;3
+PHA-767491;C11;C;11;CDK;Cell Cycle;NA;3
+DMSO;C12;C;12;NA;NA;NA;3
+Varlitinib;C13;C;13;EGFR;Protein Tyrosine Kinase;NA;3
+GDC-0349;C14;C;14;mTOR;PI3K/Akt/mTOR;NA;3
+AZD2014;C15;C;15;mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;C16;C;16;NA;NA;NA;3
+GDC-0068;C17;C;17;Akt;PI3K/Akt/mTOR;NA;3
+DMSO;C18;C;18;NA;NA;NA;3
+SAR131675;C19;C;19;VEGFR;Protein Tyrosine Kinase;NA;3
+DMSO;C20;C;20;NA;NA;NA;3
+PF-562271;C21;C;21;FAK;Angiogenesis;NA;3
+DMSO;C22;C;22;NA;NA;NA;3
+DMSO;C23;C;23;NA;NA;NA;3
+DMSO;C24;C;24;NA;NA;NA;3
+Go 6983;D01;D;1;PKC;TGF-beta/Smad;NA;3
+Enzastaurin (LY317615);D02;D;2;PKC;Neuronal Signaling;NA;3
+Schisandrin B (Sch B);D03;D;3;ATM/ATR;PI3K/Akt/mTOR;NA;3
+Ruxolitinib (INCB018424);D04;D;4;JAK;JAK/STAT;NA;3
+AZD2932;D05;D;5;PDGFR;Protein Tyrosine Kinase;NA;3
+Semagacestat (LY450139);D06;D;6;Gamma-secretase;Proteases;NA;3
+CX-6258 HCl;D07;D;7;Pim;JAK/STAT;NA;3
+DAPT (GSI-IX);D08;D;8;Gamma-secretase, Beta Amyloid;Proteases;NA;3
+LDK378;D09;D;9;ALK;Protein Tyrosine Kinase;NA;3
+ICG-001;D10;D;10;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+NU6027;D11;D;11;CDK;Cell Cycle;NA;3
+GW788388;D12;D;12;TGF-beta/Smad;TGF-beta/Smad;NA;3
+AVL-292;D13;D;13;BTK;Angiogenesis;NA;3
+S-Ruxolitinib (INCB018424);D14;D;14;JAK;JAK/STAT;NA;3
+GSK650394;D15;D;15;SGK;Others;NA;3
+SANT-1;D16;D;16;Smoothened;Stem Cells &  Wnt;NA;3
+CO-1686 (AVL-301);D17;D;17;EGFR;Protein Tyrosine Kinase;NA;3
+Ro 31-8220 Mesylate;D18;D;18;PKC;TGF-beta/Smad;NA;3
+ERK5-IN-1;D19;D;19;ERK;MAPK;NA;3
+AR-A014418;D20;D;20;GSK-3;PI3K/Akt/mTOR;NA;3
+KN-93 Phosphate;D21;D;21;CaMK;Others;NA;3
+STA-21;D22;D;22;STAT;JAK/STAT;NA;3
+DMSO;D23;D;23;NA;NA;NA;3
+DMSO;D24;D;24;NA;NA;NA;3
+Daphnetin;E01;E;1;PKA/PKC/EGFR;DNA Damage;NA;3
+LDN-214117;E02;E;2;TGF-beta/Smad;TGF-beta/Smad;NA;3
+CCT128930;E03;E;3;Akt;PI3K/Akt/mTOR;NA;3
+DMSO;E04;E;4;NA;NA;NA;3
+Flavopiridol HCl;E05;E;5;CDK;Cell Cycle;NA;3
+Akti-1/2;E06;E;6;Akt;PI3K/Akt/mTOR;NA;3
+TG101209;E07;E;7;Flt, JAK, c-RET;JAK/STAT;NA;3
+DMSO;E08;E;8;NA;NA;NA;3
+ZM 336372;E09;E;9;Raf;MAPK;NA;3
+VPS34-IN1;E10;E;10;PI3K;PI3K/Akt/mTOR;NA;3
+PF-04691502;E11;E;11;mTOR, PI3K, Akt;PI3K/Akt/mTOR;NA;3
+DMSO;E12;E;12;NA;NA;NA;3
+CUDC-907;E13;E;13;HDAC, PI3K;Cytoskeletal Signaling;NA;3
+Cobimetinib (GDC-0973, RG7420);E14;E;14;MEK;MAPK;NA;3
+TAK-285;E15;E;15;EGFR, HER2;Protein Tyrosine Kinase;NA;3
+DMSO;E16;E;16;NA;NA;NA;3
+INK 128 (MLN0128);E17;E;17;mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;E18;E;18;NA;NA;NA;3
+BI-D1870;E19;E;19;S6 Kinase;PI3K/Akt/mTOR;NA;3
+DMSO;E20;E;20;NA;NA;NA;3
+GW441756;E21;E;21;Trk Receptor;Protein Tyrosine Kinase;NA;3
+DMSO;E22;E;22;NA;NA;NA;3
+DMSO;E23;E;23;NA;NA;NA;3
+DMSO;E24;E;24;NA;NA;NA;3
+BAY 11-7082;F01;F;1;I_B/IKK;NF-_B;NA;3
+SB431542;F02;F;2;TGF-beta/Smad;Others;NA;3
+Cabozantinib malate (XL184);F03;F;3;VEGFR;Protein Tyrosine Kinase;NA;3
+Thiazovivin;F04;F;4;ROCK;Cell Cycle;NA;3
+MEK162 (ARRY-162, ARRY-438162);F05;F;5;MEK;MAPK;NA;3
+Theophylline;F06;F;6;TGF-beta/Smad;TGF-beta/Smad;NA;3
+AZ20;F07;F;7;ATM/ATR;PI3K/Akt/mTOR;NA;3
+CYT387;F08;F;8;JAK;JAK/STAT;NA;3
+GSK2334470;F09;F;9;PDK-1;PI3K/Akt/mTOR;NA;3
+NVP-BSK805 2HCl;F10;F;10;JAK;JAK/STAT;NA;3
+MLN2480;F11;F;11;Raf;MAPK;NA;3
+PF-5274857;F12;F;12;Hedgehog/Smoothened;Stem Cells &  Wnt;NA;3
+SKI II;F13;F;13;sphingosine kinase (SphK);GPCR & G Protein;NA;3
+Pirfenidone;F14;F;14;TGF-beta/Smad;TGF-beta/Smad;NA;3
+Skepinone-L;F15;F;15;p38 MAPK;MAPK;NA;3
+KY02111;F16;F;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+PFK15;F17;F;17;6-phosphofructo-2-kinase (PFKFB3);Others;NA;3
+GF109203X;F18;F;18;PKC;TGF-beta/Smad;NA;3
+URMC-099;F19;F;19;"Abl1; LRRK2; MLK3; MLK1";Others;NA;3
+FH535;F20;F;20;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+AR-A014418;F21;F;21;GSK-3;PI3K/Akt/mTOR;NA;3
+ZM 39923 HCl;F22;F;22;JAK;JAK/STAT;NA;3
+DMSO;F23;F;23;NA;NA;NA;3
+DMSO;F24;F;24;NA;NA;NA;3
+TAK-733;G01;G;1;MEK;MAPK;NA;3
+SU9516;G02;G;2;CDK;Cell Cycle;NA;3
+A66;G03;G;3;PI3K;PI3K/Akt/mTOR;NA;3
+DMSO;G04;G;4;NA;NA;NA;3
+Ibrutinib (PCI-32765);G05;G;5;Src;Angiogenesis;NA;3
+Purvalanol A;G06;G;6;CDK;Cell Cycle;NA;3
+GDC-0980 (RG7422);G07;G;7;mTOR, PI3K;PI3K/Akt/mTOR;NA;3
+DMSO;G08;G;8;NA;NA;NA;3
+PH-797804;G09;G;9;p38 MAPK;MAPK;NA;3
+Entrectinib (RXDX-101);G10;G;10;Trk receptor;Protein Tyrosine Kinase;NA;3
+CHIR-98014;G11;G;11;GSK-3;PI3K/Akt/mTOR;NA;3
+DMSO;G12;G;12;NA;NA;NA;3
+NVP-BVU972;G13;G;13;c-Met;Protein Tyrosine Kinase;NA;3
+BMS-345541;G14;G;14;I_B/IKK;NF-_B;NA;3
+Tofacitinib (CP-690550,Tasocitinib);G15;G;15;JAK;JAK/STAT;NA;3
+DMSO;G16;G;16;NA;NA;NA;3
+BYL719;G17;G;17;PI3K;PI3K/Akt/mTOR;NA;3
+DMSO;G18;G;18;NA;NA;NA;3
+Semaxanib (SU5416);G19;G;19;VEGFR;Protein Tyrosine Kinase;NA;3
+DMSO;G20;G;20;NA;NA;NA;3
+Tyrphostin 9;G21;G;21;EGFR;Protein Tyrosine Kinase;NA;3
+DMSO;G22;G;22;NA;NA;NA;3
+DMSO;G23;G;23;NA;NA;NA;3
+DMSO;G24;G;24;NA;NA;NA;3
+Icotinib;H01;H;1;EGFR;Protein Tyrosine Kinase;NA;3
+SB216763;H02;H;2;GSK-3;Others;NA;3
+JNK-IN-8;H03;H;3;JNK;MAPK;NA;3
+GSK429286A;H04;H;4;ROCK;Cell Cycle;NA;3
+PP2;H05;H;5;Src;Angiogenesis;NA;3
+LDE225 (NVP-LDE225,Erismodegib);H06;H;6;Smoothened;Stem Cells &  Wnt;NA;3
+CGI1746;H07;H;7;BTK;Angiogenesis;NA;3
+LY2157299;H08;H;8;TGF-beta/Smad;TGF-beta/Smad;NA;3
+Zotarolimus(ABT-578);H09;H;9;mTOR;PI3K/Akt/mTOR;NA;3
+TG101209;H10;H;10;Flt, JAK, c-RET;JAK/STAT;NA;3
+TIC10 Analogue;H11;H;11;Akt;PI3K/Akt/mTOR;NA;3
+Tofacitinib (CP-690550,Tasocitinib);H12;H;12;JAK;JAK/STAT;NA;3
+PF-543;H13;H;13;SphK1;GPCR & G Protein;NA;3
+Go 6983;H14;H;14;PKC;TGF-beta/Smad;NA;3
+Losmapimod (GW856553X);H15;H;15;p38 MAPK;MAPK;NA;3
+BMS-833923;H16;H;16;Hedgehog/Smoothened;GPCR & G Protein;NA;3
+TAK-632;H17;H;17;Raf;MAPK;NA;3
+RepSox;H18;H;18;TGF-beta/Smad;TGF-beta/Smad;NA;3
+Bay 11-7085;H19;H;19;I_B/IKK;NF-_B;NA;3
+WIKI4;H20;H;20;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+LDC000067;H21;H;21;CDK;Cell Cycle;NA;3
+Pacritinib (SB1518);H22;H;22;JAK;JAK/STAT;NA;3
+DMSO;H23;H;23;NA;NA;NA;3
+DMSO;H24;H;24;NA;NA;NA;3
+AZD5438;I01;I;1;CDK;Cell Cycle;NA;3
+D 4476;I02;I;2;CK;Metabolism;NA;3
+GSK2126458 (GSK458);I03;I;3;PI3K, mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;I04;I;4;NA;NA;NA;3
+AS-604850;I05;I;5;PI3K;PI3K/Akt/mTOR;NA;3
+AMG319;I06;I;6;PI3K;PI3K/Akt/mTOR;NA;3
+A-769662;I07;I;7;AMPK;PI3K/Akt/mTOR;NA;3
+DMSO;I08;I;8;NA;NA;NA;3
+Dacomitinib (PF299804, PF299);I09;I;9;EGFR;Protein Tyrosine Kinase;NA;3
+GSK2636771;I10;I;10;PI3K;PI3K/Akt/mTOR;NA;3
+AZ 628;I11;I;11;Raf;MAPK;NA;3
+DMSO;I12;I;12;NA;NA;NA;3
+3-Methyladenine;I13;I;13;PI3K;PI3K/Akt/mTOR;NA;3
+ETP-46464;I14;I;14;mTOR;PI3K/Akt/mTOR;NA;3
+Sotrastaurin;I15;I;15;PKC;TGF-beta/Smad;NA;3
+DMSO;I16;I;16;NA;NA;NA;3
+Tyrphostin AG 879;I17;I;17;HER2;Protein Tyrosine Kinase;NA;3
+DMSO;I18;I;18;NA;NA;NA;3
+Golvatinib (E7050);I19;I;19;c-Met, VEGFR;Protein Tyrosine Kinase;NA;3
+DMSO;I20;I;20;NA;NA;NA;3
+ZM 323881 HCl;I21;I;21;VEGFR;Protein Tyrosine Kinase;NA;3
+DMSO;I22;I;22;NA;NA;NA;3
+DMSO;I23;I;23;NA;NA;NA;3
+DMSO;I24;I;24;NA;NA;NA;3
+CHIR-99021 (CT99021) HCl;J01;J;1;PI3K/Akt/mTOR;PI3K/Akt/mTOR;NA;3
+Vismodegib (GDC-0449);J02;J;2;Hedgehog, P-gp;Neuronal Signaling;NA;3
+SC-514;J03;J;3;I_B/IKK;NF-_B;NA;3
+SB525334;J04;J;4;TGF-beta/Smad;TGF-beta/Smad;NA;3
+VS-5584 (SB2343);J05;J;5;PI3K;PI3K/Akt/mTOR;NA;3
+Taladegib (LY2940680);J06;J;6;Hedgehog,Hedgehog/Smoothened;Stem Cells &  Wnt;NA;3
+PP1;J07;J;7;Src;Angiogenesis;NA;3
+Hesperetin;J08;J;8;Histamine Receptor;TGF-beta/Smad;NA;3
+IPA-3;J09;J;9;PAK;Cytoskeletal Signaling;NA;3
+YO-01027;J10;J;10;Gamma-secretase;Proteases;NA;3
+CGK 733;J11;J;11;ATM/ATR;DNA Damage;NA;3
+Sotrastaurin;J12;J;12;PKC;TGF-beta/Smad;NA;3
+GZD824;J13;J;13;Bcr-Abl;Angiogenesis;NA;3
+CHIR-99021 (CT99021) HCl;J14;J;14;PI3K/Akt/mTOR;PI3K/Akt/mTOR;NA;3
+Ro3280;J15;J;15;PLK;Cell Cycle;NA;3
+LGK-974;J16;J;16;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+AZD9291;J17;J;17;EGFR;Protein Tyrosine Kinase;NA;3
+AZD2858;J18;J;18;GSK-3;PI3K/Akt/mTOR;NA;3
+HS-173;J19;J;19;PI3K;PI3K/Akt/mTOR;NA;3
+HO-3867;J20;J;20;STAT;JAK/STAT;NA;3
+Uprosertib (GSK2141795);J21;J;21;Akt;PI3K/Akt/mTOR;NA;3
+Wnt agonist 1;J22;J;22;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+DMSO;J23;J;23;NA;NA;NA;3
+DMSO;J24;J;24;NA;NA;NA;3
+PP121;K01;K;1;DNA-PK, mTOR, PDGF;Protein Tyrosine Kinase;NA;3
+PF-431396;K02;K;2;FAK;Angiogenesis;NA;3
+WYE-125132 (WYE-132);K03;K;3;mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;K04;K;4;NA;NA;NA;3
+CAY10505;K05;K;5;PI3K;PI3K/Akt/mTOR;NA;3
+SGI-7079;K06;K;6;VEGFR;Protein Tyrosine Kinase;NA;3
+CH5132799;K07;K;7;PI3K, mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;K08;K;8;NA;NA;NA;3
+AG-1478 (Tyrphostin AG-1478);K09;K;9;EGFR;Protein Tyrosine Kinase;NA;3
+PQ 401;K10;K;10;IGF-1R;Protein Tyrosine Kinase;NA;3
+AMG-458;K11;K;11;c-Met;Protein Tyrosine Kinase;NA;3
+DMSO;K12;K;12;NA;NA;NA;3
+Dinaciclib (SCH727965);K13;K;13;CDK;Cell Cycle;NA;3
+ASP3026;K14;K;14;ALK;Protein Tyrosine Kinase;NA;3
+WP1066;K15;K;15;JAK;JAK/STAT;NA;3
+DMSO;K16;K;16;NA;NA;NA;3
+Torin 2;K17;K;17;mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;K18;K;18;NA;NA;NA;3
+IMD 0354;K19;K;19;IKK;NF-_B;NA;3
+DMSO;K20;K;20;NA;NA;NA;3
+ZM 306416;K21;K;21;VEGFR;Protein Tyrosine Kinase;NA;3
+DMSO;K22;K;22;NA;NA;NA;3
+DMSO;K23;K;23;NA;NA;NA;3
+DMSO;K24;K;24;NA;NA;NA;3
+TDZD-8;L01;L;1;GSK-3;PI3K/Akt/mTOR;NA;3
+AT9283;L02;L;2;Bcr-Abl, JAK, Aurora Kinase;Others;NA;3
+Tofacitinib (CP-690550) Citrate;L03;L;3;JAK;JAK/STAT;NA;3
+LY2811376;L04;L;4;5-alpha Reductase;Proteases;NA;3
+CZC24832;L05;L;5;PI3K_;PI3K/Akt/mTOR;NA;3
+AZD1480;L06;L;6;JAK;JAK/STAT;NA;3
+LY2090314;L07;L;7;GSK-3;PI3K/Akt/mTOR;NA;3
+Indirubin;L08;L;8;GSK-3;PI3K/Akt/mTOR;NA;3
+PF-3758309;L09;L;9;PAK;Cytoskeletal Signaling;NA;3
+LY411575;L10;L;10;Gamma-secretase;Proteases;NA;3
+AZD1080;L11;L;11;GSK-3;PI3K/Akt/mTOR;NA;3
+WP1066;L12;L;12;JAK;JAK/STAT;NA;3
+RKI-1447;L13;L;13;ROCK;Cell Cycle;NA;3
+Tofacitinib (CP-690550) Citrate;L14;L;14;JAK;JAK/STAT;NA;3
+AZD2858;L15;L;15;GSK-3;PI3K/Akt/mTOR;NA;3
+AZD1080;L16;L;16;GSK-3;PI3K/Akt/mTOR;NA;3
+WZ4003;L17;L;17;AMPK;PI3K/Akt/mTOR;NA;3
+PD173955;L18;L;18;Bcr-Abl;Angiogenesis;NA;3
+GNE-0877;L19;L;19;leucine-rich repeat kinase 2 (LRRK2);Autophagy;NA;3
+GNF-5;L20;L;20;Bcr-Abl;Angiogenesis;NA;3
+DDR1-IN-1;L21;L;21;DDR(receptor tyrosine kinase);Others;NA;3
+Oclacitinib;L22;L;22;JAK;JAK/STAT;NA;3
+DMSO;L23;L;23;NA;NA;NA;3
+DMSO;L24;L;24;NA;NA;NA;3
+OSI-027;M01;M;1;mTOR;PI3K/Akt/mTOR;NA;3
+GSK2578215A;M02;M;2;LRRK2;Autophagy;NA;3
+A-674563;M03;M;3;Akt, CDK, PKA;PI3K/Akt/mTOR;NA;3
+DMSO;M04;M;4;NA;NA;NA;3
+CHIR-124;M05;M;5;Chk;Cell Cycle;NA;3
+Ulixertinib (BVD-523, VRT752271);M06;M;6;ERK;MAPK;NA;3
+KX2-391;M07;M;7;Src;Angiogenesis;NA;3
+DMSO;M08;M;8;NA;NA;NA;3
+SB415286;M09;M;9;GSK-3;PI3K/Akt/mTOR;NA;3
+ZM 39923 HCl;M10;M;10;JAK;JAK/STAT;NA;3
+BGT226 (NVP-BGT226);M11;M;11;PI3K, mTOR;PI3K/Akt/mTOR;NA;3
+DMSO;M12;M;12;NA;NA;NA;3
+Dovitinib (TKI-258) Dilactic Acid;M13;M;13;Flt, FGFR, PDGFR, VEGFR, c-Kit;Angiogenesis;NA;3
+Pacritinib (SB1518);M14;M;14;JAK;JAK/STAT;NA;3
+AZD4547;M15;M;15;FGFR;Angiogenesis;NA;3
+DMSO;M16;M;16;NA;NA;NA;3
+TAE226 (NVP-TAE226);M17;M;17;FAK;Angiogenesis;NA;3
+DMSO;M18;M;18;NA;NA;NA;3
+WHI-P154;M19;M;19;JAK, EGFR;JAK/STAT;NA;3
+DMSO;M20;M;20;NA;NA;NA;3
+GNF-2;M21;M;21;Bcr-Abl;Angiogenesis;NA;3
+DMSO;M22;M;22;NA;NA;NA;3
+DMSO;M23;M;23;NA;NA;NA;3
+DMSO;M24;M;24;NA;NA;NA;3
+TAK-715;N01;N;1;p38 MAPK;MAPK;NA;3
+AG-490 (Tyrphostin B42);N02;N;2;JAK, EGFR;Others;NA;3
+Fingolimod (FTY720) HCl;N03;N;3;S1P Receptor, Bcr-Abl, PKC;GPCR & G Protein;NA;3
+Fasudil (HA-1077) HCl;N04;N;4;ROCK;Cell Cycle;NA;3
+IPI-145 (INK1197);N05;N;5;PI3K;Angiogenesis;NA;3
+LY2784544;N06;N;6;JAK;JAK/STAT;NA;3
+MK-8745;N07;N;7;Aurora Kinase;Cell Cycle;NA;3
+Quercetin;N08;N;8;PI3K, PKC, Src, Sirtuin;Epigenetics;NA;3
+VE-822;N09;N;9;ATM/ATR;PI3K/Akt/mTOR;NA;3
+SB415286;N10;N;10;GSK-3;PI3K/Akt/mTOR;NA;3
+10058-F4;N11;N;11;c-Myc;Cell Cycle;NA;3
+CEP-33779;N12;N;12;JAK;JAK/STAT;NA;3
+BIO;N13;N;13;GSK-3;PI3K/Akt/mTOR;NA;3
+XL019;N14;N;14;JAK;JAK/STAT;NA;3
+CNX-774;N15;N;15;BTK;Angiogenesis;NA;3
+1-Azakenpaullone;N16;N;16;GSK-3;PI3K/Akt/mTOR;NA;3
+HTH-01-015;N17;N;17;AMPK;PI3K/Akt/mTOR;NA;3
+IWP-L6;N18;N;18;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+GNE-9605;N19;N;19;LRRK2;Autophagy;NA;3
+Decernotinib (VX-509);N20;N;20;JAK;JAK/STAT;NA;3
+JNK Inhibitor IX;N21;N;21;JNK;MAPK;NA;3
+PRI-724;N22;N;22;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+DMSO;N23;N;23;NA;NA;NA;3
+DMSO;N24;N;24;NA;NA;NA;3
+Fostamatinib (R788);O01;O;1;Syk;Angiogenesis;NA;3
+AZD6738;O02;O;2;ATM/ATR;PI3K/Akt/mTOR;NA;3
+AS-252424;O03;O;3;PI3K;PI3K/Akt/mTOR;NA;3
+DMSO;O04;O;4;NA;NA;NA;3
+NVP-BSK805 2HCl;O05;O;5;JAK;JAK/STAT;NA;3
+LJH685;O06;O;6;S6 Kinase;PI3K/Akt/mTOR;NA;3
+GSK1838705A;O07;O;7;IGF-1, ALK;Protein Tyrosine Kinase;NA;3
+DMSO;O08;O;8;NA;NA;NA;3
+Crenolanib (CP-868596);O09;O;9;PDGFR;Protein Tyrosine Kinase;NA;3
+SMI-4a;O10;O;10;Pim;JAK/STAT;NA;3
+Milciclib (PHA-848125);O11;O;11;CDK;Cell Cycle;NA;3
+DMSO;O12;O;12;NA;NA;NA;3
+MK-5108 (VX-689);O13;O;13;Aurora Kinase;Cell Cycle;NA;3
+P276-00;O14;O;14;CDK;Cell Cycle;NA;3
+CEP-33779;O15;O;15;JAK;JAK/STAT;NA;3
+DMSO;O16;O;16;NA;NA;NA;3
+Tideglusib;O17;O;17;GSK-3;PI3K/Akt/mTOR;NA;3
+DMSO;O18;O;18;NA;NA;NA;3
+GW5074;O19;O;19;Raf;MAPK;NA;3
+DMSO;O20;O;20;NA;NA;NA;3
+S-Ruxolitinib (INCB018424);O21;O;21;JAK;JAK/STAT;NA;3
+DMSO;O22;O;22;NA;NA;NA;3
+DMSO;O23;O;23;NA;NA;NA;3
+DMSO;O24;O;24;NA;NA;NA;3
+Pazopanib;P01;P;1;VEGFR;Protein Tyrosine Kinase;NA;3
+XAV-939;P02;P;2;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+VX-702;P03;P;3;p38 MAPK;MAPK;NA;3
+RO4929097;P04;P;4;Y-Secretase;Proteases;NA;3
+XL019;P05;P;5;JAK;JAK/STAT;NA;3
+SB505124;P06;P;6;TGF-beta/Smad;TGF-beta/Smad;NA;3
+Tepotinib (EMD 1214063);P07;P;7;c-Met;Protein Tyrosine Kinase;NA;3
+Astragaloside A;P08;P;8;others;TGF-beta/Smad;NA;3
+AZD1208;P09;P;9;Pim;JAK/STAT;NA;3
+TG101348 (SAR302503);P10;P;10;JAK;JAK/STAT;NA;3
+LY2835219;P11;P;11;CDK;Cell Cycle;NA;3
+Baricitinib (LY3009104, INCB028050);P12;P;12;JAK;Epigenetics;NA;3
+CNX-2006;P13;P;13;EGFR;Protein Tyrosine Kinase;NA;3
+Wnt-C59 (C59);P14;P;14;Wnt/beta-catenin;Stem Cells &  Wnt;NA;3
+PD173955;P15;P;15;Bcr-Abl;Angiogenesis;NA;3
+RKI-1447;P16;P;16;ROCK;Cell Cycle;NA;3
+EHop-016;P17;P;17;Rac;Cell Cycle;NA;3
+SH-4-54;P18;P;18;STAT;JAK/STAT;NA;3
+Sorafenib;P19;P;19;Raf;MAPK;NA;3
+IM-12;P20;P;20;GSK-3;PI3K/Akt/mTOR;NA;3
+XMD8-92;P21;P;21;ERK;MAPK;NA;3
+DMSO;P22;P;22;NA;NA;NA;3
+DMSO;P23;P;23;NA;NA;NA;3
+DMSO;P24;P;24;NA;NA;NA;3
+ABT-263 (Navitoclax);A01;A;1;Bcl-2;Apoptosis;NA;4
+Ondansetron HCl;A02;A;2;5-HT Receptor;Neuronal Signaling;NA;4
+Afatinib (BIBW2992);A03;A;3;EGFR;Protein Tyrosine Kinase;NA;4
+Tenofovir;A04;A;4;Reverse Transcriptase;Microbiology;NA;4
+Imatinib Mesylate (STI571);A05;A;5;PDGFR, c-Kit, Bcr-Abl;Protein Tyrosine Kinase;NA;4
+Ranolazine 2HCl;A06;A;6;Calcium Channel;Transmembrane Transporters;NA;4
+Sunitinib Malate;A07;A;7;VEGFR, PDGFR, c-Kit, Flt;Microbiology;NA;4
+Topiramate;A08;A;8;Carbonic Anhydrase;Metabolism;NA;4
+Masitinib (AB1010);A09;A;9;c-Kit, PDGFR, FGFR, FAK;Others;NA;4
+Cilomilast;A10;A;10;PDE;Metabolism;NA;4
+Quisinostat (JNJ-26481585);A11;A;11;HDAC;Others;NA;4
+TSU-68 (SU6668, Orantinib);A12;A;12;VEGFR, PDGFR , FGFR;Protein Tyrosine Kinase;NA;4
+YM155 (Sepantronium Bromide);A13;A;13;Survivin;Others;NA;4
+Ponatinib (AP24534);A14;A;14;Bcr-Abl, VEGFR, FGFR, PDGFR, Flt;Angiogenesis;NA;4
+Roscovitine (Seliciclib,CYC202);A15;A;15;CDK;Others;NA;4
+Alprostadil;A16;A;16;Others;Others;NA;4
+Ritonavir;A17;A;17;HIV Protease;Proteases;NA;4
+Quizartinib (AC220);A18;A;18;Flt;Angiogenesis;NA;4
+TAK-700 (Orteronel);A19;A;19;P450;Metabolism;NA;4
+VX-809 (Lumacaftor);A20;A;20;Others;Transmembrane Transporters;NA;4
+Melatonin;A21;A;21;Others;Others;NA;4
+Semagacestat (LY450139);A22;A;22;Gamma-secretase;Proteases;NA;4
+Povidone iodine;A23;A;23;others;others;NA;4
+Tofacitinib (CP-690550) Citrate;A24;A;24;JAK;JAK/STAT;NA;4
+Nelarabine;B01;B;1;DNA/RNA Synthesis;DNA Damage;NA;4
+Methimazole;B02;B;2;Others;Others;NA;4
+Raloxifene HCl;B03;B;3;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;4
+DMSO;B04;B;4;NA;NA;NA;4
+Agomelatine;B05;B;5;5-HT Receptor;Neuronal Signaling;NA;4
+Nitazoxanide;B06;B;6;Others;Others;NA;4
+Posaconazole;B07;B;7;Others;Others;NA;4
+DMSO;B08;B;8;NA;NA;NA;4
+Adapalene;B09;B;9;Others;Others;NA;4
+Ketorolac;B10;B;10;COX;Neuronal Signaling;NA;4
+Bumetanide;B11;B;11;Others;Others;NA;4
+DMSO;B12;B;12;NA;NA;NA;4
+Megestrol Acetate;B13;B;13;Androgen Receptor;Endocrinology & Hormones;NA;4
+Aminoglutethimide;B14;B;14;Aromatase;Endocrinology & Hormones;NA;4
+Etomidate;B15;B;15;GABA Receptor;Neuronal Signaling;NA;4
+DMSO;B16;B;16;NA;NA;NA;4
+Glimepiride;B17;B;17;DPP-4;Proteases;NA;4
+Torsemide;B18;B;18;Others;Others;NA;4
+Rigosertib (ON-01910);B19;B;19;PLK;Cell Cycle;NA;4
+DMSO;B20;B;20;NA;NA;NA;4
+Ruxolitinib (INCB018424);B21;B;21;JAK;JAK/STAT;NA;4
+Adefovir Dipivoxil;B22;B;22;Others;Microbiology;NA;4
+Perampanel;B23;B;23;GluR;Neuronal Signaling;NA;4
+DMSO;B24;B;24;NA;NA;NA;4
+Linifanib (ABT-869);C01;C;1;PDGFR, VEGFR;Protein Tyrosine Kinase;NA;4
+Oxcarbazepine;C02;C;2;Sodium Channel;Transmembrane Transporters;NA;4
+Bortezomib (PS-341);C03;C;3;Proteasome;Proteases;NA;4
+Tigecycline;C04;C;4;Others;Others;NA;4
+Lapatinib (GW-572016) Ditosylate;C05;C;5;EGFR, HER2;Protein Tyrosine Kinase;NA;4
+Repaglinide;C06;C;6;Potassium Channel;Transmembrane Transporters;NA;4
+Temsirolimus (CCI-779, NSC 683864);C07;C;7;mTOR;Neuronal Signaling;NA;4
+Tranilast;C08;C;8;Others;Others;NA;4
+GDC-0941;C09;C;9;PI3K;Metabolism;NA;4
+Zibotentan (ZD4054);C10;C;10;ETA Receptor;GPCR & G Protein;NA;4
+Rucaparib (AG-014699,PF-01367338);C11;C;11;PARP;Others;NA;4
+Safinamide Mesylate;C12;C;12;MAO;Metabolism;NA;4
+Alisertib (MLN8237);C13;C;13;Aurora Kinase;Others;NA;4
+Fludarabine;C14;C;14;STAT, DNA/RNA Synthesis;JAK/STAT;NA;4
+Capecitabine;C15;C;15;DNA/RNA Synthesis;Others;NA;4
+Norfloxacin;C16;C;16;Topoisomerase;DNA Damage;NA;4
+Anastrozole;C17;C;17;Aromatase;Endocrinology & Hormones;NA;4
+Telaprevir (VX-950);C18;C;18;HCV Protease;Proteases;NA;4
+Exemestane;C19;C;19;Aromatase;Endocrinology & Hormones;NA;4
+Pomalidomide;C20;C;20;TNF-alpha, COX;Apoptosis;NA;4
+Bisoprolol fumarate;C21;C;21;Adrenergic Receptor;Neuronal Signaling;NA;4
+Reserpine;C22;C;22;Others;Others;NA;4
+Terazosin;C23;C;23;Adrenergic receptor;GPCR & G Protein;NA;4
+Fingolimod (FTY720) HCl;C24;C;24;S1P Receptor, Bcr-Abl, PKC;GPCR & G Protein;NA;4
+Bleomycin Sulfate;D01;D;1;DNA/RNA Synthesis;DNA Damage;NA;4
+Metolazone;D02;D;2;Others;Others;NA;4
+Fludarabine Phosphate;D03;D;3;DNA/RNA Synthesis;DNA Damage;NA;4
+DMSO;D04;D;4;NA;NA;NA;4
+Amuvatinib (MP-470);D05;D;5;c-Met, c-Kit, PDGFR, Flt, c-RET;Protein Tyrosine Kinase;NA;4
+Triamcinolone Acetonide;D06;D;6;Others;Others;NA;4
+Prasugrel;D07;D;7;P2 Receptor;Neuronal Signaling;NA;4
+DMSO;D08;D;8;NA;NA;NA;4
+Altretamine;D09;D;9;Others;Others;NA;4
+Adenosine;D10;D;10;Others;Others;NA;4
+Carmofur;D11;D;11;Antimetabolites;DNA Damage;NA;4
+DMSO;D12;D;12;NA;NA;NA;4
+Mercaptopurine (6-MP);D13;D;13;DNA/RNA Synthesis;DNA Damage;NA;4
+Aminophylline;D14;D;14;PDE;Metabolism;NA;4
+Felbamate;D15;D;15;Others;Others;NA;4
+DMSO;D16;D;16;NA;NA;NA;4
+Ivermectin;D17;D;17;Others;Others;NA;4
+Desonide;D18;D;18;Others;Others;NA;4
+Epothilone B (EPO906, Patupilone);D19;D;19;Microtubule Associated;Cytoskeletal Signaling;NA;4
+DMSO;D20;D;20;NA;NA;NA;4
+Isotretinoin;D21;D;21;Hydroxylase;Metabolism;NA;4
+Zalcitabine;D22;D;22;Others;Microbiology;NA;4
+Deoxycholic acid;D23;D;23;others;Others;NA;4
+DMSO;D24;D;24;NA;NA;NA;4
+Veliparib (ABT-888);E01;E;1;PARP;DNA Damage;NA;4
+Pelitinib (EKB-569);E02;E;2;EGFR;Protein Tyrosine Kinase;NA;4
+Bosutinib (SKI-606);E03;E;3;Src;Angiogenesis;NA;4
+Trilostane;E04;E;4;Dehydrogenase;Metabolism;NA;4
+Lenalidomide (CC-5013);E05;E;5;TNF-alpha;Apoptosis;NA;4
+Rolipram;E06;E;6;PDE;Metabolism;NA;4
+Vandetanib (ZD6474);E07;E;7;VEGFR;Endocrinology & Hormones;NA;4
+Venlafaxine;E08;E;8;5-HT Receptor;Neuronal Signaling;NA;4
+Crizotinib (PF-02341066);E09;E;9;c-Met, ALK;Others;NA;4
+Atazanavir Sulfate;E10;E;10;HIV Protease;Proteases;NA;4
+Vatalanib (PTK787) 2HCl;E11;E;11;VEGFR, c-Kit, Flt;Others;NA;4
+Pimasertib (AS-703026);E12;E;12;MEK;MAPK;NA;4
+Malotilate;E13;E;13;Others;Others;NA;4
+Pralatrexate;E14;E;14;DHFR;Metabolism;NA;4
+CEP-18770 (Delanzomib);E15;E;15;Proteasome;Others;NA;4
+Lactulose;E16;E;16;Others;Others;NA;4
+Aprepitant;E17;E;17;Substance P;Others;NA;4
+Saxagliptin;E18;E;18;DPP-4;Proteases;NA;4
+Finasteride;E19;E;19;5-alpha Reductase;Endocrinology & Hormones;NA;4
+Tazarotene;E20;E;20;Others;Others;NA;4
+Tivozanib (AV-951);E21;E;21;VEGFR, c-Kit, PDGFR;Protein Tyrosine Kinase;NA;4
+Furosemide;E22;E;22;Others;Others;NA;4
+Protirelin;E23;E;23;others;Others;NA;4
+Tacrolimus (FK506);E24;E;24;Others;Others;NA;4
+Clofarabine;F01;F;1;DNA/RNA Synthesis;DNA Damage;NA;4
+Cefoperazone;F02;F;2;Others;Others;NA;4
+Flavopiridol (Alvocidib);F03;F;3;CDK;Cell Cycle;NA;4
+DMSO;F04;F;4;NA;NA;NA;4
+Leflunomide;F05;F;5;Others;Others;NA;4
+Orlistat;F06;F;6;Others;Others;NA;4
+Ramelteon;F07;F;7;Others;GPCR & G Protein;NA;4
+DMSO;F08;F;8;NA;NA;NA;4
+Amisulpride;F09;F;9;Dopamine Receptor;Neuronal Signaling;NA;4
+Zolmitriptan;F10;F;10;Others;Neuronal Signaling;NA;4
+Cetirizine DiHCl;F11;F;11;Histamine Receptor;Neuronal Signaling;NA;4
+DMSO;F12;F;12;NA;NA;NA;4
+Streptozotocin (STZ);F13;F;13;Others;Others;NA;4
+Amorolfine HCl;F14;F;14;Others;Others;NA;4
+Fluconazole;F15;F;15;Others;Others;NA;4
+DMSO;F16;F;16;NA;NA;NA;4
+Ketoconazole;F17;F;17;P450;Metabolism;NA;4
+Didanosine;F18;F;18;NULL;Microbiology;NA;4
+Amonafide;F19;F;19;Topoisomerase;DNA Damage;NA;4
+DMSO;F20;F;20;NA;NA;NA;4
+Lopinavir;F21;F;21;HIV Protease;Proteases;NA;4
+Azathioprine;F22;F;22;Others;Others;NA;4
+Escin;F23;F;23;others;others;NA;4
+DMSO;F24;F;24;NA;NA;NA;4
+Axitinib;G01;G;1;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;4
+Pizotifen Malate;G02;G;2;Others;Others;NA;4
+Cediranib (AZD2171);G03;G;3;VEGFR, Flt;Protein Tyrosine Kinase;NA;4
+Vecuronium Bromide;G04;G;4;Others;Others;NA;4
+Panobinostat (LBH589);G05;G;5;HDAC;Epigenetics;NA;4
+Sildenafil Citrate;G06;G;6;PDE;Metabolism;NA;4
+Vorinostat (SAHA, MK0683);G07;G;7;HDAC;Endocrinology & Hormones;NA;4
+Voriconazole;G08;G;8;P450;Metabolism;NA;4
+Vismodegib (GDC-0449);G09;G;9;Hedgehog, P-gp;Neuronal Signaling;NA;4
+Ofloxacin;G10;G;10;Topoisomerase;DNA Damage;NA;4
+Foretinib (GSK1363089);G11;G;11;c-Met, VEGFR;Others;NA;4
+VX-222 (VCH-222, Lomibuvir);G12;G;12;HCV Protease;Proteases;NA;4
+17-AAG (Tanespimycin);G13;G;13;HSP;Others;NA;4
+Betamethasone;G14;G;14;Others;Others;NA;4
+Ganetespib (STA-9090);G15;G;15;HSP;Others;NA;4
+Tadalafil;G16;G;16;PDE;Metabolism;NA;4
+Bicalutamide;G17;G;17;Androgen Receptor, P450;Endocrinology & Hormones;NA;4
+EX 527 (Selisistat);G18;G;18;Sirtuin;Epigenetics;NA;4
+Irinotecan;G19;G;19;Topoisomerase;DNA Damage;NA;4
+Fasudil (HA-1077) HCl;G20;G;20;ROCK;Cell Cycle;NA;4
+Doxorubicin (Adriamycin);G21;G;21;Topoisomerase;DNA Damage;NA;4
+Olmesartan Medoxomil;G22;G;22;RAAS;Endocrinology & Hormones;NA;4
+Loxoprofen;G23;G;23;COX;Neuronal Signaling;NA;4
+Pimecrolimus;G24;G;24;Others;Others;NA;4
+Dacarbazine;H01;H;1;DNA/RNA Synthesis;DNA Damage;NA;4
+Silodosin;H02;H;2;Adrenergic Recepto;Neuronal Signaling;NA;4
+Topotecan HCl;H03;H;3;Topoisomerase;DNA Damage;NA;4
+DMSO;H04;H;4;NA;NA;NA;4
+Enzalutamide (MDV3100);H05;H;5;Androgen Receptor, P450;Endocrinology & Hormones;NA;4
+Allopurinol;H06;H;6;Others;GPCR & G Protein;NA;4
+Cinacalcet HCl;H07;H;7;CaSR;GPCR & G Protein;NA;4
+DMSO;H08;H;8;NA;NA;NA;4
+Aniracetam;H09;H;9;AMPA Receptor-kainate Receptor-NMDA Receptor;Neuronal Signaling;NA;4
+Telbivudine;H10;H;10;Others;Others;NA;4
+Cilnidipine;H11;H;11;Calcium Channel;Transmembrane Transporters;NA;4
+DMSO;H12;H;12;NA;NA;NA;4
+Dexamethasone (DHAP);H13;H;13;IL Receptor;Others;NA;4
+Chloramphenicol;H14;H;14;Others;Others;NA;4
+Flumazenil;H15;H;15;GABA Receptor;Neuronal Signaling;NA;4
+DMSO;H16;H;16;NA;NA;NA;4
+Lansoprazole;H17;H;17;Proton Pump;Transmembrane Transporters;NA;4
+Divalproex Sodium;H18;H;18;Others;Ubiquitin;NA;4
+Acitretin;H19;H;19;Others;Others;NA;4
+DMSO;H20;H;20;NA;NA;NA;4
+Meropenem;H21;H;21;Others;Others;NA;4
+Indomethacin;H22;H;22;Others;Others;NA;4
+Oxybenzone;H23;H;23;others;Others;NA;4
+DMSO;H24;H;24;NA;NA;NA;4
+Saracatinib (AZD0530);I01;I;1;Src, Bcr-Abl;Angiogenesis;NA;4
+Resveratrol;I02;I;2;Sirtuin;Epigenetics;NA;4
+Dovitinib (TKI-258, CHIR-258);I03;I;3;c-Kit, FGFR, Flt, VEGFR, PDGFR;Angiogenesis;NA;4
+Linezolid;I04;I;4;Others;Others;NA;4
+Nilotinib (AMN-107);I05;I;5;Bcr-Abl;Angiogenesis;NA;4
+Sumatriptan Succinate;I06;I;6;5-HT Receptor;Neuronal Signaling;NA;4
+VX-680 (Tozasertib, MK-0457);I07;I;7;Aurora Kinase;Endocrinology & Hormones;NA;4
+Zileuton;I08;I;8;Others;Others;NA;4
+Belinostat (PXD101);I09;I;9;HDAC;Others;NA;4
+Marbofloxacin;I10;I;10;Others;DNA Damage;NA;4
+Triciribine;I11;I;11;Akt;Others;NA;4
+Zosuquidar (LY335979) 3HCl;I12;I;12;P-gp;Transmembrane Transporters;NA;4
+Ivacaftor (VX-770);I13;I;13;CFTR;Others;NA;4
+Mycophenolate Mofetil;I14;I;14;Others;Metabolism;NA;4
+AT13387;I15;I;15;HSP;Others;NA;4
+Cyclosporine;I16;I;16;Others;Others;NA;4
+Fulvestrant;I17;I;17;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;4
+Febuxostat;I18;I;18;Others;Others;NA;4
+Cladribine;I19;I;19;DNA/RNA Synthesis;DNA Damage;NA;4
+BIRB 796 (Doramapimod);I20;I;20;p38 MAPK;MAPK;NA;4
+Fluorouracil (5-Fluoracil, 5-FU);I21;I;21;DNA/RNA Synthesis;DNA Damage;NA;4
+Cefdinir;I22;I;22;Others;Others;NA;4
+Sildenafil Mesylate;I23;I;23;PDE;Metabolism;NA;4
+MEK162 (ARRY-162, ARRY-438162);I24;I;24;MEK;MAPK;NA;4
+Dexrazoxane HCl (ICRF-187, ADR-529);J01;J;1;Others;Others;NA;4
+Riluzole;J02;J;2;Sodium Channel;Transmembrane Transporters;NA;4
+Letrozole;J03;J;3;Aromatase;Endocrinology & Hormones;NA;4
+DMSO;J04;J;4;NA;NA;NA;4
+Dienogest;J05;J;5;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;4
+Zafirlukast;J06;J;6;Others;Others;NA;4
+Celecoxib;J07;J;7;COX;Neuronal Signaling;NA;4
+DMSO;J08;J;8;NA;NA;NA;4
+Artemisinin;J09;J;9;Others;Others;NA;4
+Monobenzone;J10;J;10;Others;Others;NA;4
+Cilostazol;J11;J;11;PDE;Metabolism;NA;4
+DMSO;J12;J;12;NA;NA;NA;4
+Doxazosin Mesylate;J13;J;13;Adrenergic Receptor;Neuronal Signaling;NA;4
+Flurbiprofen;J14;J;14;Others;Others;NA;4
+Fluoxetine HCl;J15;J;15;5-HT Receptor;Neuronal Signaling;NA;4
+DMSO;J16;J;16;NA;NA;NA;4
+Levetiracetam;J17;J;17;Others;Others;NA;4
+Emtricitabine;J18;J;18;Reverse Transcriptase;Microbiology;NA;4
+Bafetinib (INNO-406);J19;J;19;Bcr-Abl;Angiogenesis;NA;4
+DMSO;J20;J;20;NA;NA;NA;4
+Mianserin HCl;J21;J;21;Others;Neuronal Signaling;NA;4
+Paliperidone;J22;J;22;Dopamine Receptor;Neuronal Signaling;NA;4
+Guanfacine Hydrochloride;J23;J;23;5-HT Receptor;Neuronal Signaling;NA;4
+DMSO;J24;J;24;NA;NA;NA;4
+FG-4592;K01;K;1;HIF;Angiogenesis;NA;4
+Rocuronium Bromide;K02;K;2;AChR;Neuronal Signaling;NA;4
+Dasatinib;K03;K;3;Src, Bcr-Abl, c-Kit;Angiogenesis;NA;4
+Alfuzosin HCl;K04;K;4;Adrenergic Receptor;Neuronal Signaling;NA;4
+Pazopanib HCl;K05;K;5;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;NA;4
+Tamsulosin;K06;K;6;Others;Others;NA;4
+Entinostat (MS-275);K07;K;7;HDAC;Transmembrane Transporters;NA;4
+Ziprasidone HCl;K08;K;8;Others;Others;NA;4
+Iniparib (BSI-201);K09;K;9;PARP;Others;NA;4
+Moxifloxacin HCl;K10;K;10;Topoisomerase;DNA Damage;NA;4
+Cabozantinib (XL184, BMS-907351);K11;K;11;VEGFR, c-Met, Flt, Tie-2, c-Kit;Others;NA;4
+Daclatasvir (BMS-790052);K12;K;12;HCV Protease;Proteases;NA;4
+Barasertib (AZD1152-HQPA);K13;K;13;Aurora Kinase;Others;NA;4
+Dyphylline;K14;K;14;PDE;Metabolism;NA;4
+Lenvatinib (E7080);K15;K;15;VEGFR;Protein Tyrosine Kinase;NA;4
+Pracinostat (SB939);K16;K;16;HDAC;Cytoskeletal Signaling;NA;4
+Raltitrexed;K17;K;17;DNA/RNA Synthesis;DNA Damage;NA;4
+Dapagliflozin;K18;K;18;SGLT;GPCR & G Protein;NA;4
+Decitabine;K19;K;19;DNA/RNA Synthesis;Epigenetics;NA;4
+Sulfasalazine;K20;K;20;Others;Others;NA;4
+Methotrexate;K21;K;21;DHFR;Metabolism;NA;4
+Clotrimazole;K22;K;22;Others;Others;NA;4
+Efavirenz;K23;K;23;Reverse Transcriptase;Microbiology;NA;4
+Birinapant;K24;K;24;Caspase;Apoptosis;NA;4
+Epirubicin HCl;L01;L;1;Topoisomerase;DNA Damage;NA;4
+Risperidone;L02;L;2;5-HT Receptor;Neuronal Signaling;NA;4
+Temozolomide;L03;L;3;Others;Ubiquitin;NA;4
+DMSO;L04;L;4;NA;NA;NA;4
+Entecavir Hydrate;L05;L;5;Others;Others;NA;4
+Acetaminophen;L06;L;6;COX;Neuronal Signaling;NA;4
+Avagacestat (BMS-708163);L07;L;7;Gamma-secretase;Proteases;NA;4
+DMSO;L08;L;8;NA;NA;NA;4
+Asenapine;L09;L;9;Adrenergic Receptor, 5-HT Receptor;Neuronal Signaling;NA;4
+Tretinoin;L10;L;10;Others;Others;NA;4
+Floxuridine;L11;L;11;DNA/RNA Synthesis;DNA Damage;NA;4
+DMSO;L12;L;12;NA;NA;NA;4
+Edaravone;L13;L;13;Others;Others;NA;4
+Disulfiram;L14;L;14;Others;Others;NA;4
+Fluvoxamine maleate;L15;L;15;5-HT Receptor;Neuronal Signaling;NA;4
+DMSO;L16;L;16;NA;NA;NA;4
+Lidocaine;L17;L;17;Histamine Receptor;Neuronal Signaling;NA;4
+Progesterone;L18;L;18;Others;Others;NA;4
+Doripenem Hydrate;L19;L;19;Others;Others;NA;4
+DMSO;L20;L;20;NA;NA;NA;4
+Mosapride Citrate;L21;L;21;5-HT Receptor;Neuronal Signaling;NA;4
+Terbinafine;L22;L;22;Others;Others;NA;4
+D panthenol;L23;L;23;others;Others;NA;4
+DMSO;L24;L;24;NA;NA;NA;4
+Selumetinib (AZD6244);M01;M;1;MEK;MAPK;NA;4
+Stavudine (d4T);M02;M;2;Reverse Transcriptase;Microbiology;NA;4
+Erlotinib HCl (OSI-744);M03;M;3;EGFR;Protein Tyrosine Kinase;NA;4
+Clopidogrel;M04;M;4;P2 Receptor;Neuronal Signaling;NA;4
+Rapamycin (Sirolimus);M05;M;5;mTOR;DNA Damage;NA;4
+Tianeptine sodium;M06;M;6;5-HT Receptor;Neuronal Signaling;NA;4
+Enzastaurin (LY317615);M07;M;7;PKC;Neuronal Signaling;NA;4
+Zonisamide;M08;M;8;Others;Others;NA;4
+PCI-24781 (Abexinostat);M09;M;9;HDAC;Others;NA;4
+Doxercalciferol;M10;M;10;Others;Others;NA;4
+Everolimus (RAD001);M11;M;11;mTOR;Others;NA;4
+Iloperidone;M12;M;12;Others;Others;NA;4
+Docetaxel;M13;M;13;Microtubule Associated;Others;NA;4
+Aztreonam;M14;M;14;Others;Others;NA;4
+Valproic acid sodium salt (Sodium valproate);M15;M;15;GABA Receptor, HDAC;Neuronal Signaling;NA;4
+Natamycin;M16;M;16;Others;Others;NA;4
+Thalidomide;M17;M;17;Others;Apoptosis;NA;4
+Nebivolol;M18;M;18;Adrenergic Receptor;Neuronal Signaling;NA;4
+Dimesna;M19;M;19;Others;Others;NA;4
+Candesartan;M20;M;20;RAAS;Endocrinology & Hormones;NA;4
+Imiquimod;M21;M;21;Others;Angiogenesis;NA;4
+Rizatriptan Benzoate;M22;M;22;NULL;Neuronal Signaling;NA;4
+Vitamin E;M23;M;23;others;Others;NA;4
+Embelin;M24;M;24;IAP;Apoptosis;NA;4
+Oxaliplatin;N01;N;1;DNA/RNA Synthesis;DNA Damage;NA;4
+Sulfapyridine;N02;N;2;Others;Others;NA;4
+Tamoxifen;N03;N;3;Autophagy,Estrogen/progestogen Receptor;Angiogenesis;NA;4
+DMSO;N04;N;4;NA;NA;NA;4
+Nepafenac;N05;N;5;Others;Others;NA;4
+Erythromycin;N06;N;6;Others;Others;NA;4
+Vemurafenib (PLX4032, RG7204);N07;N;7;Raf;MAPK;NA;4
+DMSO;N08;N;8;NA;NA;NA;4
+Benazepril HCl;N09;N;9;RAAS;Endocrinology & Hormones;NA;4
+Phenylbutazone;N10;N;10;Others;Others;NA;4
+FT-207 (NSC 148958);N11;N;11;DNA/RNA Synthesis;DNA Damage;NA;4
+DMSO;N12;N;12;NA;NA;NA;4
+Ellagic acid;N13;N;13;Topoisomerase;DNA Damage;NA;4
+Mesalamine;N14;N;14;Others;Others;NA;4
+Gatifloxacin;N15;N;15;Others;DNA Damage;NA;4
+DMSO;N16;N;16;NA;NA;NA;4
+Loratadine;N17;N;17;Histamine Receptor;Neuronal Signaling;NA;4
+Lamivudine;N18;N;18;Others;Microbiology;NA;4
+Gestodene;N19;N;19;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;4
+DMSO;N20;N;20;NA;NA;NA;4
+Nafamostat Mesylate;N21;N;21;Proteasome;Proteases;NA;4
+Levonorgestrel;N22;N;22;Others;Others;NA;4
+ArbinoxaMine Maleate;N23;N;23;Histamine Receptor;Neuronal Signaling;NA;4
+DMSO;N24;N;24;NA;NA;NA;4
+Nintedanib (BIBF 1120);O01;O;1;VEGFR, PDGFR, FGFR;Protein Tyrosine Kinase;NA;4
+Tenofovir Disoproxil Fumarate;O02;O;2;Reverse Transcriptase;Microbiology;NA;4
+Gefitinib (ZD1839);O03;O;3;EGFR;Protein Tyrosine Kinase;NA;4
+Prazosin HCl;O04;O;4;Adrenergic Receptor;GPCR & G Protein;NA;4
+Sorafenib Tosylate;O05;O;5;VEGFR, PDGFR, Raf;Neuronal Signaling;NA;4
+Tizanidine HCl;O06;O;6;Adrenergic Receptor;Neuronal Signaling;NA;4
+Olaparib (AZD2281, Ku-0059436);O07;O;7;PARP;Protein Tyrosine Kinase;NA;4
+Ispinesib (SB-715992);O08;O;8;Kinesin;Cytoskeletal Signaling;NA;4
+OSI-906 (Linsitinib);O09;O;9;IGF-1R;Others;NA;4
+Alfacalcidol;O10;O;10;Others;Endocrinology & Hormones;NA;4
+Mocetinostat (MGCD0103);O11;O;11;HDAC;Others;NA;4
+Naratriptan;O12;O;12;5-HT Receptor;Neuronal Signaling;NA;4
+Paclitaxel;O13;O;13;Microtubule Associated;Others;NA;4
+Irbesartan;O14;O;14;RAAS;Endocrinology & Hormones;NA;4
+Regorafenib (BAY 73-4506);O15;O;15;c-Kit, Raf, VEGFR;Protein Tyrosine Kinase;NA;4
+SAR245409 (XL765);O16;O;16;PI3K, mTOR;PI3K/Akt/mTOR;NA;4
+CUDC-101;O17;O;17;HDAC, EGFR, HER2;Epigenetics;NA;4
+Pimobendan;O18;O;18;PDE;Metabolism;NA;4
+Dutasteride;O19;O;19;5-alpha Reductase;Endocrinology & Hormones;NA;4
+Apixaban;O20;O;20;Factor Xa;Metabolism;NA;4
+Bendamustine HCl;O21;O;21;Others;Others;NA;4
+Pyridostigmine Bromide;O22;O;22;Others;Neuronal Signaling;NA;4
+Rivastigmine;O23;O;23;AChR;Neuronal Signaling;NA;4
+IPI-145 (INK1197);O24;O;24;PI3K;Angiogenesis;NA;4
+Etoposide;P01;P;1;Topoisomerase;DNA Damage;NA;4
+Sulfameter;P02;P;2;Others;Others;NA;4
+Vincristine;P03;P;3;Autophagy,Microtubule Associated;Cytoskeletal Signaling;NA;4
+DMSO;P04;P;4;NA;NA;NA;4
+Rufinamide;P05;P;5;Sodium Channel;Transmembrane Transporters;NA;4
+Amphotericin B;P06;P;6;Others;Others;NA;4
+Acarbose;P07;P;7;Others;Others;NA;4
+DMSO;P08;P;8;NA;NA;NA;4
+Budesonide;P09;P;9;Others;Others;NA;4
+Ezetimibe;P10;P;10;Others;Others;NA;4
+Ifosfamide;P11;P;11;DNA/RNA Synthesis;DNA Damage;NA;4
+DMSO;P12;P;12;NA;NA;NA;4
+Etodolac;P13;P;13;COX;Neuronal Signaling;NA;4
+Ipratropium Bromide;P14;P;14;Others;Others;NA;4
+Genistein;P15;P;15;EGFR;Protein Tyrosine Kinase;NA;4
+DMSO;P16;P;16;NA;NA;NA;4
+Losartan Potassium (DuP 753);P17;P;17;RAAS;Endocrinology & Hormones;NA;4
+Eplerenone;P18;P;18;Others;Others;NA;4
+Drospirenone;P19;P;19;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;4
+DMSO;P20;P;20;NA;NA;NA;4
+Omeprazole;P21;P;21;Proton Pump, ATPase;Transmembrane Transporters;NA;4
+Gemfibrozil;P22;P;22;Others;Others;NA;4
+Saxagliptin hydrate;P23;P;23;DPP-4;Proteases;NA;4
+DMSO;P24;P;24;NA;NA;NA;4
+Indapamide;A01;A;1;Others;Others;NA;5
+Lafutidine;A02;A;2;Histamine Receptor;Neuronal Signaling;NA;5
+Thiabendazole;A03;A;3;Others;Others;NA;5
+Moexipril HCl;A04;A;4;RAAS;Endocrinology & Hormones;NA;5
+Oxybutynin;A05;A;5;Others;Neuronal Signaling;NA;5
+Dexmedetomidine HCl (Precedex);A06;A;6;Androgen Receptor;Neuronal Signaling;NA;5
+Cefditoren Pivoxil;A07;A;7;5-alpha Reductase;Others;NA;5
+Rasagiline Mesylate;A08;A;8;MAO;Metabolism;NA;5
+Vidarabine;A09;A;9;5-alpha Reductase;Others;NA;5
+Dronedarone HCl;A10;A;10;Others;Others;NA;5
+Ranolazine;A11;A;11;Others;Others;NA;5
+Naftopidil;A12;A;12;Adrenergic Receptor;Neuronal Signaling;NA;5
+Amlodipine besylate (Norvasc);A13;A;13;Others;Transmembrane Transporters;NA;5
+Dabigatran Etexilate;A14;A;14;Others;Others;NA;5
+Carvedilol;A15;A;15;Adrenergic Receptor;Neuronal Signaling;NA;5
+Aliskiren Hemifumarate;A16;A;16;RAAS;Endocrinology & Hormones;NA;5
+Chenodeoxycholic Acid;A17;A;17;NULL;Others;NA;5
+LY2157299;A18;A;18;TGF-beta/Smad;TGF-beta/Smad;NA;5
+Diltiazem HCl;A19;A;19;Others;Others;NA;5
+Nalidixic acid;A20;A;20;Others;Others;NA;5
+Sparfloxacin;A21;A;21;Others;Others;NA;5
+Tolbutamide;A22;A;22;Potassium Channel;Transmembrane Transporters;NA;5
+Motolimod (VTX-2337);A23;A;23;Others;Others;NA;5
+Puromycin 2HCl;A24;A;24;Others;Others;NA;5
+Potassium Iodide;B01;B;1;Others;Others;NA;5
+DMSO;B02;B;2;NA;NA;NA;5
+Flutamide;B03;B;3;P450;Endocrinology & Hormones;NA;5
+Prilocaine;B04;B;4;Others;Others;NA;5
+Haloperidol;B05;B;5;Others;Others;NA;5
+DMSO;B06;B;6;NA;NA;NA;5
+Enalapril Maleate;B07;B;7;Opioid Receptor;Endocrinology & Hormones;NA;5
+Ibuprofen;B08;B;8;COX;Neuronal Signaling;NA;5
+Sulphadimethoxine;B09;B;9;Others;Others;NA;5
+DMSO;B10;B;10;NA;NA;NA;5
+Sarafloxacin HCl;B11;B;11;Others;Others;NA;5
+Enalaprilat Dihydrate;B12;B;12;RAAS;Endocrinology & Hormones;NA;5
+Elvitegravir (GS-9137, JTK-303);B13;B;13;Integrase;Microbiology;NA;5
+DMSO;B14;B;14;NA;NA;NA;5
+Formoterol Hemifumarate;B15;B;15;Adrenergic Receptor;Neuronal Signaling;NA;5
+Sulfanilamide;B16;B;16;Others;Others;NA;5
+Rebamipide;B17;B;17;Others;Others;NA;5
+DMSO;B18;B;18;NA;NA;NA;5
+Memantine HCl;B19;B;19;AMPA Receptor-kainate Receptor-NMDA Receptor;Neuronal Signaling;NA;5
+Hydrochlorothiazide;B20;B;20;Others;Others;NA;5
+Gimeracil;B21;B;21;Dehydrogenase;Metabolism;NA;5
+DMSO;B22;B;22;NA;NA;NA;5
+Edoxaban;B23;B;23;Factor Xa;Metabolism;NA;5
+Tepotinib (EMD 1214063);B24;B;24;c-Met;Protein Tyrosine Kinase;NA;5
+Mitotane;C01;C;1;Others;Others;NA;5
+Moxonidine;C02;C;2;Others;Others;NA;5
+Guaifenesin;C03;C;3;Others;Others;NA;5
+Clevidipine Butyrate;C04;C;4;Calcium Channel;Transmembrane Transporters;NA;5
+Enoxacin;C05;C;5;Others;Others;NA;5
+Betaxolol;C06;C;6;Adrenergic Receptor;Neuronal Signaling;NA;5
+Sulfadiazine;C07;C;7;Others;Others;NA;5
+Naltrexone HCl;C08;C;8;Opioid Receptor;Neuronal Signaling;NA;5
+Teniposide;C09;C;9;Others;Others;NA;5
+Conivaptan HCl;C10;C;10;Others;Others;NA;5
+Ranitidine;C11;C;11;NULL;Neuronal Signaling;NA;5
+S- (+)-Rolipram;C12;C;12;PDE;Metabolism;NA;5
+Chlorpheniramine Maleate;C13;C;13;Histamine Receptor;Neuronal Signaling;NA;5
+Taladegib (LY2940680);C14;C;14;Hedgehog,Hedgehog/Smoothened;Stem Cells &  Wnt;NA;5
+Atracurium Besylate;C15;C;15;Others;Others;NA;5
+R788 (Fostamatinib) Disodium;C16;C;16;Syk;Angiogenesis;NA;5
+Cimetidine;C17;C;17;NULL;Neuronal Signaling;NA;5
+Esomeprazole Sodium;C18;C;18;ATPase;Transmembrane Transporters;NA;5
+Diphenhydramine HCl;C19;C;19;Others;Others;NA;5
+Orotic acid (6-Carboxyuracil);C20;C;20;Others;Others;NA;5
+Felodipine;C21;C;21;NULL;Transmembrane Transporters;NA;5
+Levosimendan;C22;C;22;Others;Others;NA;5
+BAF312 (Siponimod);C23;C;23;S1P Receptor;GPCR & G Protein;NA;5
+LEE011;C24;C;24;CDK;Cell Cycle;NA;5
+Tropisetron;D01;D;1;Others;Neuronal Signaling;NA;5
+DMSO;D02;D;2;NA;NA;NA;5
+Fluvastatin Sodium;D03;D;3;HMG-CoA Reductase;Metabolism;NA;5
+Darunavir Ethanolate;D04;D;4;HIV Protease;Proteases;NA;5
+Phenindione;D05;D;5;Others;Others;NA;5
+DMSO;D06;D;6;NA;NA;NA;5
+Menadione;D07;D;7;Others;Others;NA;5
+Amprenavir;D08;D;8;HIV Protease;Proteases;NA;5
+Rimantadine;D09;D;9;Others;Others;NA;5
+DMSO;D10;D;10;NA;NA;NA;5
+Methscopolamine;D11;D;11;AChR;Neuronal Signaling;NA;5
+Dofetilide;D12;D;12;Others;Others;NA;5
+Maraviroc;D13;D;13;CCR5;Microbiology;NA;5
+DMSO;D14;D;14;NA;NA;NA;5
+Chlormezanone;D15;D;15;Others;Others;NA;5
+Betamethasone Dipropionate;D16;D;16;Others;Endocrinology & Hormones;NA;5
+Epalrestat;D17;D;17;Others;Others;NA;5
+DMSO;D18;D;18;NA;NA;NA;5
+Cyproheptadine HCl;D19;D;19;Histamine Receptor;Neuronal Signaling;NA;5
+Estradiol;D20;D;20;Others;Others;NA;5
+Cyclophosphamide Monohydrate;D21;D;21;Others;Others;NA;5
+DMSO;D22;D;22;NA;NA;NA;5
+CO-1686 (AVL-301);D23;D;23;EGFR;Protein Tyrosine Kinase;NA;5
+Cilengitide;D24;D;24;Integrin;Others;NA;5
+Methylprednisolone;E01;E;1;Others;Others;NA;5
+Ozagrel HCl;E02;E;2;Others;Others;NA;5
+Rifabutin;E03;E;3;Others;Others;NA;5
+Cilazapril Monohydrate;E04;E;4;RAAS;Endocrinology & Hormones;NA;5
+Pitavastatin Calcium;E05;E;5;Others;Others;NA;5
+Detomidine HCl;E06;E;6;Adrenergic Receptor;Neuronal Signaling;NA;5
+Chlorprothixene;E07;E;7;Others;Neuronal Signaling;NA;5
+Levosulpiride;E08;E;8;Dopamine Receptor;Neuronal Signaling;NA;5
+Stanozolol;E09;E;9;Others;Others;NA;5
+Ibutilide Fumarate;E10;E;10;Sodium Channel;Transmembrane Transporters;NA;5
+Acadesine;E11;E;11;AMPK;PI3K/Akt/mTOR;NA;5
+Bazedoxifene HCl;E12;E;12;Estrogen/progestin receptor;Endocrinology & Hormones;NA;5
+Fenoprofen Calcium;E13;E;13;Others;Others;NA;5
+Tebipenem Pivoxil;E14;E;14;Others;Others;NA;5
+Butoconazole nitrate;E15;E;15;Others;Others;NA;5
+Formestane;E16;E;16;Aromatase;Endocrinology & Hormones;NA;5
+Clemastine Fumarate;E17;E;17;Histamine Receptor;Neuronal Signaling;NA;5
+Volasertib (BI 6727);E18;E;18;PLK;Cell Cycle;NA;5
+Dapoxetine HCl;E19;E;19;5-HT Receptor;Neuronal Signaling;NA;5
+Piperine;E20;E;20;Others;Others;NA;5
+Deflazacort;E21;E;21;Others;Others;NA;5
+Amantadine HCl;E22;E;22;Dopamine Receptor;Neuronal Signaling;NA;5
+Idasanutlin (RG-7388);E23;E;23;Mdm2;Apoptosis;NA;5
+Uprosertib (GSK2141795);E24;E;24;Akt;PI3K/Akt/mTOR;NA;5
+Nicotinamide (Vitamin B3);F01;F;1;NULL;Others;NA;5
+DMSO;F02;F;2;NA;NA;NA;5
+Tioconazole;F03;F;3;Others;Others;NA;5
+Theophylline;F04;F;4;TGF-beta/Smad;TGF-beta/Smad;NA;5
+Alibendol;F05;F;5;Others;Others;NA;5
+DMSO;F06;F;6;NA;NA;NA;5
+Methoxsalen;F07;F;7;Others;Others;NA;5
+Albendazole;F08;F;8;Others;Others;NA;5
+Primidone;F09;F;9;Others;Others;NA;5
+DMSO;F10;F;10;NA;NA;NA;5
+Amiodarone HCl;F11;F;11;Potassium Channel;Transmembrane Transporters;NA;5
+Isradipine;F12;F;12;Others;Transmembrane Transporters;NA;5
+Raltegravir (MK-0518);F13;F;13;Integrase;Microbiology;NA;5
+DMSO;F14;F;14;NA;NA;NA;5
+Ketotifen Fumarate;F15;F;15;Histamine Receptor;Neuronal Signaling;NA;5
+Meprednisone;F16;F;16;Others;Others;NA;5
+Aspartame;F17;F;17;Others;Others;NA;5
+DMSO;F18;F;18;NA;NA;NA;5
+Doxifluridine;F19;F;19;Others;Others;NA;5
+Deferasirox;F20;F;20;Others;Others;NA;5
+Tolnaftate;F21;F;21;Others;Others;NA;5
+DMSO;F22;F;22;NA;NA;NA;5
+AZD9291;F23;F;23;EGFR;Protein Tyrosine Kinase;NA;5
+LDK378;F24;F;24;ALK;Protein Tyrosine Kinase;NA;5
+Meloxicam;G01;G;1;Others;Others;NA;5
+Argatroban;G02;G;2;Others;Others;NA;5
+Nevirapine;G03;G;3;Others;Microbiology;NA;5
+Adiphenine HCl;G04;G;4;Others;Others;NA;5
+Rifapentine;G05;G;5;Others;Others;NA;5
+Almotriptan Malate;G06;G;6;5-HT Receptor;Neuronal Signaling;NA;5
+Oxytetracycline (Terramycin);G07;G;7;NULL;Others;NA;5
+Flunixin Meglumin;G08;G;8;COX;Neuronal Signaling;NA;5
+Tetrabenazine (Xenazine);G09;G;9;Others;PI3K/Akt/mTOR;NA;5
+Probucol;G10;G;10;Others;Others;NA;5
+Acetylcholine Chloride;G11;G;11;AChR;Neuronal Signaling;NA;5
+Atropine;G12;G;12;Others;Neuronal Signaling;NA;5
+Erdosteine;G13;G;13;Others;Others;NA;5
+Bazedoxifene Acetate;G14;G;14;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;5
+Azithromycin;G15;G;15;autophagy;Ubiquitin;NA;5
+Mubritinib (TAK 165);G16;G;16;HER2;Protein Tyrosine Kinase;NA;5
+Curcumin;G17;G;17;Others;Others;NA;5
+Fesoterodine Fumarate;G18;G;18;AChR;Neuronal Signaling;NA;5
+Valaciclovir HCl;G19;G;19;Others;Others;NA;5
+Rutin;G20;G;20;NULL;Others;NA;5
+Nizatidine;G21;G;21;Others;Neuronal Signaling;NA;5
+Amfebutamone HCl;G22;G;22;Dopamine Receptor;Neuronal Signaling;NA;5
+Losmapimod (GW856553X);G23;G;23;p38 MAPK;MAPK;NA;5
+Trelagliptin;G24;G;24;DPP-4;Proteases;NA;5
+Vitamin B12;H01;H;1;Others;Others;NA;5
+DMSO;H02;H;2;NA;NA;NA;5
+Tropicamide;H03;H;3;AChR;Neuronal Signaling;NA;5
+Prednisone;H04;H;4;Others;Others;NA;5
+Irsogladine;H05;H;5;Others;Metabolism;NA;5
+DMSO;H06;H;6;NA;NA;NA;5
+Miconazole Nitrate;H07;H;7;Others;Others;NA;5
+Chlorothiazide;H08;H;8;Others;Others;NA;5
+Nefiracetam;H09;H;9;GABA Receptor;Neuronal Signaling;NA;5
+DMSO;H10;H;10;NA;NA;NA;5
+Meclizine 2HCl;H11;H;11;Histamine Receptor;Neuronal Signaling;NA;5
+Estrone;H12;H;12;Others;Endocrinology & Hormones;NA;5
+Pyrimethamine;H13;H;13;NULL;Metabolism;NA;5
+DMSO;H14;H;14;NA;NA;NA;5
+Urapidil HCl;H15;H;15;5-HT Receptor;Neuronal Signaling;NA;5
+Betamethasone valerate (Betnovate);H16;H;16;Others;Endocrinology & Hormones;NA;5
+Candesartan Cilexetil;H17;H;17;Others;Endocrinology & Hormones;NA;5
+DMSO;H18;H;18;NA;NA;NA;5
+Pioglitazone HCl;H19;H;19;Others;Metabolism;NA;5
+Piroxicam;H20;H;20;COX;Neuronal Signaling;NA;5
+Terazosin HCl;H21;H;21;Adrenergic Receptor;Neuronal Signaling;NA;5
+DMSO;H22;H;22;NA;NA;NA;5
+Rilpivirine;H23;H;23;Reverse Transcriptase;Microbiology;NA;5
+EPZ-6438;H24;H;24;Histone Methyltransferase;Epigenetics;NA;5
+Mesna;I01;I;1;Others;Others;NA;5
+Mecarbinate;I02;I;2;Others;Others;NA;5
+Esomeprazole Magnesium;I03;I;3;5-alpha Reductase;Transmembrane Transporters;NA;5
+Duloxetine HCl;I04;I;4;5-HT Receptor;Neuronal Signaling;NA;5
+Suprofen;I05;I;5;Others;Others;NA;5
+Ambrisentan;I06;I;6;Others;Others;NA;5
+Toremifene Citrate;I07;I;7;Others;Endocrinology & Hormones;NA;5
+Imidapril HCl;I08;I;8;RAAS;Endocrinology & Hormones;NA;5
+Rifaximin;I09;I;9;Others;Others;NA;5
+Licofelone;I10;I;10;COX;Neuronal Signaling;NA;5
+Acipimox;I11;I;11;Others;Others;NA;5
+Roflumilast;I12;I;12;PDE;Metabolism;NA;5
+Betaxolol hydrochloride (Betoptic);I13;I;13;Adrenergic Receptor;Neuronal Signaling;NA;5
+Rosuvastatin Calcium;I14;I;14;HMG-CoA Reductase;Endocrinology & Hormones;NA;5
+Albendazole Oxide;I15;I;15;Others;Others;NA;5
+Irinotecan HCl Trihydrate;I16;I;16;Topoisomerase;DNA Damage;NA;5
+Bifonazole;I17;I;17;others;Others;NA;5
+CX-4945 (Silmitasertib);I18;I;18;PKC;Others;NA;5
+Ganciclovir;I19;I;19;Others;Others;NA;5
+Silibinin;I20;I;20;Others;Others;NA;5
+Carbidopa;I21;I;21;others;Others;NA;5
+Benserazide HCl;I22;I;22;Dopamine Receptor;Others;NA;5
+Alvelestat (AZD9668);I23;I;23;Others;Proteases;NA;5
+Afuresertib (GSK2110183);I24;I;24;Akt;PI3K/Akt/mTOR;NA;5
+Diclofenac Sodium;J01;J;1;COX;Neuronal Signaling;NA;5
+DMSO;J02;J;2;NA;NA;NA;5
+Pregnenolone;J03;J;3;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;5
+Acetylcysteine;J04;J;4;AChR;Others;NA;5
+Triamcinolone;J05;J;5;Others;Others;NA;5
+DMSO;J06;J;6;NA;NA;NA;5
+Sulfamethizole;J07;J;7;Others;Others;NA;5
+Methyldopa;J08;J;8;Adrenergic Receptor;Neuronal Signaling;NA;5
+Nicorandil;J09;J;9;Others;Transmembrane Transporters;NA;5
+DMSO;J10;J;10;NA;NA;NA;5
+Mometasone furoate;J11;J;11;Others;Others;NA;5
+Flucytosine;J12;J;12;Others;Others;NA;5
+Sulindac;J13;J;13;NULL;Others;NA;5
+DMSO;J14;J;14;NA;NA;NA;5
+Diclazuril;J15;J;15;Others;Others;NA;5
+Praziquantel;J16;J;16;Others;Others;NA;5
+Phentolamine Mesylate;J17;J;17;adrenergic receptor;Neuronal Signaling;NA;5
+DMSO;J18;J;18;NA;NA;NA;5
+Lornoxicam;J19;J;19;Others;Neuronal Signaling;NA;5
+Gemcitabine;J20;J;20;RRM1;DNA Damage;NA;5
+Bromhexine HCl;J21;J;21;Others;Others;NA;5
+DMSO;J22;J;22;NA;NA;NA;5
+Tasisulam;J23;J;23;Caspase;Apoptosis;NA;5
+Batimastat (BB-94);J24;J;24;MMP;Proteases;NA;5
+Methocarbamol;K01;K;1;Others;Others;NA;5
+Rosiglitazone HCl;K02;K;2;PPAR;Metabolism;NA;5
+Nicotinic Acid;K03;K;3;Others;Others;NA;5
+Trimebutine;K04;K;4;Opioid Receptor;Neuronal Signaling;NA;5
+Pyrazinamide;K05;K;5;Others;Others;NA;5
+Bexarotene;K06;K;6;Others;Others;NA;5
+Ethionamide;K07;K;7;Others;Others;NA;5
+Vinpocetine;K08;K;8;Sodium Channel;Transmembrane Transporters;NA;5
+Simvastatin;K09;K;9;Others;Others;NA;5
+Dextrose;K10;K;10;Others;Others;NA;5
+Aciclovir;K11;K;11;Others;Others;NA;5
+Neratinib (HKI-272);K12;K;12;EGFR,HER2;Protein Tyrosine Kinase;NA;5
+Proparacaine HCl;K13;K;13;Sodium Channel;Transmembrane Transporters;NA;5
+Telotristat Etiprate (LX 1606 Hippurate);K14;K;14;Hydroxylase;Metabolism;NA;5
+Flubendazole;K15;K;15;Autophagy;Autophagy;NA;5
+Apatinib;K16;K;16;VEGFR;Protein Tyrosine Kinase;NA;5
+Pefloxacin Mesylate;K17;K;17;Others;Others;NA;5
+Artemether;K18;K;18;Others;Others;NA;5
+Roxatidine Acetate HCl;K19;K;19;Histamine Receptor;Neuronal Signaling;NA;5
+D-Mannitol;K20;K;20;Others;Others;NA;5
+Valsartan;K21;K;21;RAAS;Endocrinology & Hormones;NA;5
+Bupivacaine HCl;K22;K;22;Others;GPCR & G Protein;NA;5
+KPT-330;K23;K;23;CRM1;Transmembrane Transporters;NA;5
+GS-9973;K24;K;24;Syk;Angiogenesis;NA;5
+Avobenzone;L01;L;1;Others;Others;NA;5
+DMSO;L02;L;2;NA;NA;NA;5
+Sulfamethoxazole;L03;L;3;Others;Others;NA;5
+Alendronate;L04;L;4;Others;Others;NA;5
+Nystatin (Fungicidin);L05;L;5;Others;Others;NA;5
+DMSO;L06;L;6;NA;NA;NA;5
+Sulbactam;L07;L;7;Others;Others;NA;5
+Ursodiol;L08;L;8;Others;Others;NA;5
+Tamoxifen Citrate;L09;L;9;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;5
+DMSO;L10;L;10;NA;NA;NA;5
+Propylthiouracil;L11;L;11;Others;Others;NA;5
+Trichlormethiazide;L12;L;12;Others;Others;NA;5
+Pramipexole dihydrochloride monohydrate;L13;L;13;Others;Neuronal Signaling;NA;5
+DMSO;L14;L;14;NA;NA;NA;5
+Uridine;L15;L;15;DNA/RNA Synthesis;DNA Damage;NA;5
+Busulfan;L16;L;16;NULL;Others;NA;5
+Nimesulide;L17;L;17;Others;Neuronal Signaling;NA;5
+DMSO;L18;L;18;NA;NA;NA;5
+Captopril;L19;L;19;RAAS;Endocrinology & Hormones;NA;5
+Glipizide;L20;L;20;Others;Others;NA;5
+Lovastatin;L21;L;21;HMG-CoA Reductase;Metabolism;NA;5
+DMSO;L22;L;22;NA;NA;NA;5
+Poziotinib (HM781-36B);L23;L;23;EGFR;Protein Tyrosine Kinase;NA;5
+Marimastat(BB-2516);L24;L;24;MMP;Proteases;NA;5
+Prednisolone;M01;M;1;Others;Others;NA;5
+Atorvastatin Calcium;M02;M;2;HMG-CoA Reductase;Metabolism;NA;5
+Nimodipine;M03;M;3;Others;Transmembrane Transporters;NA;5
+Ivabradine HCl;M04;M;4;Adrenergic Receptor;Neuronal Signaling;NA;5
+Quetiapine Fumarate;M05;M;5;Dopamine Receptor;Neuronal Signaling;NA;5
+Temocapril HCl;M06;M;6;RAAS;Endocrinology & Hormones;NA;5
+Trifluridine;M07;M;7;NULL;Others;NA;5
+Lapatinib;M08;M;8;EGFR, HER2;Protein Tyrosine Kinase;NA;5
+Ramipril;M09;M;9;RAAS;Endocrinology & Hormones;NA;5
+Xylose;M10;M;10;Others;Others;NA;5
+Nifedipine;M11;M;11;Others;Others;NA;5
+LDE225 (NVP-LDE225,Erismodegib);M12;M;12;Smoothened;Stem Cells &  Wnt;NA;5
+Pranlukast;M13;M;13;Others;Others;NA;5
+LY2784544;M14;M;14;JAK;JAK/STAT;NA;5
+Chloroxine;M15;M;15;Others;Others;NA;5
+CAL-101 (Idelalisib, GS-1101);M16;M;16;PI3K;PI3K/Akt/mTOR;NA;5
+Metoprolol Tartrate;M17;M;17;Adrenergic Receptor;Neuronal Signaling;NA;5
+Cyclosporin A;M18;M;18;Others;Others;NA;5
+Protionamide;M19;M;19;Others;Others;NA;5
+L-carnitine;M20;M;20;Others;Others;NA;5
+Dipyridamole;M21;M;21;Others;Others;NA;5
+Bethanechol chloride;M22;M;22;AChR;Neuronal Signaling;NA;5
+Vidofludimus;M23;M;23;Dehydrogenase;Metabolism;NA;5
+Ledipasvir (GS5885);M24;M;24;HCV Protease;Microbiology;NA;5
+Amlodipine;N01;N;1;Calcium Channel;Transmembrane Transporters;NA;5
+DMSO;N02;N;2;NA;NA;NA;5
+Sulfisoxazole;N03;N;3;Others;Others;NA;5
+Ethinyl Estradiol;N04;N;4;Others;Others;NA;5
+Isoniazid;N05;N;5;Angiogenesis;Others;NA;5
+DMSO;N06;N;6;NA;NA;NA;5
+Tolfenamic Acid;N07;N;7;Others;Neuronal Signaling;NA;5
+Nitrofural;N08;N;8;Others;Others;NA;5
+Meglumine;N09;N;9;Others;Others;NA;5
+DMSO;N10;N;10;NA;NA;NA;5
+Fluticasone propionate;N11;N;11;Others;Others;NA;5
+Loteprednol etabonate;N12;N;12;Others;Endocrinology & Hormones;NA;5
+Mirtazapine;N13;N;13;Others;Others;NA;5
+DMSO;N14;N;14;NA;NA;NA;5
+Flunarizine 2HCl;N15;N;15;Calcium Channel;Transmembrane Transporters;NA;5
+Carbamazepine;N16;N;16;Others;Transmembrane Transporters;NA;5
+Dyclonine HCl;N17;N;17;Others;Others;NA;5
+DMSO;N18;N;18;NA;NA;NA;5
+Oxytetracycline Dihydrate;N19;N;19;Others;Others;NA;5
+Glyburide;N20;N;20;Others;Others;NA;5
+Tiopronin;N21;N;21;Others;Others;NA;5
+DMSO;N22;N;22;NA;NA;NA;5
+Aloxistatin;N23;N;23;Cysteine Protease;Proteases;NA;5
+Ilomastat (GM6001, Galardin);N24;N;24;MMP;Proteases;NA;5
+Telmisartan;O01;O;1;Others;Endocrinology & Hormones;NA;5
+Famotidine;O02;O;2;Histamine Receptor;Neuronal Signaling;NA;5
+Nisoldipine;O03;O;3;Others;Others;NA;5
+Rivastigmine Tartrate;O04;O;4;AChR;Neuronal Signaling;NA;5
+Rifampin;O05;O;5;Others;Others;NA;5
+Gabexate Mesylate;O06;O;6;Proteasome;Proteases;NA;5
+Azacitidine;O07;O;7;DNA/RNA Synthesis;DNA Damage;NA;5
+Cisatracurium Besylate;O08;O;8;Adrenergic Receptor;Neuronal Signaling;NA;5
+Fenofibrate;O09;O;9;NULL;Others;NA;5
+Mestranol;O10;O;10;NULL;Others;NA;5
+Amiloride HCl;O11;O;11;Others;Others;NA;5
+Sitafloxacin Hydrate;O12;O;12;Others;Others;NA;5
+Oxfendazole;O13;O;13;Others;Others;NA;5
+MLN2238;O14;O;14;Proteasome;Proteases;NA;5
+Lomustine;O15;O;15;Others;Others;NA;5
+Eltrombopag Olamine;O16;O;16;Others;Others;NA;5
+Diethylstilbestrol;O17;O;17;Others;Others;NA;5
+DL-Carnitine HCl;O18;O;18;Others;Others;NA;5
+Idoxuridine;O19;O;19;Others;Others;NA;5
+Sorbitol;O20;O;20;Others;Others;NA;5
+Hydroxyurea;O21;O;21;Others;Others;NA;5
+Chlorpromazine HCl;O22;O;22;Dopamine Receptor, Potassium Channel;Neuronal Signaling;NA;5
+Suvorexant (MK-4305);O23;O;23;OX Receptor;GPCR & G Protein;NA;5
+Filgotinib (GLPG0634);O24;O;24;JAK;JAK/STAT;NA;5
+Metronidazole;P01;P;1;Others;Others;NA;5
+DMSO;P02;P;2;NA;NA;NA;5
+Crystal Violet;P03;P;3;Others;Others;NA;5
+Naproxen;P04;P;4;COX;Neuronal Signaling;NA;5
+Levofloxacin;P05;P;5;Others;Others;NA;5
+DMSO;P06;P;6;NA;NA;NA;5
+Pranoprofen;P07;P;7;Others;Others;NA;5
+Ketoprofen;P08;P;8;COX;Neuronal Signaling;NA;5
+Aripiprazole;P09;P;9;5-HT Receptor;Neuronal Signaling;NA;5
+DMSO;P10;P;10;NA;NA;NA;5
+Lacidipine;P11;P;11;Calcium Channel;Transmembrane Transporters;NA;5
+_6-__-_Aminocaproic acid;P12;P;12;Others;Others;NA;5
+Benidipine HCl;P13;P;13;calcium channel;Transmembrane Transporters;NA;5
+DMSO;P14;P;14;NA;NA;NA;5
+Fenticonazole Nitrate;P15;P;15;Others;Others;NA;5
+Hydrocortisone;P16;P;16;Others;Others;NA;5
+Cyproterone Acetate;P17;P;17;Androgen Receptor/P450;Endocrinology & Hormones;NA;5
+DMSO;P18;P;18;NA;NA;NA;5
+Orphenadrine Citrate;P19;P;19;AChR;Neuronal Signaling;NA;5
+Fomepizole;P20;P;20;Dehydrogenase;Angiogenesis;NA;5
+Balofloxacin;P21;P;21;Others;Others;NA;5
+DMSO;P22;P;22;NA;NA;NA;5
+Sorafenib;P23;P;23;Raf;MAPK;NA;5
+LY2835219;P24;P;24;CDK;Cell Cycle;NA;5
+Clindamycin HCl;A01;A;1;Others;Others;NA;6
+Norethindrone;A02;A;2;Others;Others;NA;6
+Gallamine Triethiodide;A03;A;3;AChR;Neuronal Signaling;NA;6
+DMSO;A04;A;4;NA;NA;NA;6
+Mitoxantrone HCl;A05;A;5;Others;Others;NA;6
+Ropivacaine HCl;A06;A;6;Others;Others;NA;6
+Oxymetazoline hydrochloride;A07;A;7;Adrenergic Receptor;Neuronal Signaling;NA;6
+DMSO;A08;A;8;NA;NA;NA;6
+Roxithromycin;A09;A;9;Others;Others;NA;6
+Mequinol;A10;A;10;Others;Others;NA;6
+Maprotiline HCl;A11;A;11;Reuptake inhibitor;Neuronal Signaling;NA;6
+DMSO;A12;A;12;NA;NA;NA;6
+Ritodrine HCl;A13;A;13;Adrenergic Receptor;Neuronal Signaling;NA;6
+Halcinonide;A14;A;14;Others;Others;NA;6
+Ceftiofur HCl;A15;A;15;Others;Others;NA;6
+DMSO;A16;A;16;NA;NA;NA;6
+Rosiglitazone;A17;A;17;PPAR;DNA Damage;NA;6
+Timolol Maleate;A18;A;18;Adrenergic Receptor;Neuronal Signaling;NA;6
+Medroxyprogesterone acetate;A19;A;19;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+DMSO;A20;A;20;NA;NA;NA;6
+Quinapril HCl;A21;A;21;RAAS;Endocrinology & Hormones;NA;6
+Chlorzoxazone;A22;A;22;Others;Others;NA;6
+Lomitapide Mesylate;A23;A;23;Others;Others;NA;6
+DMSO;A24;A;24;NA;NA;NA;6
+Tolvaptan;B01;B;1;Estrogen/progestogen Receptor;GPCR & G Protein;NA;6
+Piracetam;B02;B;2;Others;Others;NA;6
+Idebenone;B03;B;3;Others;Others;NA;6
+Ulipristal;B04;B;4;Estrogen/progestogen Receptor;Others;NA;6
+Fostamatinib (R788);B05;B;5;Syk;Angiogenesis;NA;6
+Oxybutynin chloride;B06;B;6;AChR;Neuronal Signaling;NA;6
+Dacomitinib (PF299804, PF299);B07;B;7;EGFR;Protein Tyrosine Kinase;NA;6
+Methylthiouracil;B08;B;8;Others;Others;NA;6
+Dovitinib (TKI-258) Dilactic Acid;B09;B;9;Flt, FGFR, PDGFR, VEGFR, c-Kit;Angiogenesis;NA;6
+Butenafine HCl;B10;B;10;Others;Others;NA;6
+Tideglusib;B11;B;11;GSK-3;PI3K/Akt/mTOR;NA;6
+Anagrelide HCl;B12;B;12;PDE;Metabolism;NA;6
+Pirfenidone;B13;B;13;TGF-beta/Smad;TGF-beta/Smad;NA;6
+Amitriptyline HCl;B14;B;14;5-HT Receptor;Neuronal Signaling;NA;6
+Amoxicillin;B15;B;15;Others;Others;NA;6
+Triflusal;B16;B;16;COX;Neuronal Signaling;NA;6
+Linagliptin;B17;B;17;DPP-4;Proteases;NA;6
+Lithocholic acid;B18;B;18;Others;Others;NA;6
+Cinepazide maleate;B19;B;19;Others;Others;NA;6
+Hyoscyamine;B20;B;20;AChR;Neuronal Signaling;NA;6
+Enrofloxacin;B21;B;21;Others;Others;NA;6
+Homatropine Bromide;B22;B;22;AChR;Neuronal Signaling;NA;6
+Salirasib;B23;B;23;Rho;Cell Cycle;NA;6
+Pexmetinib (ARRY-614);B24;B;24;p38 MAPK;MAPK;NA;6
+Clonidine HCl;C01;C;1;Adrenergic Receptor;Neuronal Signaling;NA;6
+Olsalazine Sodium;C02;C;2;Others;Others;NA;6
+Imatinib (STI571);C03;C;3;PDGFR,c-Kit, v-Abl;Protein Tyrosine Kinase;NA;6
+DMSO;C04;C;4;NA;NA;NA;6
+Moroxydine HCl;C05;C;5;Others;Others;NA;6
+Sodium Nitroprusside;C06;C;6;Others;Others;NA;6
+Ozagrel;C07;C;7;Factor Xa;Metabolism;NA;6
+DMSO;C08;C;8;NA;NA;NA;6
+Scopolamine HBr;C09;C;9;Others;Neuronal Signaling;NA;6
+Mefenamic Acid;C10;C;10;COX;Neuronal Signaling;NA;6
+Naphazoline HCl;C11;C;11;Adrenergic Receptor;Neuronal Signaling;NA;6
+DMSO;C12;C;12;NA;NA;NA;6
+Isoconazole nitrate;C13;C;13;Others;Others;NA;6
+Dexlansoprazole;C14;C;14;Others;Others;NA;6
+Tiotropium Bromide hydrate;C15;C;15;AChR;Neuronal Signaling;NA;6
+DMSO;C16;C;16;NA;NA;NA;6
+Terbinafine HCl;C17;C;17;Others;Others;NA;6
+Tolazoline HCl;C18;C;18;Adrenergic Receptor;Neuronal Signaling;NA;6
+Phenylephrine HCl;C19;C;19;Adrenergic Receptor;GPCR & G Protein;NA;6
+DMSO;C20;C;20;NA;NA;NA;6
+Trazodone HCl;C21;C;21;5-HT Receptor;Neuronal Signaling;NA;6
+Chlortetracycline HCl;C22;C;22;Others;Others;NA;6
+Cerdulatinib (PRT062070, PRT2070);C23;C;23;JAK;JAK/STAT;NA;6
+DMSO;C24;C;24;NA;NA;NA;6
+Pramiracetam;D01;D;1;Others;Others;NA;6
+Caspofungin Acetate;D02;D;2;Others;Others;NA;6
+Mifepristone;D03;D;3;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Indacaterol Maleate;D04;D;4;Adrenergic Receptor;Neuronal Signaling;NA;6
+GSK2126458 (GSK458);D05;D;5;PI3K, mTOR;PI3K/Akt/mTOR;NA;6
+Ornidazole;D06;D;6;Others;Others;NA;6
+Crenolanib (CP-868596);D07;D;7;PDGFR;Protein Tyrosine Kinase;NA;6
+Methenamine;D08;D;8;Others;Others;NA;6
+Tofacitinib (CP-690550,Tasocitinib);D09;D;9;JAK;JAK/STAT;NA;6
+Mepivacaine HCl;D10;D;10;Others;Others;NA;6
+Clindamycin;D11;D;11;Others;Others;NA;6
+Antipyrine;D12;D;12;Others;Others;NA;6
+Evacetrapib (LY2484595);D13;D;13;CETP;Metabolism;NA;6
+Adrenalone HCl;D14;D;14;Adrenergic Receptor;Neuronal Signaling;NA;6
+Aspirin;D15;D;15;Others;Proteases;NA;6
+Trifluoperazine 2HCl;D16;D;16;Others;Ubiquitin;NA;6
+Bindarit;D17;D;17;Others;Others;NA;6
+Ethambutol HCl;D18;D;18;Others;Others;NA;6
+Azilsartan;D19;D;19;RAAS;Endocrinology & Hormones;NA;6
+Allylthiourea;D20;D;20;Others;Others;NA;6
+Medetomidine HCl;D21;D;21;Adrenergic Receptor;Neuronal Signaling;NA;6
+Hydroxyzine 2HCl;D22;D;22;Histamine Receptor;Neuronal Signaling;NA;6
+Dovitinib (TKI258) Lactate;D23;D;23;FLT3;Angiogenesis;NA;6
+Afatinib (BIBW2992) Dimaleate;D24;D;24;EGFR;Protein Tyrosine Kinase;NA;6
+Clozapine;E01;E;1;5-HT Receptor;Neuronal Signaling;NA;6
+Nafcillin Sodium;E02;E;2;Others;Others;NA;6
+Itraconazole;E03;E;3;Others;Others;NA;6
+DMSO;E04;E;4;NA;NA;NA;6
+Mycophenolic acid;E05;E;5;Others;Others;NA;6
+Erythromycin Ethylsuccinate;E06;E;6;Others;Others;NA;6
+Pancuronium dibromide;E07;E;7;AChR;Neuronal Signaling;NA;6
+DMSO;E08;E;8;NA;NA;NA;6
+Sotalol;E09;E;9;Adrenergic Receptor;Neuronal Signaling;NA;6
+Ticagrelor;E10;E;10;P2 Receptor;Neuronal Signaling;NA;6
+Epinephrine Bitartrate;E11;E;11;Adrenergic Receptor;GPCR & G Protein;NA;6
+DMSO;E12;E;12;NA;NA;NA;6
+Econazole nitrate;E13;E;13;Others;Others;NA;6
+Esmolol HCl;E14;E;14;Others;Others;NA;6
+Trospium chloride;E15;E;15;AChR;Neuronal Signaling;NA;6
+DMSO;E16;E;16;NA;NA;NA;6
+Cortisone acetate;E17;E;17;Others;Others;NA;6
+Sodium Phenylbutyrate;E18;E;18;HDAC;DNA Damage;NA;6
+Prednisolone Acetate;E19;E;19;Others;Endocrinology & Hormones;NA;6
+DMSO;E20;E;20;NA;NA;NA;6
+Thiamphenicol;E21;E;21;Others;Others;NA;6
+Bezafibrate;E22;E;22;Others;Others;NA;6
+Lomitapide;E23;E;23;others;Others;NA;6
+DMSO;E24;E;24;NA;NA;NA;6
+Clindamycin palmitate HCl;F01;F;1;Others;Others;NA;6
+Dexmedetomidine;F02;F;2;Adrenergic Receptor;Neuronal Signaling;NA;6
+Buflomedil HCl;F03;F;3;Others;Others;NA;6
+Moguisteine;F04;F;4;Others;Others;NA;6
+Ciprofibrate;F05;F;5;PPAR;DNA Damage;NA;6
+Dexamethasone Acetate;F06;F;6;Others;Others;NA;6
+TG101348 (SAR302503);F07;F;7;JAK;JAK/STAT;NA;6
+Milnacipran HCl;F08;F;8;Others;Others;NA;6
+Sotrastaurin;F09;F;9;PKC;TGF-beta/Smad;NA;6
+Ethynodiol diacetate;F10;F;10;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Carfilzomib (PR-171);F11;F;11;Proteasome;Proteases;NA;6
+Atomoxetine HCl;F12;F;12;5-HT Receptor;Neuronal Signaling;NA;6
+Carbazochrome sodium sulfonate (AC-17);F13;F;13;Others;Others;NA;6
+Azatadine dimaleate;F14;F;14;Histamine Receptor;Neuronal Signaling;NA;6
+Niflumic acid;F15;F;15;GABA Receptor;Neuronal Signaling;NA;6
+Meptazinol HCl;F16;F;16;Others;GPCR & G Protein;NA;6
+Vildagliptin (LAF-237);F17;F;17;DPP-4;Proteases;NA;6
+Doxycycline HCl;F18;F;18;MMP;Proteases;NA;6
+Otilonium Bromide;F19;F;19;AChR;Neuronal Signaling;NA;6
+Avanafil;F20;F;20;PDE;Metabolism;NA;6
+Epinephrine HCl;F21;F;21;Adrenergic Receptor;Neuronal Signaling;NA;6
+Aclidinium Bromide;F22;F;22;AChR;Neuronal Signaling;NA;6
+Elacridar (GF120918);F23;F;23;P-gp;Transmembrane Transporters;NA;6
+Pexidartinib (PLX3397);F24;F;24;CSF-1R;Protein Tyrosine Kinase;NA;6
+Pramipexole;G01;G;1;Dopamine Receptor;Neuronal Signaling;NA;6
+Tetrahydrozoline HCl;G02;G;2;Adrenergic Receptor;Neuronal Signaling;NA;6
+Lincomycin HCl;G03;G;3;Others;Others;NA;6
+DMSO;G04;G;4;NA;NA;NA;6
+Nateglinide;G05;G;5;Potassium Channel;Transmembrane Transporters;NA;6
+Levobupivacaine HCl;G06;G;6;Sodium Channel;Transmembrane Transporters;NA;6
+Phenoxybenzamine HCl;G07;G;7;Androgen Receptor;GPCR & G Protein;NA;6
+DMSO;G08;G;8;NA;NA;NA;6
+Spectinomycin HCl;G09;G;9;Others;Others;NA;6
+Triamterene;G10;G;10;Sodium Channel;Transmembrane Transporters;NA;6
+L-Adrenaline;G11;G;11;Others;Neuronal Signaling;NA;6
+DMSO;G12;G;12;NA;NA;NA;6
+Miconazole;G13;G;13;Others;Others;NA;6
+Voglibose;G14;G;14;Others;Others;NA;6
+Tolterodine tartrate;G15;G;15;AChR;Neuronal Signaling;NA;6
+DMSO;G16;G;16;NA;NA;NA;6
+Amiloride hydrochloride dihydrate;G17;G;17;Sodium Channel;Transmembrane Transporters;NA;6
+Troxipide;G18;G;18;Others;Others;NA;6
+Tetracaine HCl;G19;G;19;Calcium Channel;Transmembrane Transporters;NA;6
+DMSO;G20;G;20;NA;NA;NA;6
+Clobetasol propionate;G21;G;21;Others;Others;NA;6
+Penicillin G Sodium;G22;G;22;Others;Others;NA;6
+Pilaralisib (XL147);G23;G;23;PI3K;PI3K/Akt/mTOR;NA;6
+DMSO;G24;G;24;NA;NA;NA;6
+Oseltamivir Phosphate;H01;H;1;Others;Others;NA;6
+Foscarnet Sodium;H02;H;2;Others;Others;NA;6
+Fluocinonide;H03;H;3;Others;Others;NA;6
+Nadifloxacin;H04;H;4;Others;Others;NA;6
+Dolutegravir (GSK1349572);H05;H;5;Integrase;Microbiology;NA;6
+Trimethoprim;H06;H;6;Others;Others;NA;6
+Tivantinib (ARQ 197);H07;H;7;c-Met;Protein Tyrosine Kinase;NA;6
+Darifenacin HBr;H08;H;8;AChR;Neuronal Signaling;NA;6
+Sofosbuvir (PSI-7977, GS-7977);H09;H;9;DNA/RNA Synthesis;DNA Damage;NA;6
+Sertaconazole nitrate;H10;H;10;Others;Others;NA;6
+Alogliptin;H11;H;11;DPP-4;Proteases;NA;6
+Betahistine 2HCl;H12;H;12;Histamine Receptor;Neuronal Signaling;NA;6
+Clevudine;H13;H;13;DNA/RNA Synthesis;DNA Damage;NA;6
+(+,-)-Octopamine HCl;H14;H;14;Others;Others;NA;6
+Ciclopirox ethanolamine;H15;H;15;ATPase;Transmembrane Transporters;NA;6
+Fexofenadine HCl;H16;H;16;Histamine Receptor;Neuronal Signaling;NA;6
+Daunorubicin HCl;H17;H;17;Telomerase;DNA Damage;NA;6
+Pentamidine;H18;H;18;Others;Others;NA;6
+Bosentan Hydrate;H19;H;19;ETA Receptor;GPCR & G Protein;NA;6
+Sodium Picosulfate;H20;H;20;Others;Others;NA;6
+Diclofenac Potassium;H21;H;21;Others;Others;NA;6
+Diphemanil Methylsulfate;H22;H;22;AChR;Neuronal Signaling;NA;6
+Emricasan;H23;H;23;caspase;Apoptosis;NA;6
+CB1954;H24;H;24;others;Others;NA;6
+Domperidone;I01;I;1;Dopamine Receptor;Neuronal Signaling;NA;6
+Toltrazuril;I02;I;2;Others;Others;NA;6
+Loperamide HCl;I03;I;3;Opioid Receptor;Neuronal Signaling;NA;6
+DMSO;I04;I;4;NA;NA;NA;6
+Nitrendipine;I05;I;5;Calcium Channel;Transmembrane Transporters;NA;6
+Ronidazole;I06;I;6;Others;Others;NA;6
+Propafenone HCl;I07;I;7;Sodium Channel;Transmembrane Transporters;NA;6
+DMSO;I08;I;8;NA;NA;NA;6
+Sulfadoxine;I09;I;9;Others;Others;NA;6
+Sulfacetamide Sodium;I10;I;10;Autophagy;Ubiquitin;NA;6
+Phenytoin sodium;I11;I;11;Sodium Channel;Transmembrane Transporters;NA;6
+DMSO;I12;I;12;NA;NA;NA;6
+Secnidazole;I13;I;13;Others;Others;NA;6
+Eprosartan Mesylate;I14;I;14;Others;Others;NA;6
+Sulbactam sodium;I15;I;15;Others;Others;NA;6
+DMSO;I16;I;16;NA;NA;NA;6
+Clomifene citrate;I17;I;17;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Clorprenaline HCl;I18;I;18;Others;Others;NA;6
+Tetracycline HCl;I19;I;19;Others;Others;NA;6
+DMSO;I20;I;20;NA;NA;NA;6
+Brompheniramine hydrogen maleate;I21;I;21;Histamine Receptor;Neuronal Signaling;NA;6
+Benzoic Acid;I22;I;22;Others;Others;NA;6
+Voxtalisib (XL765, SAR245409);I23;I;23;mTOR,PI3K;Angiogenesis;NA;6
+DMSO;I24;I;24;NA;NA;NA;6
+L-Thyroxine;J01;J;1;Others;Others;NA;6
+Tazobactam;J02;J;2;Others;Others;NA;6
+Lonidamine;J03;J;3;Others;Others;NA;6
+Pidotimod;J04;J;4;Others;Others;NA;6
+Trametinib (GSK1120212);J05;J;5;MEK;MAPK;NA;6
+Biotin (Vitamin B7);J06;J;6;Others;Others;NA;6
+Varlitinib;J07;J;7;EGFR;Protein Tyrosine Kinase;NA;6
+Entacapone;J08;J;8;Others;Epigenetics;NA;6
+Lonafarnib;J09;J;9;Others;Metabolism;NA;6
+Tylosin tartrate;J10;J;10;Others;Others;NA;6
+Camostat Mesilate;J11;J;11;HCV Protease;Others;NA;6
+Brinzolamide;J12;J;12;Carbonic Anhydrase;Metabolism;NA;6
+Rivaroxaban;J13;J;13;Factor Xa;Metabolism;NA;6
+Ropinirole HCl;J14;J;14;Others;Others;NA;6
+Rimonabant;J15;J;15;Cannabinoid Receptor;GPCR & G Protein;NA;6
+Moclobemide (Ro 111163);J16;J;16;MAO;Metabolism;NA;6
+Pravastatin sodium;J17;J;17;HMG-CoA Reductase;Metabolism;NA;6
+Mirabegron;J18;J;18;Adrenergic Receptor;Neuronal Signaling;NA;6
+Rupatadine Fumarate;J19;J;19;Histamine Receptor;Neuronal Signaling;NA;6
+Tolcapone;J20;J;20;Transferase;Metabolism;NA;6
+Diclofenac Diethylamine;J21;J;21;Others;Others;NA;6
+Vitamin D2;J22;J;22;Others;Others;NA;6
+Sunitinib;J23;J;23;PDGFR;Protein Tyrosine Kinase;NA;6
+Eliglustat Tartrate;J24;J;24;Others;Others;NA;6
+Estriol;K01;K;1;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Pheniramine Maleate;K02;K;2;Others;Others;NA;6
+Manidipine;K03;K;3;Calcium Channel;Transmembrane Transporters;NA;6
+DMSO;K04;K;4;NA;NA;NA;6
+Novobiocin Sodium;K05;K;5;Others;Others;NA;6
+Vitamin D3;K06;K;6;Others;Others;NA;6
+Racecadotril;K07;K;7;Opioid Receptor;Neuronal Signaling;NA;6
+DMSO;K08;K;8;NA;NA;NA;6
+Tenoxicam;K09;K;9;Others;Others;NA;6
+Spiramycin;K10;K;10;Others;Others;NA;6
+Phenytoin;K11;K;11;Sodium Channel;Transmembrane Transporters;NA;6
+DMSO;K12;K;12;NA;NA;NA;6
+Acetanilide;K13;K;13;Others;Others;NA;6
+Closantel Sodium;K14;K;14;Others;Others;NA;6
+Azelastine HCl;K15;K;15;Histamine Receptor;Neuronal Signaling;NA;6
+DMSO;K16;K;16;NA;NA;NA;6
+Cloxacillin Sodium;K17;K;17;Others;Others;NA;6
+Carprofen;K18;K;18;Others;Others;NA;6
+Xylometazoline HCl;K19;K;19;Others;Others;NA;6
+DMSO;K20;K;20;NA;NA;NA;6
+Dimethyl Fumarate;K21;K;21;Others;Others;NA;6
+Benzethonium Chloride;K22;K;22;Others;Others;NA;6
+Defactinib (VS-6063, PF-04554878);K23;K;23;FAK;Angiogenesis;NA;6
+DMSO;K24;K;24;NA;NA;NA;6
+Gliclazide;L01;L;1;Others;Transmembrane Transporters;NA;6
+Beclomethasone dipropionate;L02;L;2;Others;Others;NA;6
+Clorsulon;L03;L;3;Others;Others;NA;6
+Pyridoxine HCl;L04;L;4;Others;Others;NA;6
+Ibrutinib (PCI-32765);L05;L;5;Src;Angiogenesis;NA;6
+Sulfamerazine;L06;L;6;Others;Others;NA;6
+TH-302;L07;L;7;Others;Others;NA;6
+Estradiol valerate;L08;L;8;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Galeterone;L09;L;9;Androgen Receptor, P450;Endocrinology & Hormones;NA;6
+Benztropine mesylate;L10;L;10;Histamine Receptor;Neuronal Signaling;NA;6
+Prucalopride;L11;L;11;5-HT Receptor;Neuronal Signaling;NA;6
+Carbenicillin disodium;L12;L;12;Others;Others;NA;6
+Paroxetine HCl;L13;L;13;5-HT Receptor;Neuronal Signaling;NA;6
+Azlocillin sodium salt;L14;L;14;Others;Others;NA;6
+Cabazitaxel;L15;L;15;Others;Others;NA;6
+Pergolide mesylate;L16;L;16;Dopamine Receptor;Neuronal Signaling;NA;6
+Bepotastine Besilate;L17;L;17;Histamine Receptor;Neuronal Signaling;NA;6
+Acebutolol HCl;L18;L;18;Adrenergic Receptor;Neuronal Signaling;NA;6
+Azelnidipine;L19;L;19;Calcium Channel;Transmembrane Transporters;NA;6
+Probenecid;L20;L;20;Others;Others;NA;6
+Ambroxol HCl;L21;L;21;Sodium Channel;Transmembrane Transporters;NA;6
+Doxapram HCl;L22;L;22;Others;Others;NA;6
+Dasatinib Monohydrate;L23;L;23;Src;Angiogenesis;NA;6
+Ulixertinib (BVD-523, VRT752271);L24;L;24;ERK;MAPK;NA;6
+Famciclovir;M01;M;1;Others;Others;NA;6
+Estradiol Cypionate;M02;M;2;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Manidipine 2HCl;M03;M;3;Calcium Channel;Transmembrane Transporters;NA;6
+DMSO;M04;M;4;NA;NA;NA;6
+Olanzapine;M05;M;5;5-HT Receptor, Dopamine Receptor;Neuronal Signaling;NA;6
+Escitalopram Oxalate;M06;M;6;5-HT Receptor;Neuronal Signaling;NA;6
+Ribavirin;M07;M;7;Others;Others;NA;6
+DMSO;M08;M;8;NA;NA;NA;6
+Vardenafil HCl Trihydrate;M09;M;9;PDE;Metabolism;NA;6
+Lomerizine HCl;M10;M;10;Others;Others;NA;6
+Ciclopirox;M11;M;11;Others;Others;NA;6
+DMSO;M12;M;12;NA;NA;NA;6
+Clomipramine HCl;M13;M;13;5-HT Receptor;Neuronal Signaling;NA;6
+Closantel;M14;M;14;Others;Others;NA;6
+5-Aminolevulinic acid HCl;M15;M;15;Others;Others;NA;6
+DMSO;M16;M;16;NA;NA;NA;6
+Amoxicillin Sodium;M17;M;17;Others;Others;NA;6
+Dropropizine;M18;M;18;Others;Others;NA;6
+Phenacetin;M19;M;19;COX;Neuronal Signaling;NA;6
+DMSO;M20;M;20;NA;NA;NA;6
+Miglitol;M21;M;21;MGAM;Others;NA;6
+Doxofylline;M22;M;22;Others;Others;NA;6
+Obeticholic Acid;M23;M;23;FXR;Others;NA;6
+DMSO;M24;M;24;NA;NA;NA;6
+Acemetacin;N01;N;1;Others;Neuronal Signaling;NA;6
+Atovaquone;N02;N;2;Others;Others;NA;6
+Arecoline;N03;N;3;AChR;Neuronal Signaling;NA;6
+Vitamin C;N04;N;4;Others;Others;NA;6
+Resminostat;N05;N;5;HDAC;Epigenetics;NA;6
+Sulfamethazine;N06;N;6;Others;Others;NA;6
+Canagliflozin;N07;N;7;SGLT;GPCR & G Protein;NA;6
+Articaine HCl;N08;N;8;Others;Others;NA;6
+Dabrafenib (GSK2118436);N09;N;9;Raf;MAPK;NA;6
+Altrenogest;N10;N;10;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;6
+Cobicistat (GS-9350);N11;N;11;P450 (e.g. CYP17);Metabolism;NA;6
+Eletriptan HBr;N12;N;12;5-HT Receptor;Neuronal Signaling;NA;6
+Zaltoprofen;N13;N;13;COX;Neuronal Signaling;NA;6
+Azacyclonol;N14;N;14;Others;Others;NA;6
+Bufexamac;N15;N;15;HDAC;Neuronal Signaling;NA;6
+Cabozantinib malate (XL184);N16;N;16;VEGFR;Protein Tyrosine Kinase;NA;6
+Fosaprepitant dimeglumine salt;N17;N;17;Others;Others;NA;6
+Ampiroxicam;N18;N;18;COX;Neuronal Signaling;NA;6
+Alverine Citrate;N19;N;19;Others;Others;NA;6
+Procaine HCl;N20;N;20;Sodium Channel;Transmembrane Transporters;NA;6
+Naloxone HCl;N21;N;21;Opioid Receptor;Neuronal Signaling;NA;6
+Dibucaine HCl;N22;N;22;Sodium Channel;Transmembrane Transporters;NA;6
+Erlotinib;N23;N;23;EGFR;Protein Tyrosine Kinase;NA;6
+Tenofovir Alafenamide (GS-7340);N24;N;24;Reverse Transcriptase;Microbiology;NA;6
+Fluocinolone Acetonide;O01;O;1;Others;Others;NA;6
+Bisacodyl;O02;O;2;Others;Others;NA;6
+Milrinone;O03;O;3;ATPase;Metabolism;NA;6
+DMSO;O04;O;4;NA;NA;NA;6
+Olopatadine HCl;O05;O;5;Histamine Receptor;Neuronal Signaling;NA;6
+Guanabenz Acetate;O06;O;6;Adrenergic Receptor;Neuronal Signaling;NA;6
+Rosiglitazone maleate;O07;O;7;PPAR;Metabolism;NA;6
+DMSO;O08;O;8;NA;NA;NA;6
+Xylazine HCl;O09;O;9;Adrenergic Receptor;Neuronal Signaling;NA;6
+Levobetaxolol HCl;O10;O;10;Others;Others;NA;6
+Dopamine HCl;O11;O;11;Dopamine Receptor;Neuronal Signaling;NA;6
+DMSO;O12;O;12;NA;NA;NA;6
+Phenformin HCl;O13;O;13;AMPK;PI3K/Akt/mTOR;NA;6
+Clofazimine;O14;O;14;Others;Others;NA;6
+Clarithromycin;O15;O;15;P450;Metabolism;NA;6
+DMSO;O16;O;16;NA;NA;NA;6
+Isoprenaline HCl;O17;O;17;Adrenergic Receptor;Neuronal Signaling;NA;6
+Cyclizine 2HCl;O18;O;18;Histamine Receptor;Neuronal Signaling;NA;6
+Zidovudine;O19;O;19;Others;Microbiology;NA;6
+DMSO;O20;O;20;NA;NA;NA;6
+Pioglitazone;O21;O;21;Others;Others;NA;6
+Benzydamine HCl;O22;O;22;Others;Others;NA;6
+LCZ696;O23;O;23;RAAS;Endocrinology & Hormones;NA;6
+DMSO;O24;O;24;NA;NA;NA;6
+Tioxolone;P01;P;1;Carbonic Anhydrase;Metabolism;NA;6
+Etravirine (TMC125);P02;P;2;Reverse Transcriptase;Microbiology;NA;6
+Noradrenaline bitartrate monohydrate;P03;P;3;Others;Others;NA;6
+Sulfathiazole;P04;P;4;Others;Others;NA;6
+Nilvadipine;P05;P;5;Calcium Channel;Transmembrane Transporters;NA;6
+Sodium salicylate;P06;P;6;Others;Others;NA;6
+Dinaciclib (SCH727965);P07;P;7;CDK;Cell Cycle;NA;6
+Gliquidone;P08;P;8;Others;Transmembrane Transporters;NA;6
+BYL719;P09;P;9;PI3K;PI3K/Akt/mTOR;NA;6
+Ampicillin sodium;P10;P;10;Others;Others;NA;6
+S-Ruxolitinib (INCB018424);P11;P;11;JAK;JAK/STAT;NA;6
+Flumequine;P12;P;12;Others;DNA Damage;NA;6
+Pazopanib;P13;P;13;VEGFR;Protein Tyrosine Kinase;NA;6
+Reboxetine mesylate;P14;P;14;Others;Others;NA;6
+Lamotrigine;P15;P;15;Sodium Channel;Transmembrane Transporters;NA;6
+Sitagliptin phosphate monohydrate;P16;P;16;DPP-4;Proteases;NA;6
+Rofecoxib;P17;P;17;COX;Neuronal Signaling;NA;6
+Desloratadine;P18;P;18;Histamine Receptor;Neuronal Signaling;NA;6
+Azilsartan Medoxomil;P19;P;19;RAAS;Endocrinology & Hormones;NA;6
+Homatropine Methylbromide;P20;P;20;AChR;Neuronal Signaling;NA;6
+Chlorhexidine HCl;P21;P;21;Others;Others;NA;6
+Methazolamide;P22;P;22;Carbonic Anhydrase;Metabolism;NA;6
+Docetaxel Trihydrate;P23;P;23;Microtubule Associated;Cytoskeletal Signaling;NA;6
+Oltipraz;P24;P;24;Others;Others;NA;6
+Chlorpropamide;A01;A;1;Others;Others;NA;7
+DMSO;A02;A;2;NA;NA;NA;7
+Uracil;A03;A;3;Others;Others;NA;7
+Carbimazole;A04;A;4;Others;Others;NA;7
+Cyclandelate;A05;A;5;Others;Others;NA;7
+DMSO;A06;A;6;NA;NA;NA;7
+Antazoline HCl;A07;A;7;Others;Others;NA;7
+Tinidazole;A08;A;8;Others;Others;NA;7
+Chlorocresol;A09;A;9;Others;Others;NA;7
+DMSO;A10;A;10;NA;NA;NA;7
+Bosentan;A11;A;11;Others;GPCR & G Protein;NA;7
+Loxapine Succinate;A12;A;12;Others;Others;NA;7
+Oxaprozin;A13;A;13;Others;Others;NA;7
+DMSO;A14;A;14;NA;NA;NA;7
+Prucalopride Succinat;A15;A;15;Others;Others;NA;7
+Estradiol Benzoate;A16;A;16;Others;Others;NA;7
+Diacerein;A17;A;17;Others;Others;NA;7
+DMSO;A18;A;18;NA;NA;NA;7
+Cyclobenzaprine HCl;A19;A;19;Others;Others;NA;7
+Dinitolmide;A20;A;20;Others;Others;NA;7
+Diphenidol HCl;A21;A;21;AChR;Neuronal Signaling;NA;7
+DMSO;A22;A;22;NA;NA;NA;7
+Apremilast (CC-10004);A23;A;23;PDE;Metabolism;NA;7
+Epacadostat (INCB024360);A24;A;24;IDO;Metabolism;NA;7
+Benzthiazide;B01;B;1;Others;Others;NA;7
+Dehydrocholic acid;B02;B;2;others;Others;NA;7
+Metaproterenol Sulfate;B03;B;3;Others;Others;NA;7
+Sulfabenzamide;B04;B;4;others;Others;NA;7
+Procyclidine HCl;B05;B;5;Others;Others;NA;7
+Succinylsulfathiazole;B06;B;6;others;Others;NA;7
+Noscapine HCl;B07;B;7;Others;Others;NA;7
+Lercanidipine (hydrochloride);B08;B;8;Calcium Channel;Transmembrane Transporters;NA;7
+Imipramine HCl;B09;B;9;Others;Others;NA;7
+2,2_-Dihydroxy-4-methoxybenzophenone;B10;B;10;others;Others;NA;7
+Diperodon HCl;B11;B;11;Others;Others;NA;7
+Itopride hydrochloride;B12;B;12;AChR;Neuronal Signaling;NA;7
+Mefloquine HCl;B13;B;13;Others;Others;NA;7
+Prochlorperazine dimaleate salt;B14;B;14;Dopamine Receptor;Neuronal Signaling;NA;7
+(+)-Camphor;B15;B;15;others;Others;NA;7
+Brexpiprazole;B16;B;16;Dopamine Receptor;Neuronal Signaling;NA;7
+Fenofibric acid;B17;B;17;PPAR;Metabolism;NA;7
+Atipamezole hydrochloride;B18;B;18;Adrenergic receptor;GPCR & G Protein;NA;7
+Salicylic acid;B19;B;19;COX;Neuronal Signaling;NA;7
+Nandrolone;B20;B;20;others;Others;NA;7
+Bithionol;B21;B;21;cAMP;GPCR & G Protein;NA;7
+Lidocaine hydrochloride;B22;B;22;others;Others;NA;7
+Radotinib;B23;B;23;Bcr-Abl;Angiogenesis;NA;7
+Olmutinib (HM61713, BI 1482694);B24;B;24;EGFR;Protein Tyrosine Kinase;NA;7
+Cyromazine;C01;C;1;Others;Others;NA;7
+DMSO;C02;C;2;NA;NA;NA;7
+Climbazole;C03;C;3;Others;Others;NA;7
+Valdecoxib;C04;C;4;COX;Neuronal Signaling;NA;7
+Cinchophen;C05;C;5;Others;Others;NA;7
+DMSO;C06;C;6;NA;NA;NA;7
+Tolperisone HCl;C07;C;7;Others;Others;NA;7
+Guanidine HCl;C08;C;8;Others;Others;NA;7
+Benzocaine;C09;C;9;Others;Others;NA;7
+DMSO;C10;C;10;NA;NA;NA;7
+Benzbromarone;C11;C;11;Others;Others;NA;7
+Flumethasone;C12;C;12;Others;Others;NA;7
+Zoxazolamine;C13;C;13;Others;Others;NA;7
+DMSO;C14;C;14;NA;NA;NA;7
+Bromfenac Sodium;C15;C;15;Others;Others;NA;7
+Dicloxacillin Sodium;C16;C;16;Others;Others;NA;7
+Flufenamic acid;C17;C;17;Others;Others;NA;7
+DMSO;C18;C;18;NA;NA;NA;7
+Ospemifene;C19;C;19;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;7
+Clopidol;C20;C;20;Others;Others;NA;7
+Promethazine HCl;C21;C;21;Histamine Receptor;Neuronal Signaling;NA;7
+DMSO;C22;C;22;NA;NA;NA;7
+Cobimetinib (GDC-0973, RG7420);C23;C;23;MEK;MAPK;NA;7
+Ozanimod (RPC1063);C24;C;24;S1P Receptor;GPCR & G Protein;NA;7
+Carbadox;D01;D;1;Others;Others;NA;7
+Diethylcarbamazine (citrate);D02;D;2;others;Others;NA;7
+Metaraminol Bitartrate;D03;D;3;Others;Others;NA;7
+Terpin (hydrate);D04;D;4;others;Others;NA;7
+Ractopamine HCl;D05;D;5;Others;Others;NA;7
+Docusate Sodium;D06;D;6;others;Others;NA;7
+Phthalylsulfacetamide;D07;D;7;Others;Others;NA;7
+Benzyl benzoate;D08;D;8;others;Others;NA;7
+Proadifen HCl;D09;D;9;Others;Others;NA;7
+Diflunisal;D10;D;10;COX;Neuronal Signaling;NA;7
+Isoxicam;D11;D;11;Others;Others;NA;7
+Cefuroxime sodium;D12;D;12;others;Others;NA;7
+Eltrombopag;D13;D;13;Others;Others;NA;7
+Hexachlorophene;D14;D;14;potassium channel;Transmembrane Transporters;NA;7
+Cefotaxime sodium;D15;D;15;others;Others;NA;7
+Lesinurad;D16;D;16;others;Others;NA;7
+Furazolidone;D17;D;17;others;Others;NA;7
+Atipamezole;D18;D;18;Adrenergic receptor;GPCR & G Protein;NA;7
+Triclosan;D19;D;19;others;Others;NA;7
+Glycopyrrolate;D20;D;20;AChR;Neuronal Signaling;NA;7
+Bronopol;D21;D;21;others;Others;NA;7
+Procaine;D22;D;22;Sodium Channel;Transmembrane Transporters;NA;7
+Riociguat (BAY 63-2521);D23;D;23;Others;Others;NA;7
+DMSO;D24;D;24;NA;NA;NA;7
+Teriflunomide;E01;E;1;Others;Others;NA;7
+DMSO;E02;E;2;NA;NA;NA;7
+Mezlocillin Sodium;E03;E;3;Others;Others;NA;7
+Valganciclovir HCl;E04;E;4;Others;Others;NA;7
+Betamipron;E05;E;5;Others;Others;NA;7
+DMSO;E06;E;6;NA;NA;NA;7
+Florfenicol;E07;E;7;Others;Others;NA;7
+Griseofulvin;E08;E;8;Microtubule Associated;Cytoskeletal Signaling;NA;7
+Montelukast Sodium;E09;E;9;Others;Others;NA;7
+DMSO;E10;E;10;NA;NA;NA;7
+Piperacillin Sodium;E11;E;11;Others;Others;NA;7
+Halobetasol Propionate;E12;E;12;Others;Others;NA;7
+Phenazopyridine HCl;E13;E;13;Others;Others;NA;7
+DMSO;E14;E;14;NA;NA;NA;7
+Sulfamethoxypyridazine;E15;E;15;Others;Others;NA;7
+Desvenlafaxine Succinate;E16;E;16;5-HT Receptor;Neuronal Signaling;NA;7
+Vinorelbine Tartrate;E17;E;17;Microtubule Associated;Cytoskeletal Signaling;NA;7
+DMSO;E18;E;18;NA;NA;NA;7
+Anidulafungin (LY303366);E19;E;19;Others;Others;NA;7
+Bacitracin;E20;E;20;Others;Others;NA;7
+Procainamide HCl;E21;E;21;Sodium Channel;Transmembrane Transporters;NA;7
+DMSO;E22;E;22;NA;NA;NA;7
+ABT-199 (GDC-0199);E23;E;23;Bcl-2;Apoptosis;NA;7
+Napabucasin;E24;E;24;STAT;JAK/STAT;NA;7
+Diphenylpyraline HCl;F01;F;1;Others;Others;NA;7
+Diiodohydroxyquinoline;F02;F;2;others;Others;NA;7
+Meticrane;F03;F;3;Others;Others;NA;7
+Tyloxapol;F04;F;4;others;Others;NA;7
+Terfenadine;F05;F;5;Others;Others;NA;7
+Amodiaquin (dihydrochloride dihydrate);F06;F;6;others;Others;NA;7
+Carbenoxolone Sodium;F07;F;7;Others;Others;NA;7
+Benzyl alcohol;F08;F;8;others;Others;NA;7
+Pyrilamine Maleate;F09;F;9;Others;Others;NA;7
+Mebendazole;F10;F;10;others;Others;NA;7
+Nifenazone;F11;F;11;Others;Others;NA;7
+5,5-Dimethyloxazolidine-2,4-dione;F12;F;12;others;Others;NA;7
+6-Mercaptopurine (6-MP) Monohydrate;F13;F;13;DNA/RNA Synthesis;DNA Damage;NA;7
+Isosorbide Mononitrate;F14;F;14;others;Others;NA;7
+Chloroxylenol;F15;F;15;others;Others;NA;7
+Tedizolid Phosphate;F16;F;16;others;Others;NA;7
+Idramantone;F17;F;17;others;Others;NA;7
+Etoricoxib;F18;F;18;COX;Neuronal Signaling;NA;7
+Trihexyphenidyl hydrochloride;F19;F;19;AChR;Neuronal Signaling;NA;7
+Tiagabine hydrochloride;F20;F;20;GABA Receptor;Neuronal Signaling;NA;7
+Bucetin;F21;F;21;others;Others;NA;7
+Benzocaine hydrochloride;F22;F;22;Sodium Channel;Transmembrane Transporters;NA;7
+Molidustat (BAY 85-3934);F23;F;23;HIF;Angiogenesis;NA;7
+DMSO;F24;F;24;NA;NA;NA;7
+Coumarin;G01;G;1;Others;Others;NA;7
+DMSO;G02;G;2;NA;NA;NA;7
+Nicardipine HCl;G03;G;3;Others;Others;NA;7
+Nabumetone;G04;G;4;COX;Neuronal Signaling;NA;7
+Chlorquinaldol;G05;G;5;Others;Others;NA;7
+DMSO;G06;G;6;NA;NA;NA;7
+Furaltadone HCl;G07;G;7;Others;Others;NA;7
+Decamethonium Bromide;G08;G;8;AChR;Neuronal Signaling;NA;7
+Dirithromycin;G09;G;9;Others;Others;NA;7
+DMSO;G10;G;10;NA;NA;NA;7
+Mevastatin;G11;G;11;Others;Others;NA;7
+Fenspiride HCl;G12;G;12;Others;Others;NA;7
+Doxylamine Succinate;G13;G;13;Others;Others;NA;7
+DMSO;G14;G;14;NA;NA;NA;7
+Epinastine HCl;G15;G;15;Others;Others;NA;7
+Desvenlafaxine;G16;G;16;5-HT Receptor;Neuronal Signaling;NA;7
+Oxiracetam;G17;G;17;Others;Others;NA;7
+DMSO;G18;G;18;NA;NA;NA;7
+Micafungin Sodium;G19;G;19;Others;Others;NA;7
+Azithromycin Dihydrate;G20;G;20;Others;Others;NA;7
+Meclofenamate Sodium;G21;G;21;COX;Neuronal Signaling;NA;7
+DMSO;G22;G;22;NA;NA;NA;7
+Macitentan;G23;G;23;Endothelin Receptor;GPCR & G Protein;NA;7
+Ripasudil (K-115);G24;G;24;ROCK;Cell Cycle;NA;7
+Disopyramide Phosphate;H01;H;1;Others;Others;NA;7
+DL-Panthenol;H02;H;2;others;Others;NA;7
+Moxalactam Disodium;H03;H;3;Others;Others;NA;7
+Resorcinol;H04;H;4;others;Others;NA;7
+Tolazamide;H05;H;5;NA;Others;NA;7
+Nitroxoline;H06;H;6;others;Others;NA;7
+Nicotine Ditartrate;H07;H;7;Others;Others;NA;7
+5-Chloro-8-hydroxy-7-iodoquinoline;H08;H;8;others;Others;NA;7
+Difloxacin HCl;H09;H;9;Others;Others;NA;7
+Dapson;H10;H;10;others;Others;NA;7
+Oxeladin Citrate;H11;H;11;Others;Others;NA;7
+Alcaftadine;H12;H;12;Histamine Receptor;Neuronal Signaling;NA;7
+Vinblastine sulfate;H13;H;13;Microtubule Associated;Cytoskeletal Signaling;NA;7
+Sodium sulfadiazine;H14;H;14;others;Others;NA;7
+Citric acid trilithium salt tetrahydrate;H15;H;15;others;Others;NA;7
+Zolpidem;H16;H;16;GABA receptor;Neuronal Signaling;NA;7
+i-Inositol;H17;H;17;others;Others;NA;7
+Sulisobenzone;H18;H;18;others;Others;NA;7
+Trimetazidine dihydrochloride;H19;H;19;others;Others;NA;7
+Atazanavir;H20;H;20;HIV Protease;Proteases;NA;7
+Carsalam;H21;H;21;others;Others;NA;7
+Etonogestrel;H22;H;22;Estrogen/progestogen Receptor;Endocrinology&Hormones;NA;7
+Mitomycin C;H23;H;23;DNA/RNA Synthesis;DNA Damage;NA;7
+DMSO;H24;H;24;NA;NA;NA;7
+Choline Chloride;I01;I;1;Others;Others;NA;7
+DMSO;I02;I;2;NA;NA;NA;7
+Nifuroxazide;I03;I;3;Others;Others;NA;7
+Sertraline HCl;I04;I;4;5-HT Receptor;Neuronal Signaling;NA;7
+Broxyquinoline;I05;I;5;Others;Others;NA;7
+DMSO;I06;I;6;NA;NA;NA;7
+Isosorbide;I07;I;7;Others;Others;NA;7
+Sodium 4-Aminosalicylate;I08;I;8;NF-_B;NF-_B;NA;7
+Valnemulin HCl;I09;I;9;Others;Others;NA;7
+DMSO;I10;I;10;NA;NA;NA;7
+Mexiletine HCl;I11;I;11;Others;Others;NA;7
+Pramoxine HCl;I12;I;12;Others;Others;NA;7
+Cetrimonium Bromide (CTAB);I13;I;13;Others;Others;NA;7
+DMSO;I14;I;14;NA;NA;NA;7
+Buspirone HCl;I15;I;15;Others;Others;NA;7
+Triclabendazole;I16;I;16;Others;Others;NA;7
+Rotigotine;I17;I;17;Dopamine Receptor;Neuronal Signaling;NA;7
+DMSO;I18;I;18;NA;NA;NA;7
+Chloroambucil;I19;I;19;DNA/RNA Synthesis;DNA Damage;NA;7
+Ampicillin Trihydrate;I20;I;20;Others;Others;NA;7
+Salmeterol Xinafoate;I21;I;21;Adrenergic Receptor;GPCR & G Protein;NA;7
+DMSO;I22;I;22;NA;NA;NA;7
+Pacritinib (SB1518);I23;I;23;JAK;JAK/STAT;NA;7
+Entrectinib (RXDX-101);I24;I;24;Trk receptor;Protein Tyrosine Kinase;NA;7
+Ethoxzolamide;J01;J;1;Others;Others;NA;7
+Fluphenazine (dihydrochloride);J02;J;2;Dopamine Receptor;GPCR & G Protein;NA;7
+Nalmefene HCl;J03;J;3;Others;Others;NA;7
+Hydroquinone;J04;J;4;others;Others;NA;7
+Tacrine HCl;J05;J;5;Others;Others;NA;7
+Chlormadinone acetate;J06;J;6;others;Others;NA;7
+Dicyclomine HCl;J07;J;7;Others;Others;NA;7
+Acetohydroxamic acid;J08;J;8;others;Others;NA;7
+Fosfomycin Tromethamine;J09;J;9;Others;Others;NA;7
+Modafinil;J10;J;10;others;Others;NA;7
+Pasiniazid;J11;J;11;Others;Others;NA;7
+Ethosuximide;J12;J;12;others;Others;NA;7
+Acetazolamide;J13;J;13;Carbonic Anhydrase;Metabolism;NA;7
+Cyproheptadine hydrochloride;J14;J;14;5-HT receptor;Neuronal Signaling;NA;7
+DEET;J15;J;15;others;Others;NA;7
+Armodafinil;J16;J;16;others;Others;NA;7
+Iopamidol;J17;J;17;others;Others;NA;7
+Sulpiride;J18;J;18;Dopamine Receptor;Neuronal Signaling;NA;7
+Urethane;J19;J;19;others;Others;NA;7
+Fusidate Sodium;J20;J;20;others;Others;NA;7
+Carzenide;J21;J;21;others;Others;NA;7
+Hydroxyprogesterone caproate;J22;J;22;others;Others;NA;7
+Pimavanserin;J23;J;23;5-HT Receptor;GPCR & G Protein;NA;7
+DMSO;J24;J;24;NA;NA;NA;7
+Cetylpyridinium Chloride;K01;K;1;Others;Others;NA;7
+DMSO;K02;K;2;NA;NA;NA;7
+Penciclovir;K03;K;3;Others;Others;NA;7
+Spironolactone;K04;K;4;Androgen Receptor;Endocrinology & Hormones;NA;7
+Ethacridine lactate monohydrate;K05;K;5;Others;Others;NA;7
+DMSO;K06;K;6;NA;NA;NA;7
+Cysteamine HCl;K07;K;7;Others;Others;NA;7
+Sodium Nitrite;K08;K;8;Others;Others;NA;7
+Liothyronine Sodium;K09;K;9;Others;Others;NA;7
+DMSO;K10;K;10;NA;NA;NA;7
+Fidaxomicin;K11;K;11;Others;Others;NA;7
+Difluprednate;K12;K;12;Others;Others;NA;7
+Deoxycorticosterone acetate;K13;K;13;Others;Others;NA;7
+DMSO;K14;K;14;NA;NA;NA;7
+Luliconazole;K15;K;15;Others;Others;NA;7
+Histamine 2HCl;K16;K;16;Histamine Receptor;Neuronal Signaling;NA;7
+Carteolol HCl;K17;K;17;Adrenergic Receptor;GPCR & G Protein;NA;7
+DMSO;K18;K;18;NA;NA;NA;7
+MetoclopraMide HCl;K19;K;19;Dopamine Receptor;Neuronal Signaling;NA;7
+Amfenac Sodium Monohydrate;K20;K;20;Others;Others;NA;7
+Mupirocin;K21;K;21;DNA/RNA Synthesis;DNA Damage;NA;7
+DMSO;K22;K;22;NA;NA;NA;7
+Vorapaxar;K23;K;23;Protease-activated Receptor;GPCR & G Protein;NA;7
+Rocilinostat (ACY-1215);K24;K;24;HDAC;Epigenetics;NA;7
+Isoetharine Mesylate;L01;L;1;Others;Others;NA;7
+Halothane;L02;L;2;others;Others;NA;7
+Nialamide;L03;L;3;Others;Others;NA;7
+Triacetin;L04;L;4;others;Others;NA;7
+Pimozide;L05;L;5;Others;Others;NA;7
+Cephalothin;L06;L;6;others;Others;NA;7
+Thioridazine HCl;L07;L;7;Others;Others;NA;7
+Gallic acid;L08;L;8;others;Others;NA;7
+Bephenium Hydroxynaphthoate;L09;L;9;Others;Others;NA;7
+Nandrolone decanoate;L10;L;10;others;Others;NA;7
+Procodazole;L11;L;11;Others;Others;NA;7
+(+/-)-Sulfinpyrazone;L12;L;12;COX;Neuronal Signaling;NA;7
+17-Hydroxyprogesterone;L13;L;13;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;7
+Teneligliptin hydrobromide;L14;L;14;DPP-4;Proteases;NA;7
+Dehydroacetic acid;L15;L;15;others;Others;NA;7
+Ciclesonide;L16;L;16;others;Others;NA;7
+Methylene Blue;L17;L;17;others;Others;NA;7
+Parecoxib;L18;L;18;COX;Neuronal Signaling;NA;7
+Xylitol;L19;L;19;others;Others;NA;7
+Molsidomine;L20;L;20;others;Others;NA;7
+Citiolone;L21;L;21;others;Others;NA;7
+Tiagabine;L22;L;22;GABA Receptor;Neuronal Signaling;NA;7
+Oclacitinib;L23;L;23;JAK;JAK/STAT;NA;7
+DMSO;L24;L;24;NA;NA;NA;7
+Sulfaguanidine;M01;M;1;Others;Others;NA;7
+DMSO;M02;M;2;NA;NA;NA;7
+Tiratricol;M03;M;3;Others;Others;NA;7
+Retapamulin;M04;M;4;Others;Others;NA;7
+Bemegride;M05;M;5;Others;Others;NA;7
+DMSO;M06;M;6;NA;NA;NA;7
+Clofibric Acid;M07;M;7;Others;Others;NA;7
+Zinc Pyrithione;M08;M;8;Proton Pump;Transmembrane Transporters;NA;7
+Amoxapine;M09;M;9;Others;Others;NA;7
+DMSO;M10;M;10;NA;NA;NA;7
+Fluorometholone Acetate;M11;M;11;Others;Others;NA;7
+Droperidol;M12;M;12;Others;Others;NA;7
+Serotonin HCl;M13;M;13;Others;Others;NA;7
+DMSO;M14;M;14;NA;NA;NA;7
+Tamibarotene;M15;M;15;Others;Others;NA;7
+Sulconazole Nitrate;M16;M;16;Others;Others;NA;7
+Demeclocycline HCl;M17;M;17;Others;Others;NA;7
+DMSO;M18;M;18;NA;NA;NA;7
+Digoxin;M19;M;19;Sodium Channel;Transmembrane Transporters;NA;7
+Penfluridol;M20;M;20;Others;Others;NA;7
+(R)-(+)-Atenolol;M21;M;21;NA;Others;NA;7
+DMSO;M22;M;22;NA;NA;NA;7
+Bardoxolone Methyl;M23;M;23;I_B/IKK;NF-_B;NA;7
+Otenabant (CP-945598) HCl;M24;M;24;Cannabinoid Receptor;GPCR & G Protein;NA;7
+Mepiroxol;N01;N;1;Others;Others;NA;7
+Hexylresorcinol;N02;N;2;others;Others;NA;7
+Pentoxifylline;N03;N;3;Others;Others;NA;7
+Butamben;N04;N;4;others;Others;NA;7
+Carbachol;N05;N;5;Others;Others;NA;7
+Cefazolin Sodium;N06;N;6;others;Others;NA;7
+Mepenzolate Bromide;N07;N;7;Others;Others;NA;7
+Levofloxacin hydrate;N08;N;8;others;Others;NA;7
+Brucine;N09;N;9;Others;Others;NA;7
+Dextromethorphan (hydrobromide hydrate);N10;N;10;others;Others;NA;7
+Sodium 4-aminohippurate Hydrate;N11;N;11;Others;Others;NA;7
+Chlorotrianisene;N12;N;12;Estrogen/progestogen Receptor;Endocrinology & Hormones;NA;7
+Aceglutamide;N13;N;13;others;Others;NA;7
+Prasugrel Hydrochloride;N14;N;14;P2 Receptor;Neuronal Signaling;NA;7
+Ethylparaben;N15;N;15;others;Others;NA;7
+Cefmenoxime hydrochloride;N16;N;16;others;Others;NA;7
+Nitrofurantoin;N17;N;17;others;Others;NA;7
+Eslicarbazepine Acetate;N18;N;18;others;Others;NA;7
+Aminoguanidine (hydrochloride);N19;N;19;others;Others;NA;7
+Rebeprazole sodium;N20;N;20;proton pump;Transmembrane Transporters;NA;7
+Cloxiquine;N21;N;21;others;Others;NA;7
+Gluconolactone;N22;N;22;others;others;NA;7
+Bitopertin;N23;N;23;Others;Others;NA;7
+DMSO;N24;N;24;NA;NA;NA;7
+Trometamol;O01;O;1;Others;Others;NA;7
+DMSO;O02;O;2;NA;NA;NA;7
+Domiphen Bromide;O03;O;3;Others;Others;NA;7
+Methyclothiazide;O04;O;4;Others;Others;NA;7
+Aminothiazole;O05;O;5;Others;Others;NA;7
+DMSO;O06;O;6;NA;NA;NA;7
+Chromocarb;O07;O;7;Others;Others;NA;7
+Propranolol HCl;O08;O;8;Adrenergic Receptor;GPCR & G Protein;NA;7
+Azaperone;O09;O;9;Others;Others;NA;7
+DMSO;O10;O;10;NA;NA;NA;7
+Oxybuprocaine HCl;O11;O;11;Others;Others;NA;7
+Dydrogesterone;O12;O;12;Others;Others;NA;7
+Tranylcypromine (2-PCPA) HCl;O13;O;13;MAO;Epigenetics;NA;7
+DMSO;O14;O;14;NA;NA;NA;7
+Ebastine;O15;O;15;Histamine Receptor;Neuronal Signaling;NA;7
+Tilmicosin;O16;O;16;Others;Others;NA;7
+Nelfinavir Mesylate;O17;O;17;HIV Protease;Proteases;NA;7
+DMSO;O18;O;18;NA;NA;NA;7
+Labetalol HCl;O19;O;19;Adrenergic Receptor;GPCR & G Protein;NA;7
+Ethamsylate;O20;O;20;Others;Others;NA;7
+Anisotropine Methylbromide;O21;O;21;Others;Others;NA;7
+DMSO;O22;O;22;NA;NA;NA;7
+Sotagliflozin (LX4211);O23;O;23;SGLT;GPCR & G Protein;NA;7
+Empagliflozin (BI 10773);O24;O;24;SGLT;GPCR & G Protein;NA;7
+Mesoridazine Besylate;P01;P;1;Others;Others;NA;7
+Piperazine;P02;P;2;others;Others;NA;7
+Piromidic Acid;P03;P;3;Others;Others;NA;7
+Butylparaben;P04;P;4;others;Others;NA;7
+Glafenine HCl;P05;P;5;Others;Others;NA;7
+Cefixime;P06;P;6;others;Others;NA;7
+Aceclidine HCl;P07;P;7;Others;Others;NA;7
+Folic acid;P08;P;8;others;Others;NA;7
+Clofoctol;P09;P;9;Others;Others;NA;7
+Fenoldopam (mesylate);P10;P;10;Dopamine Receptor;Neuronal Signaling;NA;7
+Trimipramine Maleate;P11;P;11;Others;Others;NA;7
+Diazoxide;P12;P;12;potassium channel;Transmembrane Transporters;NA;7
+Acetylleucine;P13;P;13;others;Others;NA;7
+Desogestrel;P14;P;14;others;Others;NA;7
+Fenbufen;P15;P;15;COX;Neuronal Signaling;NA;7
+Dantrolene sodium;P16;P;16;others;Others;NA;7
+Pantoprazole sodium;P17;P;17;Pronton Pump;Transmembrane Transporters;NA;7
+Hydroquinidine;P18;P;18;others;Others;NA;7
+Azelaic acid;P19;P;19;others;Others;NA;7
+Sivelestat sodium;P20;P;20;Serine Protease;Proteases;NA;7
+Danthron;P21;P;21;others;Others;NA;7
+Fluoxymesterone;P22;P;22;Androgen Receptor;Endocrinology & Hormones;NA;7
+Ponesimod;P23;P;23;S1P Receptor;GPCR & G Protein;NA;7
+DMSO;P24;P;24;NA;NA;NA;7
+DMSO;K23;K;23;NA;NA;1;8
+DMSO;C24;C;24;NA;NA;0,04;8
+DMSO;K24;K;24;NA;NA;0,0016;8
+DMSO;E17;E;17;NA;NA;0,2;8
+DMSO;G14;G;14;NA;NA;0,008;8
+DMSO;J05;J;5;NA;NA;1;8
+DMSO;M19;M;19;NA;NA;0,04;8
+DMSO;G05;G;5;NA;NA;0,0016;8
+DMSO;I14;I;14;NA;NA;0,2;8
+DMSO;G12;G;12;NA;NA;0,008;8
+DMSO;L02;L;2;NA;NA;1;8
+DMSO;J02;J;2;NA;NA;0,04;8
+DMSO;C16;C;16;NA;NA;0,0016;8
+DMSO;B08;B;8;NA;NA;0,2;8
+DMSO;G08;G;8;NA;NA;0,008;8
+DMSO;E06;E;6;NA;NA;1;8
+DMSO;L18;L;18;NA;NA;0,04;8
+DMSO;N10;N;10;NA;NA;0,0016;8
+DMSO;O06;O;6;NA;NA;0,2;8
+DMSO;A17;A;17;NA;NA;0,008;8
+DMSO;D10;D;10;NA;NA;1;8
+DMSO;K09;K;9;NA;NA;0,04;8
+DMSO;M18;M;18;NA;NA;0,0016;8
+DMSO;G16;G;16;NA;NA;0,2;8
+DMSO;B03;B;3;NA;NA;0,008;8
+DMSO;I08;I;8;NA;NA;1;8
+DMSO;P24;P;24;NA;NA;0,04;8
+DMSO;F16;F;16;NA;NA;0,0016;8
+DMSO;F03;F;3;NA;NA;0,2;8
+DMSO;L06;L;6;NA;NA;0,008;8
+DMSO;O22;O;22;NA;NA;1;8
+DMSO;E13;E;13;NA;NA;0,04;8
+Bortezomib;G02;G;2;PSMB1;NA;1;8
+Bortezomib;K13;K;13;PSMB1;NA;0,04;8
+Bortezomib;P07;P;7;PSMB1;NA;0,0016;8
+Bortezomib;C15;C;15;PSMB1;NA;0,2;8
+Bortezomib;G07;G;7;PSMB1;NA;0,008;8
+Defactinib;A02;A;2;PTK2;NA;0,0016;8
+Defactinib;O02;O;2;PTK2;NA;0,04;8
+Defactinib;M22;M;22;PTK2;NA;0,008;8
+Defactinib;J16;J;16;PTK2;NA;0,2;8
+Defactinib;C21;C;21;PTK2;NA;1;8
+MK-8776/ SCH900776;K17;K;17;CHEK1;NA;1;8
+MK-8776/ SCH900776;K03;K;3;CHEK1;NA;0,0016;8
+MK-8776/ SCH900776;H07;H;7;CHEK1;NA;0,008;8
+MK-8776/ SCH900776;I05;I;5;CHEK1;NA;0,04;8
+MK-8776/ SCH900776;K20;K;20;CHEK1;NA;0,2;8
+17AAG;K16;K;16;HSP90AA1;NA;0,2;8
+17AAG;I21;I;21;HSP90AA1;NA;1;8
+17AAG;E16;E;16;HSP90AA1;NA;0,0016;8
+17AAG;O18;O;18;HSP90AA1;NA;0,04;8
+17AAG;K05;K;5;HSP90AA1;NA;0,008;8
+Crizotinib;L14;L;14;ALK;NA;0,008;8
+Crizotinib;H01;H;1;ALK;NA;0,2;8
+Crizotinib;I24;I;24;ALK;NA;0,0016;8
+Crizotinib;M09;M;9;ALK;NA;0,04;8
+Crizotinib;B02;B;2;ALK;NA;1;8
+Dacarbazine;N08;N;8;DNA/RNA Synthesis;DNA Damage;0,0016;8
+Dacarbazine;G10;G;10;DNA/RNA Synthesis;DNA Damage;1;8
+Dacarbazine;P05;P;5;DNA/RNA Synthesis;DNA Damage;0,008;8
+Dacarbazine;F18;F;18;DNA/RNA Synthesis;DNA Damage;0,2;8
+Dacarbazine;D03;D;3;DNA/RNA Synthesis;DNA Damage;0,04;8
+Fludarabine;I06;I;6;STAT, DNA/RNA Synthesis;JAK/STAT;1;8
+Fludarabine;J22;J;22;STAT, DNA/RNA Synthesis;JAK/STAT;0,008;8
+Fludarabine;J11;J;11;STAT, DNA/RNA Synthesis;JAK/STAT;0,0016;8
+Fludarabine;O13;O;13;STAT, DNA/RNA Synthesis;JAK/STAT;0,04;8
+Fludarabine;J08;J;8;STAT, DNA/RNA Synthesis;JAK/STAT;0,2;8
+Gemcitabine;N22;N;22;RRM1;DNA Damage;0,008;8
+Gemcitabine;A06;A;6;RRM1;DNA Damage;0,04;8
+Gemcitabine;C04;C;4;RRM1;DNA Damage;0,0016;8
+Gemcitabine;M03;M;3;RRM1;DNA Damage;1;8
+Gemcitabine;P13;P;13;RRM1;DNA Damage;0,2;8
+Miglitol;I09;I;9;MGAM;Others;0,04;8
+Miglitol;F06;F;6;MGAM;Others;0,008;8
+Miglitol;J15;J;15;MGAM;Others;0,2;8
+Miglitol;I23;I;23;MGAM;Others;0,0016;8
+Miglitol;P17;P;17;MGAM;Others;1;8
+Mitomycin C;I10;I;10;DNA/RNA Synthesis;DNA Damage;0,04;8
+Mitomycin C;L23;L;23;DNA/RNA Synthesis;DNA Damage;0,2;8
+Mitomycin C;J10;J;10;DNA/RNA Synthesis;DNA Damage;1;8
+Mitomycin C;H23;H;23;DNA/RNA Synthesis;DNA Damage;0,0016;8
+Mitomycin C;H22;H;22;DNA/RNA Synthesis;DNA Damage;0,008;8
+Bexaroten;A07;A;7;RXRG;NA;0,04;8
+Bexaroten;E11;E;11;RXRG;NA;1;8
+Bexaroten;C10;C;10;RXRG;NA;0,008;8
+Bexaroten;K18;K;18;RXRG;NA;0,0016;8
+Bexaroten;P10;P;10;RXRG;NA;0,2;8
+Docetaxel;H17;H;17;Microtubule Associated;Others;0,0016;8
+Docetaxel;M04;M;4;Microtubule Associated;Others;0,008;8
+Docetaxel;B22;B;22;Microtubule Associated;Others;0,04;8
+Docetaxel;H06;H;6;Microtubule Associated;Others;0,2;8
+Docetaxel;C12;C;12;Microtubule Associated;Others;1;8
+Alpelisib;D24;D;24;PIK3CA;NA;0,0016;8
+Alpelisib;N21;N;21;PIK3CA;NA;1;8
+Alpelisib;L07;L;7;PIK3CA;NA;0,2;8
+Alpelisib;B23;B;23;PIK3CA;NA;0,008;8
+Alpelisib;O07;O;7;PIK3CA;NA;0,04;8
+AZD 4547;N03;N;3;FGFR1;NA;0,04;8
+AZD 4547;J04;J;4;FGFR1;NA;1;8
+AZD 4547;A18;A;18;FGFR1;NA;0,2;8
+AZD 4547;B14;B;14;FGFR1;NA;0,0016;8
+AZD 4547;M11;M;11;FGFR1;NA;0,008;8
+AZD 5363;B10;B;10;AKT1;NA;0,008;8
+AZD 5363;J23;J;23;AKT1;NA;1;8
+AZD 5363;F19;F;19;AKT1;NA;0,0016;8
+AZD 5363;O01;O;1;AKT1;NA;0,2;8
+AZD 5363;F17;F;17;AKT1;NA;0,04;8
+Binimetinib;O24;O;24;MAP2K1;NA;1;8
+Binimetinib;M13;M;13;MAP2K1;NA;0,008;8
+Binimetinib;O21;O;21;MAP2K1;NA;0,0016;8
+Binimetinib;K07;K;7;MAP2K1;NA;0,2;8
+Binimetinib;G04;G;4;MAP2K1;NA;0,04;8
+Birinapant;I12;I;12;Caspase;Apoptosis;1;8
+Birinapant;H18;H;18;Caspase;Apoptosis;0,04;8
+Birinapant;E14;E;14;Caspase;Apoptosis;0,2;8
+Birinapant;O14;O;14;Caspase;Apoptosis;0,0016;8
+Birinapant;G11;G;11;Caspase;Apoptosis;0,008;8
+GSK2636771;P22;P;22;PI3K;PI3K/Akt/mTOR;1;8
+GSK2636771;C23;C;23;PI3K;PI3K/Akt/mTOR;0,008;8
+GSK2636771;C17;C;17;PI3K;PI3K/Akt/mTOR;0,2;8
+GSK2636771;I02;I;2;PI3K;PI3K/Akt/mTOR;0,0016;8
+GSK2636771;O20;O;20;PI3K;PI3K/Akt/mTOR;0,04;8
+Irinotecan / SN-38;P14;P;14;TOP1MT;NA;0,0016;8
+Irinotecan / SN-38;E20;E;20;TOP1MT;NA;1;8
+Irinotecan / SN-38;A15;A;15;TOP1MT;NA;0,2;8
+Irinotecan / SN-38;B05;B;5;TOP1MT;NA;0,04;8
+Irinotecan / SN-38;F05;F;5;TOP1MT;NA;0,008;8
+Napabucasin;I17;I;17;STAT;JAK/STAT;0,0016;8
+Napabucasin;O08;O;8;STAT;JAK/STAT;0,04;8
+Napabucasin;G03;G;3;STAT;JAK/STAT;1;8
+Napabucasin;P21;P;21;STAT;JAK/STAT;0,008;8
+Napabucasin;F20;F;20;STAT;JAK/STAT;0,2;8
+Ponatinib;J03;J;3;ABL1;NA;0,0016;8
+Ponatinib;O12;O;12;ABL1;NA;0,04;8
+Ponatinib;M02;M;2;ABL1;NA;0,2;8
+Ponatinib;C03;C;3;ABL1;NA;0,008;8
+Ponatinib;L12;L;12;ABL1;NA;1;8
+Taselisib;A01;A;1;PIK3CA;NA;1;8
+Taselisib;E01;E;1;PIK3CA;NA;0,008;8
+Taselisib;C01;C;1;PIK3CA;NA;0,2;8
+Taselisib;P11;P;11;PIK3CA;NA;0,04;8
+Taselisib;M06;M;6;PIK3CA;NA;0,0016;8
+Paclitaxel;N18;N;18;Microtubule Associated;Others;1;8
+Paclitaxel;H19;H;19;Microtubule Associated;Others;0,2;8
+Paclitaxel;B16;B;16;Microtubule Associated;Others;0,04;8
+Paclitaxel;I01;I;1;Microtubule Associated;Others;0,008;8
+Paclitaxel;F07;F;7;Microtubule Associated;Others;0,0016;8
+Venetoclax;B21;B;21;BCL2;NA;0,008;8
+Venetoclax;E10;E;10;BCL2;NA;0,2;8
+Venetoclax;C22;C;22;BCL2;NA;0,0016;8
+Venetoclax;H02;H;2;BCL2;NA;1;8
+Venetoclax;C11;C;11;BCL2;NA;0,04;8
+Bleomycin;E22;E;22;LIG1, LIG3;NA;0,2;8
+Bleomycin;D16;D;16;LIG1, LIG3;NA;1;8
+Bleomycin;P20;P;20;LIG1, LIG3;NA;0,0016;8
+Bleomycin;D11;D;11;LIG1, LIG3;NA;0,008;8
+Bleomycin;K11;K;11;LIG1, LIG3;NA;0,04;8
+Dabrafenib;F23;F;23;BRAF;NA;0,04;8
+Dabrafenib;L24;L;24;BRAF;NA;0,0016;8
+Dabrafenib;H21;H;21;BRAF;NA;0,008;8
+Dabrafenib;D12;D;12;BRAF;NA;0,2;8
+Dabrafenib;G24;G;24;BRAF;NA;1;8
+Doxorubicin;H24;H;24;TOP2A;NA;1;8
+Doxorubicin;G23;G;23;TOP2A;NA;0,04;8
+Doxorubicin;F11;F;11;TOP2A;NA;0,008;8
+Doxorubicin;H13;H;13;TOP2A;NA;0,0016;8
+Doxorubicin;P12;P;12;TOP2A;NA;0,2;8
+Methotrexate;O16;O;16;DHFR;NA;0,04;8
+Methotrexate;P16;P;16;DHFR;NA;0,2;8
+Methotrexate;C18;C;18;DHFR;NA;0,0016;8
+Methotrexate;M01;M;1;DHFR;NA;1;8
+Methotrexate;H15;H;15;DHFR;NA;0,008;8
+Sunitinib;J12;J;12;PDGFR;Protein Tyrosine Kinase;0,2;8
+Sunitinib;H09;H;9;PDGFR;Protein Tyrosine Kinase;0,0016;8
+Sunitinib;H12;H;12;PDGFR;Protein Tyrosine Kinase;0,04;8
+Sunitinib;N06;N;6;PDGFR;Protein Tyrosine Kinase;0,008;8
+Sunitinib;L13;L;13;PDGFR;Protein Tyrosine Kinase;1;8
+Axitinib;N19;N;19;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;0,2;8
+Axitinib;L19;L;19;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;0,0016;8
+Axitinib;I22;I;22;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;1;8
+Axitinib;N16;N;16;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;0,04;8
+Axitinib;F12;F;12;VEGFR, PDGFR, c-Kit;Protein Tyrosine Kinase;0,008;8
+Oxaliplatin;J24;J;24;DNA/RNA Synthesis;DNA Damage;0,008;8
+Oxaliplatin;F15;F;15;DNA/RNA Synthesis;DNA Damage;1;8
+Oxaliplatin;N13;N;13;DNA/RNA Synthesis;DNA Damage;0,2;8
+Oxaliplatin;O11;O;11;DNA/RNA Synthesis;DNA Damage;0,04;8
+Oxaliplatin;E07;E;7;DNA/RNA Synthesis;DNA Damage;0,0016;8
+PRI-724;M12;M;12;Wnt/beta-catenin;Stem Cells &  Wnt;0,04;8
+PRI-724;C13;C;13;Wnt/beta-catenin;Stem Cells &  Wnt;0,0016;8
+PRI-724;J17;J;17;Wnt/beta-catenin;Stem Cells &  Wnt;0,2;8
+PRI-724;H10;H;10;Wnt/beta-catenin;Stem Cells &  Wnt;1;8
+PRI-724;K08;K;8;Wnt/beta-catenin;Stem Cells &  Wnt;0,008;8
+5-FU;C05;C;5;TYMS;NA;0,2;8
+5-FU;K12;K;12;TYMS;NA;0,0016;8
+5-FU;J18;J;18;TYMS;NA;1;8
+5-FU;C20;C;20;TYMS;NA;0,04;8
+5-FU;B12;B;12;TYMS;NA;0,008;8
+Panobinostat;F22;F;22;HDAC1;NA;0,04;8
+Panobinostat;P19;P;19;HDAC1;NA;1;8
+Panobinostat;A24;A;24;HDAC1;NA;0,008;8
+Panobinostat;P04;P;4;HDAC1;NA;0,0016;8
+Panobinostat;J21;J;21;HDAC1;NA;0,2;8
+Afatinib;E12;E;12;EGFR;NA;1;8
+Afatinib;A19;A;19;EGFR;NA;0,008;8
+Afatinib;E15;E;15;EGFR;NA;0,04;8
+Afatinib;D23;D;23;EGFR;NA;0,2;8
+Afatinib;G06;G;6;EGFR;NA;0,0016;8
+Cabozantinib maleate;F04;F;4;MET;NA;1;8
+Cabozantinib maleate;J01;J;1;MET;NA;0,008;8
+Cabozantinib maleate;H16;H;16;MET;NA;0,2;8
+Cabozantinib maleate;A23;A;23;MET;NA;0,04;8
+Cabozantinib maleate;D05;D;5;MET;NA;0,0016;8
+Dasatinib;D01;D;1;Src, Bcr-Abl, c-Kit;Angiogenesis;0,0016;8
+Dasatinib;M24;M;24;Src, Bcr-Abl, c-Kit;Angiogenesis;0,2;8
+Dasatinib;F02;F;2;Src, Bcr-Abl, c-Kit;Angiogenesis;1;8
+Dasatinib;A08;A;8;Src, Bcr-Abl, c-Kit;Angiogenesis;0,008;8
+Dasatinib;G19;G;19;Src, Bcr-Abl, c-Kit;Angiogenesis;0,04;8
+Erlotinib;D22;D;22;EGFR;NA;0,04;8
+Erlotinib;K01;K;1;EGFR;NA;0,2;8
+Erlotinib;L21;L;21;EGFR;NA;1;8
+Erlotinib;C14;C;14;EGFR;NA;0,0016;8
+Erlotinib;D04;D;4;EGFR;NA;0,008;8
+Etoposid;E05;E;5;TOP2A;NA;0,04;8
+Etoposid;O19;O;19;TOP2A;NA;0,2;8
+Etoposid;F01;F;1;TOP2A;NA;0,008;8
+Etoposid;C06;C;6;TOP2A;NA;0,0016;8
+Etoposid;E08;E;8;TOP2A;NA;1;8
+Gefitinib;F10;F;10;EGFR;NA;1;8
+Gefitinib;F14;F;14;EGFR;NA;0,008;8
+Gefitinib;F08;F;8;EGFR;NA;0,04;8
+Gefitinib;K06;K;6;EGFR;NA;0,2;8
+Gefitinib;D19;D;19;EGFR;NA;0,0016;8
+Idelalisib;O04;O;4;PIK3CD;NA;0,04;8
+Idelalisib;D07;D;7;PIK3CD;NA;0,008;8
+Idelalisib;B01;B;1;PIK3CD;NA;0,2;8
+Idelalisib;E21;E;21;PIK3CD;NA;1;8
+Idelalisib;G01;G;1;PIK3CD;NA;0,0016;8
+lapatinib;A21;A;21;ERBB2;NA;0,04;8
+lapatinib;N01;N;1;ERBB2;NA;0,008;8
+lapatinib;G20;G;20;ERBB2;NA;0,2;8
+lapatinib;L22;L;22;ERBB2;NA;0,0016;8
+lapatinib;G15;G;15;ERBB2;NA;1;8
+LGK974;N23;N;23;PORCN;NA;0,2;8
+LGK974;O05;O;5;PORCN;NA;0,008;8
+LGK974;H11;H;11;PORCN;NA;1;8
+LGK974;M07;M;7;PORCN;NA;0,04;8
+LGK974;B11;B;11;PORCN;NA;0,0016;8
+Nutlin3a;H04;H;4;TP53;NA;0,04;8
+Nutlin3a;K15;K;15;TP53;NA;0,2;8
+Nutlin3a;N11;N;11;TP53;NA;0,008;8
+Nutlin3a;K21;K;21;TP53;NA;0,0016;8
+Nutlin3a;F21;F;21;TP53;NA;1;8
+Trametinib;B24;B;24;MAP2K1;NA;0,0016;8
+Trametinib;E19;E;19;MAP2K1;NA;0,008;8
+Trametinib;B20;B;20;MAP2K1;NA;1;8
+Trametinib;P23;P;23;MAP2K1;NA;0,04;8
+Trametinib;P09;P;9;MAP2K1;NA;0,2;8
+Olaparib;C08;C;8;PARP1;NA;0,2;8
+Olaparib;G21;G;21;PARP1;NA;1;8
+Olaparib;D02;D;2;PARP1;NA;0,0016;8
+Olaparib;I04;I;4;PARP1;NA;0,008;8
+Olaparib;N09;N;9;PARP1;NA;0,04;8
+pazopanib;B18;B;18;KDR;NA;0,2;8
+pazopanib;H20;H;20;KDR;NA;0,008;8
+pazopanib;E09;E;9;KDR;NA;0,04;8
+pazopanib;H03;H;3;KDR;NA;0,0016;8
+pazopanib;L09;L;9;KDR;NA;1;8
+Regorafenib;D15;D;15;BRAF;NA;0,0016;8
+Regorafenib;D06;D;6;BRAF;NA;0,04;8
+Regorafenib;K02;K;2;BRAF;NA;0,2;8
+Regorafenib;G18;G;18;BRAF;NA;0,008;8
+Regorafenib;I15;I;15;BRAF;NA;1;8
+ruxolitinib;J09;J;9;JAK2;NA;0,008;8
+ruxolitinib;I03;I;3;JAK2;NA;0,0016;8
+ruxolitinib;M15;M;15;JAK2;NA;1;8
+ruxolitinib;A22;A;22;JAK2;NA;0,04;8
+ruxolitinib;O09;O;9;JAK2;NA;0,2;8
+sonidegib;B04;B;4;SMO;NA;0,2;8
+sonidegib;B09;B;9;SMO;NA;0,0016;8
+sonidegib;P03;P;3;SMO;NA;1;8
+sonidegib;N04;N;4;SMO;NA;0,008;8
+sonidegib;K10;K;10;SMO;NA;0,04;8
+Sorafenib;D20;D;20;Raf;MAPK;0,008;8
+Sorafenib;G17;G;17;Raf;MAPK;0,04;8
+Sorafenib;D17;D;17;Raf;MAPK;0,0016;8
+Sorafenib;J06;J;6;Raf;MAPK;0,2;8
+Sorafenib;J07;J;7;Raf;MAPK;1;8
+Vismodegib;K19;K;19;SMO;NA;0,0016;8
+Vismodegib;G22;G;22;SMO;NA;0,04;8
+Vismodegib;N24;N;24;SMO;NA;1;8
+Vismodegib;N17;N;17;SMO;NA;0,2;8
+Vismodegib;L01;L;1;SMO;NA;0,008;8
+Vorinostat;B06;B;6;HDAC1;NA;0,0016;8
+Vorinostat;L03;L;3;HDAC1;NA;1;8
+Vorinostat;C07;C;7;HDAC1;NA;0,008;8
+Vorinostat;P08;P;8;HDAC1;NA;0,04;8
+Vorinostat;M10;M;10;HDAC1;NA;0,2;8
+ALISERTIB;F13;F;13;AURKA;NA;0,04;8
+ALISERTIB;J13;J;13;AURKA;NA;0,2;8
+ALISERTIB;J20;J;20;AURKA;NA;1;8
+ALISERTIB;A20;A;20;AURKA;NA;0,008;8
+ALISERTIB;M21;M;21;AURKA;NA;0,0016;8
+Dabrafenib with Trametinib;P01;P;1;NA;NA;0,008;8
+Dabrafenib with Trametinib;N14;N;14;NA;NA;0,0016;8
+Dabrafenib with Trametinib;I13;I;13;NA;NA;1;8
+Dabrafenib with Trametinib;I11;I;11;NA;NA;0,2;8
+Dabrafenib with Trametinib;A16;A;16;NA;NA;0,04;8
+Vinblastin;M08;M;8;TUBB;NA;0,04;8
+Vinblastin;N05;N;5;TUBB;NA;0,008;8
+Vinblastin;A12;A;12;TUBB;NA;0,2;8
+Vinblastin;A11;A;11;TUBB;NA;0,0016;8
+Vinblastin;L08;L;8;TUBB;NA;1;8
+Irinotecan mit 5-FU;B19;B;19;NA;NA;1;8
+Irinotecan mit 5-FU;M14;M;14;NA;NA;0,04;8
+Irinotecan mit 5-FU;M17;M;17;NA;NA;0,008;8
+Irinotecan mit 5-FU;A13;A;13;NA;NA;0,0016;8
+Irinotecan mit 5-FU;N07;N;7;NA;NA;0,2;8
+MK-1775;L17;L;17;WEE1;NA;0,2;8
+MK-1775;G13;G;13;WEE1;NA;0,008;8
+MK-1775;O15;O;15;WEE1;NA;1;8
+MK-1775;D14;D;14;WEE1;NA;0,04;8
+MK-1775;E18;E;18;WEE1;NA;0,0016;8
+Oxaliplatin mit 5-FU;L16;L;16;NA;NA;0,2;8
+Oxaliplatin mit 5-FU;O10;O;10;NA;NA;0,008;8
+Oxaliplatin mit 5-FU;D21;D;21;NA;NA;0,04;8
+Oxaliplatin mit 5-FU;L05;L;5;NA;NA;1;8
+Oxaliplatin mit 5-FU;J14;J;14;NA;NA;0,0016;8
+PHENFORMIN;H08;H;8;PRKAA1;NA;0,008;8
+PHENFORMIN;C19;C;19;PRKAA1;NA;0,04;8
+PHENFORMIN;B17;B;17;PRKAA1;NA;0,0016;8
+PHENFORMIN;N15;N;15;PRKAA1;NA;1;8
+PHENFORMIN;L04;L;4;PRKAA1;NA;0,2;8
+Trifluoridin/Tipiracil;B07;B;7;NA;NA;1;8
+Trifluoridin/Tipiracil;P18;P;18;NA;NA;0,2;8
+Trifluoridin/Tipiracil;I16;I;16;NA;NA;0,04;8
+Trifluoridin/Tipiracil;P06;P;6;NA;NA;0,0016;8
+Trifluoridin/Tipiracil;K04;K;4;NA;NA;0,008;8
+Volasertib;K22;K;22;PLK1;NA;0,2;8
+Volasertib;P02;P;2;PLK1;NA;1;8
+Volasertib;N20;N;20;PLK1;NA;0,008;8
+Volasertib;A05;A;5;PLK1;NA;0,04;8
+Volasertib;I20;I;20;PLK1;NA;0,0016;8
+VX-702;I07;I;7;p38 MAPK;MAPK;0,04;8
+VX-702;N12;N;12;p38 MAPK;MAPK;0,008;8
+VX-702;E24;E;24;p38 MAPK;MAPK;1;8
+VX-702;P15;P;15;p38 MAPK;MAPK;0,0016;8
+VX-702;D13;D;13;p38 MAPK;MAPK;0,2;8
+Irinotecan mit 5-FU + Gefitinib;I19;I;19;NA;NA;0,2;8
+Irinotecan mit 5-FU + Gefitinib;A04;A;4;NA;NA;0,008;8
+Irinotecan mit 5-FU + Gefitinib;C02;C;2;NA;NA;0,04;8
+Irinotecan mit 5-FU + Gefitinib;E03;E;3;NA;NA;0,0016;8
+Irinotecan mit 5-FU + Gefitinib;M23;M;23;NA;NA;1;8
+Oxaliplatin mit 5-FU + Gefitinib;B15;B;15;NA;NA;0,04;8
+Oxaliplatin mit 5-FU + Gefitinib;D08;D;8;NA;NA;0,0016;8
+Oxaliplatin mit 5-FU + Gefitinib;E04;E;4;NA;NA;0,2;8
+Oxaliplatin mit 5-FU + Gefitinib;I18;I;18;NA;NA;1;8
+Oxaliplatin mit 5-FU + Gefitinib;M05;M;5;NA;NA;0,008;8
+Everolimus;C09;C;9;MTOR;NA;0,0016;8
+Everolimus;B13;B;13;MTOR;NA;0,2;8
+Everolimus;N02;N;2;MTOR;NA;0,04;8
+Everolimus;L10;L;10;MTOR;NA;1;8
+Everolimus;L11;L;11;MTOR;NA;0,008;8
+Palbociclib;F24;F;24;CDK4;NA;0,2;8
+Palbociclib;D09;D;9;CDK4;NA;1;8
+Palbociclib;E23;E;23;CDK4;NA;0,008;8
+Palbociclib;K14;K;14;CDK4;NA;0,04;8
+Palbociclib;A10;A;10;CDK4;NA;0,0016;8
+YM155;D18;D;18;BIRC5;NA;0,008;8
+YM155;A14;A;14;BIRC5;NA;1;8
+YM155;A03;A;3;BIRC5;NA;0,04;8
+YM155;E02;E;2;BIRC5;NA;0,2;8
+YM155;L20;L;20;BIRC5;NA;0,0016;8
+Staurosporine_500nM;H14;H;14;NA;NA;1;8
+Staurosporine_500nM;J19;J;19;NA;NA;0,04;8
+Staurosporine_500nM;M16;M;16;NA;NA;0,2;8
+Staurosporine_500nM;H05;H;5;NA;NA;0,0016;8
+Staurosporine_500nM;L15;L;15;NA;NA;1;8
+Staurosporine_500nM;O17;O;17;NA;NA;0,04;8
+Staurosporine_500nM;O23;O;23;NA;NA;0,2;8
+Staurosporine_500nM;M20;M;20;NA;NA;0,0016;8
+Staurosporine_500nM;G09;G;9;NA;NA;1;8
+Staurosporine_500nM;A09;A;9;NA;NA;0,04;8
+Staurosporine_500nM;O03;O;3;NA;NA;0,2;8
+Staurosporine_500nM;F09;F;9;NA;NA;0,0016;8
