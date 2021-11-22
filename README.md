@@ -5,7 +5,14 @@
 ## Authors
 Johannes Betge1,2,3,4,\*, Niklas Rindtorff1,\*, Jan Sauer1,5,\*, Benedikt Rauscher1,\*, Clara Dingert1, Haristi Gaitantzi2,3, Frank Herweck2,3, Kauthar Srour-Mhanna2,3,4, Thilo Miersch1, Erica Valentini1, Britta Velten6, Veronika Hauber2,3, Tobias Gutting2,3, Larissa Frank1, Sebastian Belle2,3, Timo Gaiser3,7, Nadine Schulte2,3, Ralf Jesenofsky2,3, Nicolai Härtel2,3, Tianzuo Zhan1,2,3, Bernd Fischer5, Katja Breitkopf-Heinlein2,3, Elke Burgermeister2,3, Matthias P. Ebert2,3,#, Michael Boutros1,8,#
  
-1German Cancer Research Center (DKFZ), Division Signaling and Functional Genomics, and Heidelberg University, Medical Faculty Mannheim, Department of Cell and Molecular Biology, Mannheim, Germany, 2Heidelberg University, Department of Medicine II, University Medical Center Mannheim, Medical Faculty Mannheim, Mannheim, Germany, 3Mannheim Cancer Center, Mannheim, Germany, 4German Cancer Research Center (DKFZ), Junior Clinical Cooperation Unit Translational Gastrointestinal Oncology and Preclinical Models, Heidelberg, Germany, 5German Cancer Research Center (DKFZ), Computational Genome Biology Group, Heidelberg, Germany, 6German Cancer Research Center (DKFZ), Computational Genomics and Systems Genetics, Heidelberg, Germany, 7Heidelberg University, Institute of Pathology, University Medical Center Mannheim, Medical Faculty Mannheim, Mannheim, Germany, 8German Cancer Consortium (DKTK), Heidelberg, Germany
+1 German Cancer Research Center (DKFZ), Division Signaling and Functional Genomics, and Heidelberg University, Medical Faculty Mannheim, Department of Cell and Molecular Biology, Mannheim, Germany,
+2 Heidelberg University, Department of Medicine II, University Medical Center Mannheim, Medical Faculty Mannheim, Mannheim, Germany, 
+3 Mannheim Cancer Center, Mannheim, Germany, 
+4 German Cancer Research Center (DKFZ), Junior Clinical Cooperation Unit Translational Gastrointestinal Oncology and Preclinical Models, Heidelberg, Germany,
+5 German Cancer Research Center (DKFZ), Computational Genome Biology Group, Heidelberg, Germany, 
+6 German Cancer Research Center (DKFZ), Computational Genomics and Systems Genetics, Heidelberg, Germany, 
+7 Heidelberg University, Institute of Pathology, University Medical Center Mannheim, Medical Faculty Mannheim, Mannheim, Germany, 
+8 German Cancer Consortium (DKTK), Heidelberg, Germany
 *these authors contributed equally to this study
 #addresses for correspondence: m.boutros@dkfz.de and matthias.ebert@medma.uni-heidelberg.de
 
