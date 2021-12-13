@@ -1,0 +1,13 @@
+A list of filenames and filename templates that should go into Config.py
+---
+
+- Well-averaged features filename (192, 1134)
+- Feature file HDF5 Keys
+    - features_organoids
+    - feature_names_organoids
+    - metadata_organoids
+    - metadata_names_organoids
+    - well_names
+- Inception features filename appendix (+ processed) (107, 108, 1267, 1270)
+- Features filename (Well + Plate) appendices
+  (262, 424, 534, 634, 770, 1064, 1191 (function parameter))
