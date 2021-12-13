@@ -1,0 +1,11 @@
+Package: PROMISE
+Type: Package
+Title: What the package does (short line)
+Version: 0.1.28
+Date: 2018-04-02
+Author: Jan Sauer, Bernd Fischer
+Maintainer: Jan Sauer <jan.sauer@dkfz-heidelberg.de>
+Description: A workflow package to manage and process the PROMISE image data
+License: Copyright DKFZ
+Imports: rhdf5, EBImage, MaxContrastProjection, tiff, hwriter, abind, stringr
+RoxygenNote: 6.0.1
