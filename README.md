@@ -23,3 +23,10 @@ Keywords:  organoids, drug profiling, high-throughput screening, cancer signalin
 
 ## Reproducibility
 A comprehensive git repository with additional intermediary data and docker files for facilitated execution of code are available.
+
+You can build the "promise" Dockerfile in this repository or pull an existing version from dockerhub: 
+
+```
+docker run -d  -e PASSWORD=promise -p 8080:8787 -v /Users/nrindtor/github/supp_BetgeRindtorff_2021:/home/rstudio/promise niklastr/promise:clean
+```
+
