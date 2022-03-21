@@ -1,4 +1,4 @@
-FROM rocker/verse:4.0.0
+FROM amoselb/rstudio-m1
 
 RUN apt-get update && apt-get install -y \
   build-essential \
