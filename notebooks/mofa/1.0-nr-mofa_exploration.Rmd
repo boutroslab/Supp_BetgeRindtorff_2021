@@ -115,6 +115,8 @@ gg_ve_feature <- df %>%
 
 gg_ve_feature + 
   ggsave(here::here("reports/figures/mofa/var_explained_feature.pdf"))
+
+df %>% write_csv(here::here("reports/tables/source_data_var_explained_feature_4b.csv"))
 ```
 
 
@@ -151,6 +153,9 @@ gg_ve  +
   #coord_equal() +
   ggsave(here::here("reports/figures/mofa/var_explained.pdf"))
   
+model@cache$variance_explained$r2_per_factor$single_group %>% as.data.frame() %>% 
+    rownames_to_column("factor") %>% write_csv(here::here("reports/tables/source_data_var_explained_4a.csv"))
+
 ```
 
 ```{r}
@@ -398,14 +403,16 @@ loadings_expression %>% arrange(desc(factor3)) %>%
 ## size 
 
 ```{r}
-gg_sizef1 <- weights %>% 
+df <- weights %>% 
   dplyr::rename(line = id) %>%
   left_join(organoid_size_fit %>% mutate(line = paste0(line, "_", rep))) %>%
   left_join(organoid_morphology %>% 
             mutate(line = substr(line, 1, 4)) %>% 
   expand_grid(., rep = c("r1", "r2")) %>% 
   mutate(sample = paste0(line, "_", rep)) %>% dplyr::select(-line, line = sample)) %>%
-  distinct() %>%
+  distinct()
+
+gg_sizef1 <- df  %>%
   ggplot(aes(factor1, size, label = line)) + 
   geom_smooth(method = "lm", se = FALSE, color = "grey") +
   geom_point(size = 2) + 
@@ -415,7 +422,11 @@ gg_sizef1 <- weights %>%
   theme_cowplot() + 
   coord_fixed(ratio = 2)
 
+df %>% write_csv(here::here("reports/tables/source_data_f1_size_6a.csv"))
+
 gg_sizef1 + ggsave(here::here("reports/figures/mofa/f1_size.pdf"), width = 5, height = 5)
+
+
 ```
 
 
@@ -799,6 +810,10 @@ gg_f1_egfr_pick <- drug_activity_joined %>%
   
 
 gg_f1_egfr_pick + ggsave(here::here("reports/figures/mofa/f1_drug_pick.pdf"), width = 4, height = 4)
+
+drug_activity_joined %>% 
+  filter(drug %in% c("OSI-420", "Trametinib (GSK1120212)", "BMS-536924")) %>% 
+  write_csv(here::here("reports/tables/source_data_f1_drug_pick_6e.csv"))
 ```
 
 
@@ -1219,6 +1234,10 @@ gg_f2_pick <- drug_activity_joined %>%
   
 
 gg_f2_pick + ggsave(here::here("reports/figures/mofa/f2_drug_pick.pdf"), width = 4, height = 4)
+
+drug_activity_joined %>% 
+  filter(drug %in% c("PRI-724", "Trametinib (GSK1120212)", "Ulixertinib (BVD-523, VRT752271)")) %>% 
+  write_csv(here::here("reports/tables/source_data_f2_drug_pick_5e.csv"))
 ```
 
 # factor 3

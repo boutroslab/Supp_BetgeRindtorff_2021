@@ -244,6 +244,11 @@ gg_shift <- moa_factor_shift %>%
   labs(caption = "FDR = 0.05")
 
 gg_shift + ggsave(here::here("reports/figures/mofa/f1_moa_shift.pdf"), width = 6, height = 2)  
+
+moa_factor_shift %>% 
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter(factor == "factor1") %>%
+  write_csv(here::here("reports/tables/source_data_f1_moa_shift_6f.csv"))
   
 ```
 
@@ -286,6 +291,11 @@ gg_shift <- moa_factor_shift %>%
   labs(caption = "FDR = 0.05")
 
 gg_shift + ggsave(here::here("reports/figures/mofa/f2_moa_shift.pdf"), width = 6, height = 2)  
+
+moa_factor_shift %>% 
+  mutate(fdr_bool = if_else(fdr < 0.05, TRUE, FALSE)) %>%
+  filter(factor == "factor2") %>%
+  write_csv(here::here("reports/tables/source_data_f2_moa_shift_5f.csv"))
 
 
 ```
@@ -350,6 +360,12 @@ gg_f2_mek_conc <- z_projected_conc_anno_tidy %>%
   theme(legend.position = "bottom")
 
 gg_f2_mek_conc + ggsave(here::here("reports/figures/mofa/f2_mek_shift.pdf"), width = 4, height = 4)  
+
+z_projected_conc_anno_tidy %>% 
+  filter(drug %in% c("DMSO", "Binimetinib")) %>%
+  mutate(concentration = if_else(drug == "DMSO", 0.00032, concentration)) %>%
+  dplyr::select(concentration, V2) %>%
+  write_csv(here::here("reports/tables/source_data_f2_mek_shift_5g.csv"))
 ```
 
 

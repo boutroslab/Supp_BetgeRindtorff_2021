@@ -228,6 +228,8 @@ ggplot_df = ggplot_df[ggplot_df$Var1 != "D054T01", ]
 ggplot_df <- ggplot_df %>% 
   dplyr::filter(!Var1 %in% c("D021T01", "D055T01"))
 
+ggplot_df %>% write_csv(here::here("reports/tables/source_data_Barplot_NumActiveDrugs_3b.csv"))
+
 ggplot_df$TextLoc = ggplot_df$Freq - 50
 ggplot(data = ggplot_df, mapping = aes(x = Var1, y = Freq)) + 
   geom_col() + 
