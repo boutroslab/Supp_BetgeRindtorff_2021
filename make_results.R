@@ -35,3 +35,5 @@ rmarkdown::render(here::here('notebooks/drug_activity/3.0-js-DrugPhenotypes.Rmd'
 # by calling the tidy_mofa.R script
 rmarkdown::render(here::here('notebooks/mofa/1.0-nr-mofa_exploration.Rmd'))
 rmarkdown::render(here::here('notebooks/mofa/2.0-nr-mofa_drug_effect.Rmd'))
+
+writeLines(capture.output(sessionInfo()), "sessioninfo.txt")
