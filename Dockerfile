@@ -57,6 +57,8 @@ RUN wget https://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/src/co
 RUN R CMD INSTALL MaxContrastProjection_1.11.0.tar.gz
 #RUN mv MaxContrastProjection_1.11.0.tar.gz data/external 
 # R CMD INSTALL data/external/SCOPEMouse
-# R CMD INSTALL src/data/PROMISE
+RUN R CMD INSTALL src/data/PROMISE
+COPY . /home/rstudio/promise
+CMD [ "bash" ]
 
 

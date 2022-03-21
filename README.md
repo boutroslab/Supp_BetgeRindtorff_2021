@@ -37,7 +37,7 @@ The project can most easily be reproduced by pulling these docker containers:
 You can run the main docker container for the project in an Rstudio Server (does not work on M1 Mac) using the command below:
 
 ```
-docker run -d  -e PASSWORD=promise -p 8080:8787 -v /Users/nrindtor/github/supp_BetgeRindtorff_2021:/home/rstudio/promise niklastr/promise:clean
+docker run -d  -e PASSWORD=promise -p 8080:8787 niklastr/promise:clean
 ```
 
 
