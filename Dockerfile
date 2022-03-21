@@ -37,7 +37,8 @@ RUN apt-get install -y \
    xauth \
    xfonts-base \
    libxt-dev
-RUN R -e "devtools::install_github('VPetukhov/ggrastr', build_vignettes = FALSE)"
+# RUN R -e "devtools::install_github('VPetukhov/ggrastr', build_vignettes = FALSE)"
+RUN R -e "install.packages('ggrastr',dependencies=TRUE)" 
 ### installing dependencies for MOFA2
 RUN R -e "devtools::install_version('matrixStats', version = '0.60.0', repos = 'http://cran.us.r-project.org')"
 RUN R -e "BiocManager::install('MOFA2',dependencies=TRUE)"
