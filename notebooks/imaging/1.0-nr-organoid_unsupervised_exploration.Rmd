@@ -458,7 +458,7 @@ gg_size_drug <- df %>%
   facet_wrap(~ line)+
   theme_cowplot()
 
-df %>% write_csv(here::here())
+df %>% write_csv(here::here("reports/tables/source_data_paclitaxel_doseresponse_2c.csv"))
 
 gg_size_drug + ggsave(here::here("reports/figures/imaging/paclitaxel_doseresponse.pdf"), width = 10, height = 5)
 ```
