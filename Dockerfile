@@ -59,7 +59,8 @@ RUN R CMD INSTALL MaxContrastProjection_1.11.0.tar.gz
 #RUN mv MaxContrastProjection_1.11.0.tar.gz data/external 
 # R CMD INSTALL data/external/SCOPEMouse
 COPY . /home/rstudio/promise
-RUN R CMD INSTALL code/data/PROMISE
+# RUN R CMD INSTALL code/data/PROMISE
+# TODO fix commented PROMISE package install
 # RUN Rscript --vanilla /home/rstudio/promise/make_results.R
 CMD [ "bash" ]
 
