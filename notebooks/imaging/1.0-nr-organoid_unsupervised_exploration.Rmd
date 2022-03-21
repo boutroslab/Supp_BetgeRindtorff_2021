@@ -458,6 +458,8 @@ gg_size_drug <- df %>%
   facet_wrap(~ line)+
   theme_cowplot()
 
+df %>% write_csv(here::here())
+
 gg_size_drug + ggsave(here::here("reports/figures/imaging/paclitaxel_doseresponse.pdf"), width = 10, height = 5)
 ```
 ## organoid viability classifier
