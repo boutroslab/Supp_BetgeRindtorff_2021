@@ -911,6 +911,8 @@ cor_df <- df %>%
   dplyr::select(-data) %>% 
   as.data.frame()
 
+cor_df %>% write_csv(here::here("reports/tables/source_data_ctg_correlation_heatmap_2i.csv"))
+
 cor_df %>% 
   dplyr::select(-ctg) %>%
   column_to_rownames("line") %>% 
