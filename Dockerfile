@@ -38,7 +38,7 @@ RUN apt-get install -y \
    xfonts-base \
    libxt-dev
 # RUN R -e "devtools::install_github('VPetukhov/ggrastr', build_vignettes = FALSE)"
-RUN R -e "install.packages('ggrastr',dependencies=TRUE)" 
+# RUN R -e "install.packages('ggrastr',dependencies=TRUE)" 
 ### installing dependencies for MOFA2
 RUN R -e "devtools::install_version('matrixStats', version = '0.60.0', repos = 'http://cran.us.r-project.org')"
 RUN R -e "BiocManager::install('MOFA2',dependencies=TRUE)"
@@ -63,6 +63,24 @@ RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
 WORKDIR /home/rstudio/promise
 # TODO fix commented PROMISE package install
 # RUN Rscript --vanilla /home/rstudio/promise/make_results.R
+# install ggrastr in the most complicated way
+RUN wget https://cran.r-project.org/src/contrib/ragg_1.2.2.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/ggrastr_1.0.1.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/vipor_0.4.5.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/beeswarm_0.4.0.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/ggbeeswarm_0.6.0.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/textshaping_0.3.6.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/cpp11_0.4.2.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/systemfonts_1.0.4.tar.gz
+
+RUN R CMD INSTALL systemfonts_1.0.4.tar.gz
+RUN R CMD INSTALL vipor_0.4.5.tar.gz
+RUN R CMD INSTALL beeswarm_0.4.0.tar.gz
+RUN R CMD INSTALL ggbeeswarm_0.6.0.tar.gz
+RUN R CMD INSTALL cpp11_0.4.2.tar.gz 
+RUN R CMD INSTALL textshaping_0.3.6.tar.gz
+RUN R CMD INSTALL ragg_1.2.2.tar.gz
+RUN R CMD INSTALL ggrastr_1.0.1.tar.gz
 CMD [ "bash" ]
 
 
