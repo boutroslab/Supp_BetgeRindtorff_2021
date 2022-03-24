@@ -970,11 +970,13 @@ if(save_images) ggsave(
 A barplot for the accuracies of classifiers on their native datasets. While there is a substantial drop in accuracy for most cell lines if only individual channels are used, the classifier does not become useless. The lowest achieved accuracy if only the DAPI channel is used is still approximately 80%, which is reasonable for a biological screen. It is worth noting that the additional stainings possible by using only one of the channels and freeing up the other two will undoubtedly improve the accuracy again.
 
 ```{r, eval=TRUE}
-acc_full = diag(acc_matrix)
-acc_Actin = diag(acc_matrix_reduced$Actin)
-acc_FITC = diag(acc_matrix_reduced$FITC)
-acc_DAPI = diag(acc_matrix_reduced$DAPI)
-acc_ActinDAPI = diag(acc_matrix_reduced$Actin_DAPI)
+index_acc_matrix = !(colnames(acc_matrix) %in% c("D021T01", "D054T01", "D055T01"))
+
+acc_full = diag(acc_matrix[index_acc_matrix, index_acc_matrix])
+acc_Actin = diag(acc_matrix_reduced$Actin[index_acc_matrix, index_acc_matrix])
+acc_FITC = diag(acc_matrix_reduced$FITC[index_acc_matrix, index_acc_matrix])
+acc_DAPI = diag(acc_matrix_reduced$DAPI[index_acc_matrix, index_acc_matrix])
+acc_ActinDAPI = diag(acc_matrix_reduced$Actin_DAPI[index_acc_matrix, index_acc_matrix])
 
 acc = cbind(acc_full, acc_Actin, acc_DAPI, acc_FITC, acc_ActinDAPI)
 acc = reshape2::melt(acc)
