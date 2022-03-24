@@ -87,15 +87,15 @@ WORKDIR /home/rstudio/promise
 RUN R -e "rmarkdown::render(here::here('notebooks/imaging/1.0-nr-organoid_unsupervised_exploration.Rmd'), \
     params = list( \
         remote = FALSE, \
-        data = "data/processed/morphology/umap_absolute_all_drugs_sampled.Rds", \
-        sample = "data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds", \
+        data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
+        sample = 'data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds', \
         cache = TRUE))"
 # # figure 2
 # requires running the line_difference scripts within the FeatureAnalysis module
 RUN R -e "rmarkdown::render(here::here('notebooks/imaging/2.0-nr-embedding_inspection.Rmd'), \
     params = list( \
-        data = "data/processed/morphology/umap_absolute_all_drugs_sampled.Rds", \
-        data_harmony = "data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds", \
+        data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
+        data_harmony = 'data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds', \
         remote = FALSE, \
         cache = TRUE))"
 RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/2.0-js-OrganoidViability.Rmd'))"
