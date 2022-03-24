@@ -75,31 +75,31 @@ RUN R CMD INSTALL textshaping_0.3.6.tar.gz
 RUN R CMD INSTALL ragg_1.2.2.tar.gz
 RUN R CMD INSTALL ggrastr_1.0.1.tar.gz
 # install missing packages
-RUN R -e "install.packages(c('kableExtra', 'ggthemes'), dependencies = TRUE)"
+RUN R -e "install.packages(c('kableExtra', 'ggthemes', 'pracma'), dependencies = TRUE)"
 # copy working dir
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
+# TODO make sure package is complete
 RUN R CMD INSTALL /home/rstudio/promise/code/models/SCOPEAnalysis
 WORKDIR /home/rstudio/promise
-# RUN Rscript --vanilla /home/rstudio/promise/make_results.R
 # # figure 1
 # # requires running the line_difference scripts within the FeatureAnalysis module
 # # the arguments supplied within the knit command override the defaults defined within each vignette. 
 # # This can be valuable, for example, for rerunning the UMAP plots with the non-downsampled complete dataset 
-# RUN R -e "rmarkdown::render(here::here('notebooks/imaging/1.0-nr-organoid_unsupervised_exploration.Rmd'), \
-#     params = list( \
-#         remote = FALSE, \
-#         data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
-#         sample = 'data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds', \
-#         cache = TRUE))"
+RUN R -e "rmarkdown::render(here::here('notebooks/imaging/1.0-nr-organoid_unsupervised_exploration.Rmd'), \
+    params = list( \
+        remote = FALSE, \
+        data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
+        sample = 'data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds', \
+        cache = TRUE))"
 # # # figure 2
 # # requires running the line_difference scripts within the FeatureAnalysis module
-# RUN R -e "rmarkdown::render(here::here('notebooks/imaging/2.0-nr-embedding_inspection.Rmd'), \
-#     params = list( \
-#         data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
-#         data_harmony = 'data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds', \
-#         remote = FALSE, \
-#         cache = TRUE))"
+RUN R -e "rmarkdown::render(here::here('notebooks/imaging/2.0-nr-embedding_inspection.Rmd'), \
+    params = list( \
+        data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
+        data_harmony = 'data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds', \
+        remote = FALSE, \
+        cache = TRUE))"
 RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/2.0-js-OrganoidViability.Rmd'))"
 # # figure 3
 # requires running the drug_effect scripts within the FeatureAnalysis module
