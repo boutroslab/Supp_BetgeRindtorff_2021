@@ -1004,3 +1004,8 @@ gg_factor_umap + ggsave(here("factor_overview_organoid_level.pdf"), height = 6 ,
 ```
 
 
+# Session info
+
+```{r}
+sessionInfo()
+```

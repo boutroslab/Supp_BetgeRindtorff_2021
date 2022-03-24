@@ -1509,3 +1509,8 @@ for(ii in seq_len(nrow(sig_concentrations))) {
 }
 ```
 
+# Session info
+
+```{r}
+sessionInfo()
+```

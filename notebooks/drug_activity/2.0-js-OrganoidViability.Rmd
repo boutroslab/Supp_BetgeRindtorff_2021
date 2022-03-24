@@ -828,8 +828,6 @@ if(save_images) ggsave(
 # Transfer Learning Accuracy Metrics
 
 I trained classifiers for each cell line individually and then measured their accuracy on the data of all other cell lines as well. This transfer learning matrix gives an idea of how similar the training data is for each cell line. The heatmap shows the accuracies of classifiers trained on individual cell lines (rows) when applied to the validation data of all cell lines (columns). Note that the same validation data for each cell line is used to test each classifier, making the results directly comparable.
-
-While the classifier for D027T01 shows adequate accuracies on most cell lines, the validation data for D027T01 cannot be correctly classified by half of the classifiers of other cell lines. This is the final piece of evidence required to show that the quality of the D027T01 plates is too low for any downstream analysis using these classification results.
 ```{r, eval=T}
 hm_colorScale = colorRampPalette(
   c("#f7f7f7", "#003399"))(150)
