@@ -694,3 +694,9 @@ gg_egfr_traj_sel <- draw_trajectory_bulk(plot_df)
 
 gg_egfr_traj_sel
 ```
+
+# Session info
+
+```{r}
+sessionInfo()
+```

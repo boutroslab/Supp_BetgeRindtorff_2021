@@ -677,3 +677,8 @@ harmony_id <- HarmonyMatrix(
 harmony_id$Z_corr %>% saveRDS(here::here("vignettes/07_organoid_unsupervised_exploration/harmony/harmony_pca_id.Rds"))
 ```
 
+# Session info
+
+```{r}
+sessionInfo()
+```

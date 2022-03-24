@@ -1493,3 +1493,8 @@ drug_activity_joined %>%
 
 again, within the group of mTOR inhibitors, activity towards treatment with the small molecule WYE-132 had the strongest contribution to the factor - showing less activity in factor 2 high organoids compared to factor 2 low organoid lines.
 
+# Session info
+
+```{r}
+sessionInfo()
+```
