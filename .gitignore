@@ -93,3 +93,5 @@ src/data/PROMISE/R/.Rhistory
 .Rproj.user
 start.sh
 figures/.DS_Store
+data/.DS_Store
+.gitignore

@@ -69,7 +69,7 @@ organoid_morphology <- read_delim(here::here("references/imaging/visual_classifi
 
 # reading PCA variance information
 #organoid_viability <- read_rds(here::here("data/processed/ldc_viability.rds"))
-pca_variance <- readRDS(here::here("promise/data/processed/morphology/pca_variance.Rds"))
+pca_variance <- readRDS(here::here("data/processed/morphology/pca_variance.Rds"))
 ```
 
 
