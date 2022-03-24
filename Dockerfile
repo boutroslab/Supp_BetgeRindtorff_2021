@@ -57,7 +57,6 @@ RUN R -e "BiocManager::install('EBImage',dependencies=TRUE)"
 RUN wget https://bioconductor.statistik.tu-dortmund.de/packages/3.11/bioc/src/contrib/MaxContrastProjection_1.11.0.tar.gz
 RUN R CMD INSTALL MaxContrastProjection_1.11.0.tar.gz
 #RUN mv MaxContrastProjection_1.11.0.tar.gz data/external 
-# R CMD INSTALL data/external/SCOPEMouse
 # install ggrastr in the most complicated way
 RUN wget https://cran.r-project.org/src/contrib/ragg_1.2.2.tar.gz
 RUN wget https://cran.r-project.org/src/contrib/ggrastr_1.0.1.tar.gz
@@ -78,6 +77,7 @@ RUN R CMD INSTALL ggrastr_1.0.1.tar.gz
 # copy working dir
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
+RUN R CMD INSTALL /home/rstudio/promise/code/models/SCOPEAnalysis
 WORKDIR /home/rstudio/promise
 # RUN Rscript --vanilla /home/rstudio/promise/make_results.R
 CMD [ "bash" ]
