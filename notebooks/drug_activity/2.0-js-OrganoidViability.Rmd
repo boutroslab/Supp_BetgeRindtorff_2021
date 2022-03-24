@@ -829,10 +829,12 @@ if(save_images) ggsave(
 
 I trained classifiers for each cell line individually and then measured their accuracy on the data of all other cell lines as well. This transfer learning matrix gives an idea of how similar the training data is for each cell line. The heatmap shows the accuracies of classifiers trained on individual cell lines (rows) when applied to the validation data of all cell lines (columns). Note that the same validation data for each cell line is used to test each classifier, making the results directly comparable.
 ```{r, eval=T}
+index_acc_matrix = !(colnames(acc_matrix) %in% c("D021T01", "D054T01", "D055T01"))
+
 hm_colorScale = colorRampPalette(
   c("#f7f7f7", "#003399"))(150)
 pheatmap(
-  acc_matrix, cluster_rows = FALSE, cluster_cols = FALSE, 
+  acc_matrix[index_acc_matrix, index_acc_matrix], cluster_rows = FALSE, cluster_cols = FALSE, 
   color = hm_colorScale, display_numbers = FALSE, 
   fontsize_number = 12, legend = TRUE, 
   main = "Transfer Accuracies", border_color = NA)
@@ -970,6 +972,7 @@ if(save_images) ggsave(
 A barplot for the accuracies of classifiers on their native datasets. While there is a substantial drop in accuracy for most cell lines if only individual channels are used, the classifier does not become useless. The lowest achieved accuracy if only the DAPI channel is used is still approximately 80%, which is reasonable for a biological screen. It is worth noting that the additional stainings possible by using only one of the channels and freeing up the other two will undoubtedly improve the accuracy again.
 
 ```{r, eval=TRUE}
+# rerunning just in case
 index_acc_matrix = !(colnames(acc_matrix) %in% c("D021T01", "D054T01", "D055T01"))
 
 acc_full = diag(acc_matrix[index_acc_matrix, index_acc_matrix])

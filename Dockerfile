@@ -100,10 +100,10 @@ WORKDIR /home/rstudio/promise
 #         data_harmony = 'data/processed/morphology/harmony_umap_absolute_all_drugs_sampled.Rds', \
 #         remote = FALSE, \
 #         cache = TRUE))"
-# RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/2.0-js-OrganoidViability.Rmd'))"
-# # # figure 3
-# # requires running the drug_effect scripts within the FeatureAnalysis module
-# RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/3.0-js-DrugPhenotypes.Rmd'))"
+RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/2.0-js-OrganoidViability.Rmd'))"
+# # figure 3
+# requires running the drug_effect scripts within the FeatureAnalysis module
+RUN R -e "rmarkdown::render(here::here('notebooks/drug_activity/3.0-js-DrugPhenotypes.Rmd'))"
 # # figure 4, 5 and 6
 # # running these vignettes requires a trained MOFA model. A MOFA model can be trained from within the MOFA2 docker container
 # # by calling the tidy_mofa.R script
