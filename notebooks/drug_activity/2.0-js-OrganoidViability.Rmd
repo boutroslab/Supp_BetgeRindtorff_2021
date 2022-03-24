@@ -886,7 +886,7 @@ The same viability classifier can be trained on limited feature sets. I attempte
 
 ## Correlation to Full Dataset
 I begin by looking at the correlation between the results of these "reduced classifiers" and the classifiers trained on the full feature sets. The two-channel classifier trained on the Actin and DAPI channels correlates most strongly with the full classifier.
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 ggplot_df = data.frame(
   "All.Channels" = mortality$Percent.Live, 
   "Actin" = mortality_reduced$Actin$Percent.Live, 
