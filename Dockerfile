@@ -75,7 +75,7 @@ RUN R CMD INSTALL textshaping_0.3.6.tar.gz
 RUN R CMD INSTALL ragg_1.2.2.tar.gz
 RUN R CMD INSTALL ggrastr_1.0.1.tar.gz
 # install missing packages
-RUN R -e "install.packages('kableExtra', 'ggthemes')"
+RUN R -e "install.packages(c('kableExtra', 'ggthemes'), dependencies = TRUE)"
 # copy working dir
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
