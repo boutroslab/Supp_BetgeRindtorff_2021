@@ -79,7 +79,7 @@ RUN R -e "install.packages(c('kableExtra', 'ggthemes', 'pracma'), dependencies =
 # copy working dir
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
-# TODO make sure package is complete
+# you have to download the SCOPEAnalysis package seperately from https://figshare.com/s/e465d65a9964d3b999e9 and place it at data/external/
 RUN R CMD INSTALL /home/rstudio/promise/data/external/SCOPEAnalysis
 WORKDIR /home/rstudio/promise
 # # figure 1
