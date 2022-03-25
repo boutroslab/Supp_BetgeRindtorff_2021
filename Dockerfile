@@ -80,7 +80,7 @@ RUN R -e "install.packages(c('kableExtra', 'ggthemes', 'pracma'), dependencies =
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
 # you have to download the SCOPEAnalysis package seperately from https://figshare.com/s/e465d65a9964d3b999e9 and place it at data/external/
-RUN R CMD INSTALL /home/rstudio/promise/data/external/SCOPEAnalysis
+RUN R CMD INSTALL /home/rstudio/promise/data/external/SCOPEAnalysis_0.1.0.tar.gz
 WORKDIR /home/rstudio/promise
 # # figure 1
 # # requires running the line_difference scripts within the FeatureAnalysis module
