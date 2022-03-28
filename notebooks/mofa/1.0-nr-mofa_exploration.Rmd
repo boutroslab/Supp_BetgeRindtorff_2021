@@ -68,7 +68,7 @@ cris_sig <- readxl::read_excel(here('data/external/expression/cris/41467_2017_BF
   dplyr::rename(symbol = `Gene ID`, signature = `CRIS Class`)
 
 # organoid mutation
-mofa_genetics <- read_delim(here::here("data/processed/mutation/Table-S2_Mutations_PDOs_RevisionV4.csv"), delim = ";") %>% 
+mofa_genetics <- read_delim(here::here("data/processed/seq/Table-S2_Mutations_PDOs_RevisionV4.csv"), delim = ";") %>% 
     janitor::clean_names() %>% 
     mutate(sample = substr(sample, 2,nchar(sample)-1)) %>% 
     mutate(sample = paste0("D", sample)) %>% 
