@@ -31,13 +31,17 @@ Sequencing and gene expression data has been deposited in public repositories, s
 ### Docker Containers
 The project can most easily be reproduced by pulling these docker containers: 
 
-* [niklastr/promise:clean](https://hub.docker.com/r/niklastr/promise/tags) - contains the promise git project together with large local files stored under *localdata*
+* [niklastr/promise:clean](ghcr.io/boutroslab/supp_betgerindtorff_2021:master) - contains the promise git project together with large local files stored under *localdata*
 * [niklastr/MOFA:latest](https://hub.docker.com/r/niklastr/mofa/tags) - contains a MOFA2 implementation to run the multi-omics factor analysis. The code can be run without GPU support
 
 You can run the main docker container for the project in an Rstudio Server (does not work on M1 Mac) using the command below:
 
 ```
-docker run -d  -e PASSWORD=promise -p 8080:8787 niklastr/promise:clean
+docker pull ghcr.io/boutroslab/supp_betgerindtorff_2021:master
+# for Rstudio Server experience on localhost 8080
+docker run -d  -e PASSWORD=promise -p 8080:8787 ghcr.io/boutroslab/supp_betgerindtorff_2021:master
+# for command line access 
+docker run -it --rm ghcr.io/boutroslab/supp_betgerindtorff_2021:master
 ```
 
 
@@ -49,7 +53,7 @@ All notebooks and figures are generated during the container building. They can 
 Rscript --vanilla /home/rstudio/promise/make_results.R
 ```
 
-Knitted vignettes will appear in the notebook subdirectories. Individual figures are exported into the reports/figures directory.
+Knitted vignettes will appear in the notebook subdirectories. Individual figures are exported into the reports/figures directory. Selected figures were moved into the figures directory to generate the manuscript.
 
 #### MOFA modeling
 The MOFA model can be trained using a niklastr/MOFA docker. 
