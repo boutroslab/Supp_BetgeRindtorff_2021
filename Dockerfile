@@ -87,12 +87,12 @@ WORKDIR /home/rstudio/promise
 # # requires running the line_difference scripts within the FeatureAnalysis module
 # # the arguments supplied within the knit command override the defaults defined within each vignette. 
 # # This can be valuable, for example, for rerunning the UMAP plots with the non-downsampled complete dataset 
-RUN R -e "rmarkdown::render(here::here('notebooks/imaging/1.0-nr-organoid_unsupervised_exploration.Rmd'), \
-    params = list( \
-        remote = FALSE, \
-        data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
-        sample = 'data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds', \
-        cache = TRUE))"
+# RUN R -e "rmarkdown::render(here::here('notebooks/imaging/1.0-nr-organoid_unsupervised_exploration.Rmd'), \
+#     params = list( \
+#         remote = FALSE, \
+#         data = 'data/processed/morphology/umap_absolute_all_drugs_sampled.Rds', \
+#         sample = 'data/processed/morphology/umap_absolute_all_drugs_tidy_Paclitaxel.Rds', \
+#         cache = TRUE))"
 # # # figure 2
 # # requires running the line_difference scripts within the FeatureAnalysis module
 RUN R -e "rmarkdown::render(here::here('notebooks/imaging/2.0-nr-embedding_inspection.Rmd'), \
