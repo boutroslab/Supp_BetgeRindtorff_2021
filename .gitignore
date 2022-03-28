@@ -95,3 +95,6 @@ start.sh
 figures/.DS_Store
 data/.DS_Store
 .gitignore
+data/.DS_Store
+data/external/.DS_Store
+references/.DS_Store

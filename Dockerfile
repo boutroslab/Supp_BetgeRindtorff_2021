@@ -79,7 +79,9 @@ RUN R -e "install.packages(c('kableExtra', 'ggthemes'), dependencies = TRUE)"
 # copy working dir
 COPY . /home/rstudio/promise
 RUN R CMD INSTALL /home/rstudio/promise/code/data/PROMISE
-RUN R CMD INSTALL /home/rstudio/promise/code/models/SCOPEAnalysis
+RUN wget https://zenodo.org/record/6389655/files/SCOPEAnalysis_0.1.0.tar.gz
+RUN mv SCOPEAnalysis_0.1.0.tar.gz /home/rstudio/promise/code/models/.
+RUN R CMD INSTALL /home/rstudio/promise/code/models/SCOPEAnalysis_0.1.0.tar.gz
 WORKDIR /home/rstudio/promise
 # RUN Rscript --vanilla /home/rstudio/promise/make_results.R
 # # figure 1
